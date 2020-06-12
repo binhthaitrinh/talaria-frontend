@@ -1,0 +1,1 @@
+{"name":"frontend","version":"0.1.0","private":true,"scripts":{"dev":"next dev","build":"next build","start":"next start"},"dependencies":{"axios":"^0.19.2","babel-plugin-styled-components":"^1.10.7","next":"9.4.4","nprogress":"^0.2.0","react":"16.13.1","react-dom":"16.13.1","styled-components":"^5.1.1"},"readme":"ERROR: No README data found!","_id":"frontend@0.1.0"}
