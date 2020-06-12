@@ -9,8 +9,8 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getStaticProps = async (context) => {
-  const appProps = await App.getStaticProps(context);
+MyApp.getInitialProps = async (context) => {
+  const appProps = await App.getInitialProps(context);
 
   return { ...appProps };
 };
