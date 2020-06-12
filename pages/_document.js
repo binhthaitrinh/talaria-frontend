@@ -28,17 +28,17 @@ export default class MyDocument extends Document {
     }
   }
 
-  // render() {
-  //   return (
-  //     <html>
-  //       <Head />
-  //       <body>
-  //         <Main />
-  //         {/* Here we will mount our modal portal */}
-  //         <div id="modal" />
-  //         <NextScript />
-  //       </body>
-  //     </html>
-  //   );
-  // }
+  render() {
+    return (
+      <html>
+        <Head />
+        <body>
+          <Main />
+          {/* Here we will mount our modal portal */}
+          <div id="modal" />
+          <NextScript />
+        </body>
+      </html>
+    );
+  }
 }
