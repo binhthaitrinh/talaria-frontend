@@ -17,18 +17,16 @@ export default class MyDocument extends Document {
   //   // Step 4: Pass styleTags as a prop
   //   return { ...page, styleTags };
   // }
-  static async getStaticProps(ctx) {
+  static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
-
     try {
       ctx.renderPage = () =>
         originalRenderPage({
           enhanceApp: (App) => (props) =>
             sheet.collectStyles(<App {...props} />),
         });
-
-      const initialProps = await Document.getInitialProps(ctx);
+      const initialProps = await NextDocument.getInitialProps(ctx);
       return {
         ...initialProps,
         styles: (
