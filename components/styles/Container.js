@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-  height: 90vh;
+  height: 92vh;
   width: 90%;
   background-color: ${(props) => props.theme.primaryLight};
   border-radius: 8px;

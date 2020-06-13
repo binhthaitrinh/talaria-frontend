@@ -6,7 +6,7 @@ const Input = styled.input`
   color: inherit;
   padding: 1.5rem 2rem;
   border-radius: 2px;
-  background-color: ${(props) => props.theme.primaryLight};
+  background-color: ${(props) => props.theme.offWhite};
   border: none;
   border-bottom: 5px solid transparent;
   display: block;

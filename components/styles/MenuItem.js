@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 const MenuItem = styled.li`
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1;
-  font-weight: 700;
-  color: ${(props) => props.theme.primaryDark};
-  text-transform: uppercase;
+  font-weight: 400;
+  color: #fff;
+  text-transform: capitalize;
 
   ion-icon {
     font-size: 1.8rem;
@@ -14,20 +14,21 @@ const MenuItem = styled.li`
   }
 
   a {
-    padding: 1.6rem 0 2rem 5.4rem;
+    padding: 1.4rem 0 1.8rem 5.4rem;
     width: 100%;
     display: block;
     transition: all 0.2s ease-out;
-    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
 
     &:hover {
-      background-color: ${(props) => props.theme.primaryLight};
-      border-right: 8px solid ${(props) => props.theme.primaryDark};
+      background-color: #005961;
+      border-left: 8px solid #a06c00;
     }
 
     &.active {
-      background-color: ${(props) => props.theme.primaryLight};
-      border-right: 8px solid ${(props) => props.theme.primaryDark};
+      background-color: #005961;
+      border-left: 8px solid #a06c00;
+      font-weight: 700;
     }
   }
 `;

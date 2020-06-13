@@ -59,7 +59,7 @@ const ItemRow = ({ item, index }) => {
               </Link>
             </li>
             <li>
-              <Link href="/">
+              <Link href={`/items/${item.id}/edit`}>
                 <a>Edit</a>
               </Link>
             </li>

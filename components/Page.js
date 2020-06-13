@@ -19,7 +19,7 @@ Router.onRouteChangeError = () => {
 
 const theme = {
   primary: '#00909e',
-  primaryDark: '#27496d',
+  primaryDark: '#005961',
   primaryBlack: '#142850',
   primaryLight: '#dae1e7',
   black: '#393939',
@@ -71,8 +71,7 @@ img {
 
   width: 100%;
   height: 100vh;
-  background-image: linear-gradient(to right, ${(props) =>
-    props.theme.primary}, ${(props) => props.theme.primaryDark})
+  background-image: linear-gradient(to right, #D2D6DC, #D2D6DC)
 }`;
 
 class Page extends React.Component {

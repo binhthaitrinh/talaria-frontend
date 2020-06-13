@@ -10,24 +10,18 @@ import LoadingBtn from './styles/LoadingBtn';
 import Noti from './Noti';
 import Router from 'next/router';
 
-const EditItem = ({ item }) => {
-  const [name, setName] = useState(item.name);
-  const [link, setLink] = useState(item.link);
-  const [trackingLink, setTrackingLink] = useState(item.trackingLink);
-  const [tax, setTax] = useState(parseFloat(item.tax['$numberDecimal']));
-  const [taxForCustomer, setTaxForCustomer] = useState(
-    parseFloat(item.taxForCustomer['$numberDecimal'])
-  );
-  const [usShippingFee, setUsShippingFee] = useState(
-    parseFloat(item.usShippingFee['$numberDecimal'])
-  );
-  const [quantity, setQuantity] = useState(item.quantity);
-  const [estimatedWeight, setEstimatedWeight] = useState(
-    parseFloat(item.estimatedWeight['$numberDecimal'])
-  );
-  const [orderedWebsite, setOrderedWebsite] = useState(item.orderedWebsite);
-  const [orderAccount, setOrderAccount] = useState(item.orderAccount);
-  const [pricePerItem, setPrice] = useState(item.pricePerItem);
+const EditItem = () => {
+  const [name, setName] = useState('');
+  const [link, setLink] = useState('');
+  const [trackingLink, setTrackingLink] = useState('');
+  const [tax, setTax] = useState('');
+  const [taxForCustomer, setTaxForCustomer] = useState('');
+  const [usShippingFee, setUsShippingFee] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [estimatedWeight, setEstimatedWeight] = useState('');
+  const [orderedWebsite, setOrderedWebsite] = useState('');
+  const [orderAccount, setOrderAccount] = useState('');
+  const [pricePerItem, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');

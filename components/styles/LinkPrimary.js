@@ -7,6 +7,13 @@ const Link = styled.a`
   color: #fff;
   padding: .8rem 1.6rem;
 
+
+  &[aria-disabled='true'] {
+    background-color: ${(props) => props.theme.grey};
+    pointer-events: none;
+    
+  }
+
 `;
 
 export default Link;

@@ -2,7 +2,9 @@ import styled from 'styled-components';
 
 const Table = styled.table`
   border-collapse: collapse;
-  box-shadow: 0px 2px 12px -2px rgba(0,0,0,0.3);
+  /* border-left: 2px solid rgba(0,0,0,0.09);
+  border-right: 2px solid rgba(0,0,0,0.09); */
+  /* box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3); */
   text-align: left;
   /* border-spacing: 0 8px; */
   width: 100%;
@@ -14,8 +16,8 @@ const Table = styled.table`
   thead {
      font-size: 1.5rem;
     td, th {
-       background-color: ${(props) => props.theme.primary};
-       color: #fff;
+       /* background-color: ${(props) => props.theme.primary}; */
+       color: ${(props) => props.theme.grey};
       font-weight: 700;
 
       :first-child {
@@ -31,6 +33,7 @@ const Table = styled.table`
 
   tr {
    background-color: #fff;
+   border-bottom: 1px solid rgba(0,0,0,0.09);
    &:hover {
       background-color: ${(props) => props.theme.primaryLight};
     }
@@ -43,7 +46,7 @@ const Table = styled.table`
   th {
    
     /* position: relative; */
-    padding: 1.2rem 0 1.2rem 1.2rem;
+    padding: 0.6rem 0 0.6rem 1.6rem;
     font-weight: 400;
     border-right: none;
     &:last-child {

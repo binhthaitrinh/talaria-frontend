@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Main = styled.div`
-  background-color: ${(props) => props.theme.offWhite};
+  background-color: #fff;
   grid-area: main;
   border-bottom-right-radius: 8px;
   overflow-y: auto;

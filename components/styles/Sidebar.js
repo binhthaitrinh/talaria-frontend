@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Sidebar = styled.div`
-  background-color: #fff;
+  background-color: ${(props) => props.theme.primary};
   grid-area: sidebar;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
