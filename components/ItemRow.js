@@ -2,9 +2,18 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import ActionBtn from './styles/ActionBtn';
 import ActionDetail from './styles/ActionDetails';
+import axios from 'axios';
 
 const ItemRow = ({ item, index }) => {
   const [showDetail, setShowDetail] = useState(false);
+
+  const deleteItem = async () => {
+    await axios.delete(
+      `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`
+    );
+    window.location.reload();
+    console.log('acbasd');
+  };
   return (
     <tr
       key={item.id}
@@ -64,9 +73,22 @@ const ItemRow = ({ item, index }) => {
               </Link>
             </li>
             <li>
-              <Link href="/">
-                <a>Delete</a>
-              </Link>
+              <button
+                onClick={async () => {
+                  try {
+                    await axios.delete(
+                      `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`
+                    );
+                  } catch (err) {
+                    console.log(err);
+                  }
+
+                  window.location.reload();
+                  console.log('acbasd');
+                }}
+              >
+                Delete
+              </button>
             </li>
           </ul>
         </ActionDetail>

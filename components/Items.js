@@ -8,8 +8,11 @@ import LinkPrimary from '../components/styles/LinkPrimary';
 import Link from 'next/link';
 import ActionBtnGroup from '../components/styles/ActionBtnGroup';
 import styled from 'styled-components';
+import FormInput from '../components/styles/FormInput';
+import { useRouter } from 'next/router';
 
 function Items({ page }) {
+  const router = useRouter();
   const [items, setItems] = useState({});
   const [loading, setLoading] = useState(true);
   const [numOfPages, setNumOfPages] = useState(0);
@@ -59,7 +62,7 @@ function Items({ page }) {
       </Table>
       <ActionBtnGroup>
         <div>
-          <Link href={`/items?page=${page * 1 - 1}`}>
+          <Link href={`/items?page=${page * 1 - 1}`} passHref>
             <LinkPrimary
               onClick={() => setLoading(true)}
               style={{ marginRight: '2rem' }}
@@ -68,7 +71,7 @@ function Items({ page }) {
               Previous
             </LinkPrimary>
           </Link>
-          <Link href={`/items?page=${page * 1 + 1}`}>
+          <Link href={`/items?page=${page * 1 + 1}`} passHref>
             <LinkPrimary
               onClick={() => setLoading(true)}
               aria-disabled={page >= numOfPages}
@@ -79,7 +82,7 @@ function Items({ page }) {
         </div>
 
         <p>
-          Page {page} out of {numOfPages} pages{' '}
+          Page {page} out of {numOfPages} pages
         </p>
       </ActionBtnGroup>
     </MainContent>

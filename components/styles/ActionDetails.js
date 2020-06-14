@@ -30,6 +30,21 @@ const Detail = styled.div`
       height: 100%;
       padding: 1rem 0rem 1rem 1.8rem;
     }
+
+    button {
+      width: 100%;
+      height: 100%;
+      padding: 1rem 0rem 1rem 1.8rem;
+      background-color: #fff;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+
+      &:hover {
+        outline: none;
+        border: none;
+      }
+    }
   }
 
   li:hover {
