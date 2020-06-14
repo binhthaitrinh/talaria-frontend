@@ -17,7 +17,7 @@ const SingleItem = (props) => {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `http://localhost:4444/api/v1/items/${props.id}`
+          `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${props.id}`
         );
 
         console.log(res);

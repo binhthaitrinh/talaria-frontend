@@ -43,12 +43,11 @@ const EditItem = ({ item }) => {
     setLoading(true);
     try {
       const res = await axios.patch(
-        `http://localhost:4444/api/v1/items/${item.id}`,
+        `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`,
         formData,
         config
       );
 
-      console.log('Done');
       setLoading(false);
       setMessage('success');
       setAlertType('success');
@@ -60,7 +59,6 @@ const EditItem = ({ item }) => {
         setAlertType('');
       }, 2000);
     } catch (err) {
-      console.log(err.response.data.message);
       setMessage(err.response.data.message);
       setAlertType('danger');
       setShowNoti(true);

@@ -18,7 +18,7 @@ function Items({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `http://localhost:4444/api/v1/items?page=${page}&limit=8`
+          `https://hidden-gorge-76682.herokuapp.com/api/v1/items?page=${page}&limit=8`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
