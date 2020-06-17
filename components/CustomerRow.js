@@ -63,7 +63,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
               </Link>
             </li>
             <li>
-              <Link href={`/customers/${item.id}/edit`}>
+              <Link href={`/customers/${item._id}/edit`}>
                 <a>Edit</a>
               </Link>
             </li>

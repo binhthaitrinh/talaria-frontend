@@ -26,6 +26,17 @@ const SingleItem = (props) => {
     return total;
   };
 
+  const caclTotalMoney = () => {
+    let total = 0;
+    item.bills.forEach((bill) => {
+      if (bill.moneyChargeCustomerVND) {
+        total = parseFloat(bill.moneyChargeCustomerVND['$numberDecimal']);
+      }
+    });
+
+    return total;
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -105,6 +116,16 @@ const SingleItem = (props) => {
         <DetailItem>
           <DetailItemTitle>Số item mua thành công</DetailItemTitle>
           <DetailItemInfo>{caclTotalItems()}</DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Số tiền mua thành công</DetailItemTitle>
+          <DetailItemInfo>
+            {' '}
+            {new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'VND',
+            }).format(caclTotalMoney())}
+          </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Danh sách đơn hàng</DetailItemTitle>
