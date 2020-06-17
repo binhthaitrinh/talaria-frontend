@@ -3,13 +3,14 @@ import MainContent from './styles/MainContent';
 import Loader from './styles/Loader';
 import axios from 'axios';
 import Table from './styles/Table';
-import ItemRow from './ItemRow';
+import PaxfulRow from './PaxfulRow';
 import LinkPrimary from '../components/styles/LinkPrimary';
 import Link from 'next/link';
 import ActionBtnGroup from '../components/styles/ActionBtnGroup';
 import styled from 'styled-components';
 import FormInput from '../components/styles/FormInput';
 import { useRouter } from 'next/router';
+import { BASE_URL } from '../constant';
 
 function Items({ page }) {
   const router = useRouter();
@@ -20,9 +21,7 @@ function Items({ page }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(
-          `https://hidden-gorge-76682.herokuapp.com/api/v1/items?page=${page}&limit=8`
-        );
+        const res = await axios.get(`${BASE_URL}/paxfuls?page=${page}&limit=8`);
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
 
@@ -43,22 +42,24 @@ function Items({ page }) {
       <Table>
         <thead>
           <tr>
-            <th>Created At</th>
-            <th>Tracking Link</th>
-            <th>Item Link</th>
-            <th>City</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Status</th>
+            <th>Ngày</th>
+            <th>Loại</th>
+
+            <th>Lượng Bitcoin</th>
+            <th>Phí rút BTC</th>
+            <th>BTC balance</th>
+            <th>Người mua</th>
+            <th>Tiền vốn?</th>
+            <th>Số tiền chi</th>
+            <th>Tỉ giá VND/BTC</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {items.map((item, index) => (
-            <ItemRow
+            <PaxfulRow
               item={item}
-              key={item.id}
+              key={item._id}
               index={index}
               items={items}
               setItems={setItems}
@@ -68,7 +69,7 @@ function Items({ page }) {
       </Table>
       <ActionBtnGroup>
         <div>
-          <Link href={`/items?page=${page * 1 - 1}`} passHref>
+          <Link href={`/paxfuls?page=${page * 1 - 1}`} passHref>
             <LinkPrimary
               onClick={() => setLoading(true)}
               style={{ marginRight: '2rem' }}
@@ -77,7 +78,7 @@ function Items({ page }) {
               Previous
             </LinkPrimary>
           </Link>
-          <Link href={`/items?page=${page * 1 + 1}`} passHref>
+          <Link href={`/paxfuls?page=${page * 1 + 1}`} passHref>
             <LinkPrimary
               onClick={() => setLoading(true)}
               aria-disabled={page >= numOfPages}

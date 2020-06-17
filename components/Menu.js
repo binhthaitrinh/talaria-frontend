@@ -31,7 +31,7 @@ const menuItems = [
     icon: 'gift-outline',
   },
   {
-    pathname: 'paxful',
+    pathname: 'paxfuls',
     item: 'Paxful',
     icon: 'logo-bitcoin',
   },

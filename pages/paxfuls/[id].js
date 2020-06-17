@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import Meta from '../../components/Meta';
 import Title from '../../components/styles/Title';
-import SingleItem from '../../components/SingleItem';
+import SinglePaxful from '../../components/SinglePaxful';
 import MainCntHeader from '../../components/styles/MainCntHeader';
 import LinkPrimary from '../../components/styles/LinkPrimary';
 import Link from 'next/link';
@@ -13,12 +13,12 @@ export default function ItemDetail(props) {
     <>
       <Meta title="Detail" />
       <MainCntHeader>
-        <Title>Item {id}</Title>
+        <Title>Transaction {id}</Title>
         <Link href={`/items/${id}/edit`} passHref>
           <LinkPrimary>CHỉnh sửa</LinkPrimary>
         </Link>
       </MainCntHeader>
-      <SingleItem id={id} src="items" />
+      <SinglePaxful id={id} src="paxfuls" />
     </>
   );
 }

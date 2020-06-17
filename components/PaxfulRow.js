@@ -3,13 +3,14 @@ import Link from 'next/link';
 import ActionBtn from './styles/ActionBtn';
 import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
+import StickerBtn from './styles/StickerBtn';
 
 const ItemRow = ({ item, index, items, setItems }) => {
   const [showDetail, setShowDetail] = useState(false);
 
   const deleteItem = async () => {
     await axios.delete(
-      `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`
+      `https://hidden-gorge-76682.herokuapp.com/api/v1/paxfuls/${item.id}`
     );
     window.location.reload();
     console.log('acbasd');
@@ -28,29 +29,34 @@ const ItemRow = ({ item, index, items, setItems }) => {
         })}
       </th>
       <th>
-        {item.trackingLink ? (
-          <a href={item.trackingLink}>Click here</a>
+        {item.transactionType === 'inflow' ? (
+          <StickerBtn type="success">inflow</StickerBtn>
         ) : (
-          <p>No link available</p>
+          <StickerBtn type="danger">outflow</StickerBtn>
         )}
       </th>
+
+      <th>{item.btcAmount['$numberDecimal']}</th>
+      <th>{item.withdrawFee ? item.withdrawFee['$numberDecimal'] : 0}</th>
+      <th>{item.totalBalance['$numberDecimal']}</th>
+      <th>{item.buyer}</th>
+      <th>{item.pocketMoney ? 'Đúng' : 'Sai'}</th>
       <th>
-        {item.link ? (
-          <a href={item.link}>Click here</a>
-        ) : (
-          <p>No link available</p>
-        )}
+        {item.transactionType === 'inflow'
+          ? new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'VND',
+            }).format(item.moneySpent.amount['$numberDecimal'])
+          : '---'}
       </th>
-      <th>{item.name}</th>
-      <th>{item.name}</th>
       <th>
-        {new Intl.NumberFormat('en-us', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(item.pricePerItem)}
+        {item.transactionType === 'inflow'
+          ? new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'VND',
+            }).format(item.remainingBalance.rating['$numberDecimal'])
+          : '---'}
       </th>
-      <th>{item.quantity}</th>
-      <th>{item.status}</th>
       <th>
         <ActionBtn
           onClick={(e) => {
@@ -63,12 +69,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
         <ActionDetail className={showDetail ? 'show' : ''}>
           <ul>
             <li>
-              <Link href={`/items/${item.id}`}>
+              <Link href={`/paxfuls/${item.id}`}>
                 <a>View</a>
               </Link>
             </li>
             <li>
-              <Link href={`/items/${item.id}/edit`}>
+              <Link href={`/paxfuls/${item.id}/edit`}>
                 <a>Edit</a>
               </Link>
             </li>

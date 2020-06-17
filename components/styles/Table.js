@@ -46,7 +46,7 @@ const Table = styled.table`
   th {
    
     /* position: relative; */
-    padding: 0.6rem 0 0.6rem 1.6rem;
+    padding: 0.6rem 0 0.6rem 0rem;
     font-weight: 400;
     border-right: none;
     &:last-child {
