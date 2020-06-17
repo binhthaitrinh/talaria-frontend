@@ -58,12 +58,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
         <ActionDetail className={showDetail ? 'show' : ''}>
           <ul>
             <li>
-              <Link href={`/items/${item.id}`}>
+              <Link href={`/customers/${item._id}`}>
                 <a>View</a>
               </Link>
             </li>
             <li>
-              <Link href={`/items/${item.id}/edit`}>
+              <Link href={`/customers/${item.id}/edit`}>
                 <a>Edit</a>
               </Link>
             </li>

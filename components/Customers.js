@@ -7,8 +7,7 @@ import CustomerRow from './CustomerRow';
 import LinkPrimary from '../components/styles/LinkPrimary';
 import Link from 'next/link';
 import ActionBtnGroup from '../components/styles/ActionBtnGroup';
-import styled from 'styled-components';
-import FormInput from '../components/styles/FormInput';
+
 import { useRouter } from 'next/router';
 
 function Items({ page }) {
