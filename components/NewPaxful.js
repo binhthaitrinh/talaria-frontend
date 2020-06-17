@@ -18,7 +18,7 @@ const EditItem = () => {
   const [pocketMoney, setPocketMoney] = useState(true);
   const [moneySpent, setMoneySpent] = useState('');
   const [currency, setCurrency] = useState('vnd');
-
+  const [vndUsdRate, setVndUsdRate] = useState(23700);
   const [loading, setLoading] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
@@ -83,6 +83,7 @@ const EditItem = () => {
               amount: moneySpent,
               currency,
             },
+            transactionType: 'inflow',
           });
         }}
       >
@@ -118,6 +119,18 @@ const EditItem = () => {
               name="usdBtcRate"
               onChange={(e) => setUsdBtcRate(e.target.value)}
               value={usdBtcRate}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="usdBtcRate">VND/USD rate</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="VND/USD rate..."
+              id="vndUsdRate"
+              name="vndUsdRate"
+              onChange={(e) => setVndUsdRate(e.target.value)}
+              value={vndUsdRate}
             />
           </FormGroup>
 

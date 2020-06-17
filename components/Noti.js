@@ -7,7 +7,7 @@ const Container = styled.div`
   top: 0;
   left: 50%;
   background-color: ${(props) =>
-    props.type === 'success' ? '#ffe277' : '#eb6383'};
+    props.type === 'success' ? props.theme.success : props.theme.danger};
   font-size: 1.6rem;
   padding: 0.8rem 1.6rem;
   transform: translateX(-50%);
