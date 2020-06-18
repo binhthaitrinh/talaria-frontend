@@ -21,47 +21,40 @@ const ItemRow = ({ item, index, items, setItems }) => {
       onClick={() => setShowDetail(false)}
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
+      <th></th>
+      <th>{item.name}</th>
+      <th>{item.phoneNumber}</th>
       <th>
-        {new Date(item.createdAt).toLocaleString('en-us', {
+        {item.socialMediaLinks.length >= 1
+          ? item.socialMediaLinks[0].link
+          : '---'}
+      </th>
+      <th>{item.commissionRate['$numberDecimal']}</th>
+      <th>{item.bankAccounts.length >= 1 ? item.bankAccounts[0] : '---'}</th>
+      {/* <th>
+        {new Date(item.date).toLocaleString('en-us', {
           month: 'long',
           year: 'numeric',
           day: 'numeric',
         })}
       </th>
+      <th>{item.customerName}</th>
+      <th>{item.phoneNumber}</th>
       <th>
-        {item.trackingLink ? (
-          <a href={item.trackingLink}>Click here</a>
+        {new Date(item.dateOfBirth).toLocaleString('en-us', {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+        })}
+      </th>
+      <th>{item.address.length >= 1 ? item.address[0].address1 : '---'}</th>
+      <th>
+        {item.address.length >= 1 ? (
+          <StickerBtn type="success">{item.address[0].city}</StickerBtn>
         ) : (
-          <p>No link available</p>
+          '---'
         )}
-      </th>
-      <th>
-        {item.link ? (
-          <a href={item.link}>Click here</a>
-        ) : (
-          <p>No link available</p>
-        )}
-      </th>
-      <th>{item.name}</th>
-
-      <th>
-        {new Intl.NumberFormat('en-us', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(item.pricePerItem)}
-      </th>
-      <th>{item.quantity}</th>
-      <th>
-        {item.status === 'not-yet-ordered' ? (
-          <StickerBtn type="danger">N/A</StickerBtn>
-        ) : (
-          new Intl.NumberFormat('de-DE', {
-            style: 'currency',
-            currency: 'VND',
-          }).format(item.actualCost['$numberDecimal'])
-        )}
-      </th>
-      <th>{item.status}</th>
+      </th> */}
 
       <th>
         <ActionBtn
@@ -75,12 +68,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
         <ActionDetail className={showDetail ? 'show' : ''}>
           <ul>
             <li>
-              <Link href={`/items/${item.id}`}>
+              <Link href={`/affiliates/${item._id}`}>
                 <a>View</a>
               </Link>
             </li>
             <li>
-              <Link href={`/items/${item.id}/edit`}>
+              <Link href={`/affiliates/${item._id}/edit`}>
                 <a>Edit</a>
               </Link>
             </li>
@@ -89,7 +82,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
                 onClick={async () => {
                   try {
                     await axios.delete(
-                      `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`
+                      `http://localhost:4444/api/v1/items/${item.id}`
                     );
 
                     setItems(items.filter((doc) => doc.id !== item.id));
@@ -102,22 +95,6 @@ const ItemRow = ({ item, index, items, setItems }) => {
                 }}
               >
                 Delete
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={async () => {
-                  try {
-                    await axios.post(
-                      `http://localhost:4444/api/v1/items/${item._id}/charge`
-                    );
-                    window.location.reload();
-                  } catch (err) {
-                    console.log(err.response.data.message);
-                  }
-                }}
-              >
-                Charge
               </button>
             </li>
           </ul>

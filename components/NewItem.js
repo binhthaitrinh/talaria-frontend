@@ -36,8 +36,8 @@ const EditItem = () => {
   const submitForm = async (formData) => {
     setLoading(true);
     try {
-      const res = await axios.patch(
-        `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`,
+      const res = await axios.post(
+        `http://localhost:4444/api/v1/items/`,
         formData,
         config
       );
@@ -49,7 +49,7 @@ const EditItem = () => {
       setShowNoti(true);
       setTimeout(() => {
         setShowNoti(false);
-        Router.push(`/items/${item.id}`);
+        Router.push(`/items`);
         setMessage('');
         setAlertType('');
       }, 2000);

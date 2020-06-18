@@ -3,12 +3,11 @@ import MainContent from './styles/MainContent';
 import Loader from './styles/Loader';
 import axios from 'axios';
 import Table from './styles/Table';
-import ItemRow from './ItemRow';
+import AffiliateRow from './AffiliateRow';
 import LinkPrimary from '../components/styles/LinkPrimary';
 import Link from 'next/link';
 import ActionBtnGroup from '../components/styles/ActionBtnGroup';
-import styled from 'styled-components';
-import FormInput from '../components/styles/FormInput';
+
 import { useRouter } from 'next/router';
 
 function Items({ page }) {
@@ -21,7 +20,7 @@ function Items({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `http://localhost:4444/api/v1/items?page=${page}&limit=8`
+          `http://localhost:4444/api/v1/affiliates?page=${page}&limit=8`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
@@ -43,21 +42,18 @@ function Items({ page }) {
       <Table>
         <thead>
           <tr>
-            <th>Created At</th>
-            <th>Tracking Link</th>
-            <th>Item Link</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Actual Cost</th>
-            <th>Status</th>
-
+            <th>Ngày tạo</th>
+            <th>Họ tên</th>
+            <th>Số điện thoại</th>
+            <th>Link social media</th>
+            <th>% hoa hồng</th>
+            <th>Bank Account</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {items.map((item, index) => (
-            <ItemRow
+            <AffiliateRow
               item={item}
               key={item.id}
               index={index}

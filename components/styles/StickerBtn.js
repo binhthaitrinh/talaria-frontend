@@ -6,7 +6,7 @@ const StickerBtn = styled.div`
   text-transform: capitalize !important;
   background-color: ${(props) => props.theme[props.type]};
   color: #fff;
-  padding: 0.5rem 0.8rem;
+  padding: 0.6rem 1rem;
 `;
 
 export default StickerBtn;

@@ -33,7 +33,7 @@ const EditItem = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        `http://localhost:4444/api/v1/paxfuls`,
+        `http://localhost:4444/api/v1/customers`,
         formData,
         config
       );
@@ -45,7 +45,7 @@ const EditItem = () => {
       setShowNoti(true);
       setTimeout(() => {
         setShowNoti(false);
-        Router.push(`/paxfuls`);
+        Router.push(`/customers`);
         setMessage('');
         setAlertType('');
       }, 2000);
@@ -70,19 +70,18 @@ const EditItem = () => {
       <Form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(currency);
-          console.log(pocketMoney);
+          // console.log(currency);
+          // console.log(pocketMoney);
           submitForm({
-            btcAmount,
-            btcUsdRate: usdBtcRate,
-            withdrawFee,
-            buyer,
-            pocketMoney,
-            moneySpent: {
-              amount: moneySpent,
-              currency,
+            customerName: name,
+            customerType,
+            address: {
+              address1: address,
+              city,
             },
-            transactionType: 'inflow',
+            phoneNumber: phoneNo,
+            discountRate,
+            dateOfBirth,
           });
         }}
       >
