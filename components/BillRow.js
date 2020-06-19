@@ -60,7 +60,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
 
               try {
                 await axios.post(
-                  `${process.env.process.env.BASE_URL}/bills/${item._id}/pay`,
+                  `${process.env.BASE_URL}/bills/${item._id}/pay`,
                   {
                     amount,
                   }

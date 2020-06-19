@@ -20,7 +20,7 @@ function Items({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.process.env.BASE_URL}/bills?page=${page}&limit=8`
+          `${process.env.BASE_URL}/bills?page=${page}&limit=8`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));

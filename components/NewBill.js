@@ -32,9 +32,7 @@ const EditItem = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const cusRes = await axios.get(
-          `${process.env.process.env.BASE_URL}/customers`
-        );
+        const cusRes = await axios.get(`${process.env.BASE_URL}/customers`);
         console.log(cusRes.data.data.data);
         setCustomers(cusRes.data.data.data);
         setFormLoading(false);
@@ -51,7 +49,7 @@ const EditItem = (props) => {
     console.log(formData.items);
     try {
       const res = await axios.post(
-        `${process.env.process.env.BASE_URL}/bills`,
+        `${process.env.BASE_URL}/bills`,
         formData,
         config
       );
