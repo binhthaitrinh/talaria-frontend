@@ -16,6 +16,28 @@ function Items({ page }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [numOfPages, setNumOfPages] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [ids, setIds] = useState([]);
+
+  // res.data.data.data.map((item) => ({ [item._id]: false }))
+
+  const onSelectChange = (id) => {
+    setSelected({
+      ...selected,
+      [id]: !selected[id],
+    });
+    setIds([...ids, id]);
+  };
+
+  const convertArrayToObject = (array, key) => {
+    const initialValue = {};
+    return array.reduce((obj, item) => {
+      return {
+        ...obj,
+        [item[key]]: item.value,
+      };
+    }, initialValue);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -27,6 +49,12 @@ function Items({ page }) {
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
 
         setItems(res.data.data.data);
+        setSelected(
+          convertArrayToObject(
+            res.data.data.data.map((item) => ({ id: item._id, value: false })),
+            'id'
+          )
+        );
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -43,6 +71,7 @@ function Items({ page }) {
       <Table>
         <thead>
           <tr>
+            <th>Selected</th>
             <th>Created At</th>
             <th>Tracking Link</th>
             <th>Item Link</th>
@@ -63,7 +92,15 @@ function Items({ page }) {
               index={index}
               items={items}
               setItems={setItems}
-            />
+            >
+              <form>
+                <input
+                  type="checkbox"
+                  checked={selected[item._id]}
+                  onChange={() => onSelectChange(item._id)}
+                />
+              </form>
+            </ItemRow>
           ))}
         </tbody>
       </Table>
@@ -82,9 +119,13 @@ function Items({ page }) {
             <LinkPrimary
               onClick={() => setLoading(true)}
               aria-disabled={page >= numOfPages}
+              style={{ marginRight: '2rem' }}
             >
               Next
             </LinkPrimary>
+          </Link>
+          <Link href={`/bills/new?ids=${ids}`} passHref>
+            <LinkPrimary>Create a bill</LinkPrimary>
           </Link>
         </div>
 

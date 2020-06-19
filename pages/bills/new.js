@@ -1,25 +1,19 @@
 import Meta from '../../components/Meta';
 import Title from '../../components/styles/Title';
 import MainCntHeader from '../../components/styles/MainCntHeader';
-import MainContent from '../../components/Items';
+import NewBill from '../../components/NewBill';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import LinkPrimary from '../../components/styles/LinkPrimary';
-import Link from 'next/link';
 
 export default function Items() {
   const router = useRouter();
-  console.log('//////////');
-  console.log(router.query);
-  console.log('//////////');
-
+  console.log(router.query.ids);
   return (
     <>
       <Meta title="Dashboard" />
       <MainCntHeader>
-        <Title>Items</Title>
+        <Title>Create a new Item</Title>
       </MainCntHeader>
-      <MainContent page={router.query.page || 1} />
+      <NewBill items={router.query.ids} />
     </>
   );
 }

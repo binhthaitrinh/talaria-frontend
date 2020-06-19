@@ -66,7 +66,7 @@ function Items({ page }) {
       </Table>
       <ActionBtnGroup>
         <div>
-          <Link href={`/items?page=${page * 1 - 1}`} passHref>
+          <Link href={`/bills?page=${page * 1 - 1}`} passHref>
             <LinkPrimary
               onClick={() => setLoading(true)}
               style={{ marginRight: '2rem' }}
@@ -75,7 +75,7 @@ function Items({ page }) {
               Previous
             </LinkPrimary>
           </Link>
-          <Link href={`/items?page=${page * 1 + 1}`} passHref>
+          <Link href={`/bills?page=${page * 1 + 1}`} passHref>
             <LinkPrimary
               onClick={() => setLoading(true)}
               aria-disabled={page >= numOfPages}

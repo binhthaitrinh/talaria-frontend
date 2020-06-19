@@ -106,6 +106,14 @@ const ItemRow = ({ item, index, items, setItems }) => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setAmount(item.remaining['$numberDecimal']);
+                }}
+              >
+                Maximum
+              </button>
             </div>
             <button>Submit</button>
           </form>
@@ -179,10 +187,10 @@ const ItemRow = ({ item, index, items, setItems }) => {
                 onClick={async () => {
                   try {
                     await axios.delete(
-                      `http://localhost:4444/api/v1/items/${item.id}`
+                      `http://localhost:4444/api/v1/bills/${item._id}`
                     );
 
-                    setItems(items.filter((doc) => doc.id !== item.id));
+                    setItems(items.filter((doc) => doc._id !== item._id));
                   } catch (err) {
                     console.log(err);
                   }

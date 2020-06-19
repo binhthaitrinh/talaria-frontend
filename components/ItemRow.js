@@ -5,7 +5,15 @@ import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
 import StickerBtn from './styles/StickerBtn';
 
-const ItemRow = ({ item, index, items, setItems }) => {
+const ItemRow = ({
+  item,
+  index,
+  items,
+  setItems,
+  selected,
+  setSelected,
+  children,
+}) => {
   const [showDetail, setShowDetail] = useState(false);
 
   const deleteItem = async () => {
@@ -21,6 +29,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
       onClick={() => setShowDetail(false)}
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
+      <th>{children}</th>
       <th>
         {new Date(item.createdAt).toLocaleString('en-us', {
           month: 'long',
