@@ -12,7 +12,7 @@ import Router from 'next/router';
 import Loader from './styles/Loader';
 
 const EditItem = (props) => {
-  const [items, setItems] = useState(props.items.split(','));
+  const [items, setItems] = useState(props.items ? props.items.split(',') : []);
   const [customerName, setCustomerName] = useState('');
   const [vndUsdRate, setVndUsdRate] = useState(23500);
   const [customers, setCustomers] = useState([]);
