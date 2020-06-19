@@ -9,10 +9,10 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getInitialProps = async (context) => {
-  const appProps = await App.getInitialProps(context);
+// MyApp.getInitialProps = async (context) => {
+//   const appProps = await App.getInitialProps(context);
 
-  return { ...appProps };
-};
+//   return { ...appProps };
+// };
 
 export default MyApp;

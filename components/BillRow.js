@@ -44,13 +44,6 @@ const ItemRow = ({ item, index, items, setItems }) => {
   const [message, setMessage] = useState('');
   const [type, setType] = useState('');
 
-  const deleteItem = async () => {
-    await axios.delete(
-      `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`
-    );
-    window.location.reload();
-    console.log('acbasd');
-  };
   return (
     <tr
       key={item.id}
@@ -173,12 +166,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
         <ActionDetail className={showDetail ? 'show' : ''}>
           <ul>
             <li>
-              <Link href={`/affiliates/${item._id}`}>
+              <Link href={`/bills/${item._id}`}>
                 <a>View</a>
               </Link>
             </li>
             <li>
-              <Link href={`/affiliates/${item._id}/edit`}>
+              <Link href={`/bills/${item._id}/edit`}>
                 <a>Edit</a>
               </Link>
             </li>
