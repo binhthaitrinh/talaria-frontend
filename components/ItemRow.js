@@ -118,7 +118,7 @@ const ItemRow = ({
                 onClick={async () => {
                   try {
                     await axios.post(
-                      `http://localhost:4444/api/v1/items/${item._id}/charge`
+                      `${process.env.BASE_URL}/items/${item._id}/charge`
                     );
                     window.location.reload();
                   } catch (err) {

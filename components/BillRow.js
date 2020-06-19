@@ -60,7 +60,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
 
               try {
                 await axios.post(
-                  `${process.env.BASE_URL}/bills/${item._id}/pay`,
+                  `${process.env.process.env.BASE_URL}/bills/${item._id}/pay`,
                   {
                     amount,
                   }
@@ -180,7 +180,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
                 onClick={async () => {
                   try {
                     await axios.delete(
-                      `http://localhost:4444/api/v1/bills/${item._id}`
+                      `${process.env.BASE_URL}/bills/${item._id}`
                     );
 
                     setItems(items.filter((doc) => doc._id !== item._id));

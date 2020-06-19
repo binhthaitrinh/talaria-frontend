@@ -82,7 +82,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
                 onClick={async () => {
                   try {
                     await axios.delete(
-                      `http://localhost:4444/api/v1/items/${item.id}`
+                      `${process.env.BASE_URL}/items/${item.id}`
                     );
 
                     setItems(items.filter((doc) => doc.id !== item.id));

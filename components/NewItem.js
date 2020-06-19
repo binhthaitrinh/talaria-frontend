@@ -37,7 +37,7 @@ const EditItem = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        `http://localhost:4444/api/v1/items/`,
+        `${process.env.BASE_URL}/items/`,
         formData,
         config
       );

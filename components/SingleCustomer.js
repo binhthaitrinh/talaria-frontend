@@ -8,7 +8,7 @@ import DetailItemTitle from './styles/DetailItemTitle';
 import DetailItemInfo from './styles/DetailItemInfo';
 import Link from 'next/link';
 import LinkPrimary from './styles/LinkPrimary';
-import { BASE_URL } from '../constant';
+
 import StickerBtn from './styles/StickerBtn';
 
 const SingleItem = (props) => {
@@ -40,9 +40,11 @@ const SingleItem = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`${BASE_URL}/customers/${props.id}`);
+        const res = await axios.get(
+          `${process.env.BASE_URL}/customers/${props.id}`
+        );
         const billInfo = await axios.get(
-          `${BASE_URL}/customers/${props.id}/bills`
+          `${process.env.BASE_URL}/customers/${props.id}/bills`
         );
 
         console.log(res);

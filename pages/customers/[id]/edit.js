@@ -8,7 +8,6 @@ import { useState, useEffect } from 'react';
 import Loader from '../../../components/styles/Loader';
 import axios from 'axios';
 import EditCustomer from '../../../components/EditCustomer';
-import { BASE_URL } from '../../../constant';
 
 export default function Edit() {
   const [item, setItem] = useState({});
@@ -19,7 +18,7 @@ export default function Edit() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`${BASE_URL}/customers/${id}`);
+        const res = await axios.get(`${process.env.BASE_URL}/customers/${id}`);
 
         setItem(res.data.data.data);
         setLoading(false);

@@ -10,7 +10,6 @@ import ActionBtnGroup from '../components/styles/ActionBtnGroup';
 import styled from 'styled-components';
 import FormInput from '../components/styles/FormInput';
 import { useRouter } from 'next/router';
-import { BASE_URL } from '../constant';
 
 function Items({ page }) {
   const router = useRouter();
@@ -21,7 +20,9 @@ function Items({ page }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`${BASE_URL}/paxfuls?page=${page}&limit=8`);
+        const res = await axios.get(
+          `${process.env.BASE_URL}/paxfuls?page=${page}&limit=8`
+        );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
 

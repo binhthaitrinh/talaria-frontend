@@ -18,7 +18,7 @@ const SingleItem = (props) => {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `http://localhost:4444/api/v1/paxfuls/${props.id}`
+          `${process.env.BASE_URL}/paxfuls/${props.id}`
         );
 
         console.log(res);

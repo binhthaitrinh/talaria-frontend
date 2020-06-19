@@ -40,7 +40,7 @@ const EditItem = ({ item }) => {
     setLoading(true);
     try {
       const res = await axios.patch(
-        `http://localhost:4444/api/v1/customers/${item._id}`,
+        `${process.env.BASE_URL}/customers/${item._id}`,
         formData,
         config
       );
