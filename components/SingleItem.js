@@ -17,7 +17,7 @@ const SingleItem = (props) => {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${props.id}`
+          `${process.env.BASE_URL}/items/${props.id}`
         );
 
         console.log(res);

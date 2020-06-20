@@ -16,6 +16,11 @@ const menuItems = [
     icon: 'pricetags-outline',
   },
   {
+    pathname: 'accounts',
+    item: 'Accounts',
+    icon: 'person-circle-outline',
+  },
+  {
     pathname: 'customers',
     item: 'Customers',
     icon: 'people-outline',

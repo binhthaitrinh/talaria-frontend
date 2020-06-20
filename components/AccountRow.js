@@ -9,7 +9,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
   const [showDetail, setShowDetail] = useState(false);
 
   const deleteItem = async () => {
-    await axios.delete(`${process.env.BASE_URL}/paxfuls/${item.id}`);
+    await axios.delete(`${process.env.BASE_URL}/accounts/${item.id}`);
     window.location.reload();
     console.log('acbasd');
   };
@@ -20,41 +20,28 @@ const ItemRow = ({ item, index, items, setItems }) => {
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
       <th>
-        {new Date(item.createdAt).toLocaleString('en-us', {
+        {new Date(item.addedAt).toLocaleString('en-us', {
           month: 'long',
           year: 'numeric',
           day: 'numeric',
         })}
       </th>
       <th>
-        {item.transactionType === 'inflow' ? (
-          <StickerBtn type="success">inflow</StickerBtn>
-        ) : (
-          <StickerBtn type="danger">outflow</StickerBtn>
-        )}
+        {item.loginID.slice(0, 15)}...
+        <span className="tooltip">{item.loginID}</span>
       </th>
+      <th>
+        <StickerBtn type="success">{item.accountWebsite}</StickerBtn>
+      </th>
+      <th>{item.balance}</th>
+      <th>
+        <StickerBtn type={item.accountType === 'owned' ? 'success' : 'danger'}>
+          {item.accountType}
+        </StickerBtn>
+      </th>
+      <th>{item.status}</th>
+      <th>{item.notes}</th>
 
-      <th>{item.btcAmount['$numberDecimal']}</th>
-      <th>{item.withdrawFee ? item.withdrawFee['$numberDecimal'] : 0}</th>
-      <th>{item.totalBalance['$numberDecimal']}</th>
-      <th>{item.buyer}</th>
-      <th>{item.pocketMoney ? 'Đúng' : 'Sai'}</th>
-      <th>
-        {item.transactionType === 'inflow'
-          ? new Intl.NumberFormat('de-DE', {
-              style: 'currency',
-              currency: 'VND',
-            }).format(item.moneySpent.amount['$numberDecimal'])
-          : '---'}
-      </th>
-      <th>
-        {item.transactionType === 'inflow'
-          ? new Intl.NumberFormat('de-DE', {
-              style: 'currency',
-              currency: 'VND',
-            }).format(item.remainingBalance.rating['$numberDecimal'])
-          : '---'}
-      </th>
       <th>
         <ActionBtn
           onClick={(e) => {
@@ -67,12 +54,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
         <ActionDetail className={showDetail ? 'show' : ''}>
           <ul>
             <li>
-              <Link href={`/paxfuls/${item.id}`}>
+              <Link href={`/accounts/${item._id}`}>
                 <a>View</a>
               </Link>
             </li>
             <li>
-              <Link href={`/paxfuls/${item.id}/edit`}>
+              <Link href={`/accounts/${item._id}/edit`}>
                 <a>Edit</a>
               </Link>
             </li>
@@ -81,7 +68,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
                 onClick={async () => {
                   try {
                     await axios.delete(
-                      `${process.env.BASE_URL}/items/${item.id}`
+                      `${process.env.BASE_URL}/accounts/${item.id}`
                     );
 
                     setItems(items.filter((doc) => doc.id !== item.id));

@@ -43,7 +43,7 @@ const EditItem = ({ item }) => {
     setLoading(true);
     try {
       const res = await axios.patch(
-        `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`,
+        `${process.env.BASE_URL}/items/${item.id}`,
         formData,
         config
       );

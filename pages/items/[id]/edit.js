@@ -18,9 +18,7 @@ export default function Edit() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(
-          `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${id}`
-        );
+        const res = await axios.get(`${process.env.BASE_URL}/items/${id}`);
 
         setItem(res.data.data.data);
         setLoading(false);

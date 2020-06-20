@@ -26,6 +26,7 @@ const Table = styled.table`
     }
 
       :last-child {
+        width: 12rem;
        border-top-right-radius: 4px;
     }
     }
@@ -45,7 +46,7 @@ const Table = styled.table`
   td,
   th {
    
-    /* position: relative; */
+    position: relative;
     padding: 0.6rem 0 0.6rem 0rem;
     font-weight: 400;
     border-right: none;
@@ -60,6 +61,24 @@ const Table = styled.table`
       display: block;
     }
 
+    .tooltip {
+      position: absolute;
+      background-color: black;
+      color: #fff;
+      top: -30%;
+      left: -20%;
+      padding: .4rem .8rem;
+      border: 1px solid #fff;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .3s;
+    }
+
+    &:hover .tooltip {
+      visibility: visible;
+      opacity: .8;
+    }
     
    
   }

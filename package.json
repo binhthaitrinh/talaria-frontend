@@ -18,5 +18,5 @@
   "devDependencies": {
     "babel-plugin-styled-components": "^1.10.7"
   },
-  "proxy": "https://hidden-gorge-76682.herokuapp.com/api/v1"
+  "proxy": "${process.env.BASE_URL}"
 }

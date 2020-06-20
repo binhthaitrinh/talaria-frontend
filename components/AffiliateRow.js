@@ -9,9 +9,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
   const [showDetail, setShowDetail] = useState(false);
 
   const deleteItem = async () => {
-    await axios.delete(
-      `https://hidden-gorge-76682.herokuapp.com/api/v1/items/${item.id}`
-    );
+    await axios.delete(`${process.env.BASE_URL}/items/${item.id}`);
     window.location.reload();
     console.log('acbasd');
   };
