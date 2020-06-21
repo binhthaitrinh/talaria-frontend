@@ -33,7 +33,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
       <th>
         <StickerBtn type="success">{item.accountWebsite}</StickerBtn>
       </th>
-      <th>{item.balance}</th>
+      <th>
+        {new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'usd',
+        }).format(item.balance)}
+      </th>
       <th>
         <StickerBtn type={item.accountType === 'owned' ? 'success' : 'danger'}>
           {item.accountType}
