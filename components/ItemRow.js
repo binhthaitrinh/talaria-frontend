@@ -79,7 +79,7 @@ const ItemRow = ({
     >
       <th>{children}</th>
       {fields.map((field) => (
-        <th>{renderField(field)}</th>
+        <th key={field}>{renderField(field)}</th>
       ))}
       {/* <th>
         {new Date(item.createdAt).toLocaleString('en-us', {

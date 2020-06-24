@@ -14,7 +14,7 @@ const Container = styled.div`
     'sidebar header'
     'sidebar main';
   grid-template-rows: 7.2rem 1fr;
-  grid-template-columns: 32rem 1fr;
+  grid-template-columns: 26rem 1fr;
   box-shadow: 2px 8px 24px -4px rgba(0, 0, 0, 0.4);
 `;
 

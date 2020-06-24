@@ -14,7 +14,7 @@ const MenuItem = styled.li`
   }
 
   a {
-    padding: 1.4rem 0 1.8rem 5.4rem;
+    padding: 1.4rem 0 1.8rem 4.2rem;
     width: 100%;
     display: block;
     transition: all 0.2s ease-out;

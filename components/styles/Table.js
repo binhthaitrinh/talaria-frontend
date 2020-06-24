@@ -52,6 +52,7 @@ const Table = styled.table`
     font-weight: 400;
     border-right: none;
     min-width: 12rem;
+    white-space: nowrap;
     &:last-child {
       border-right: none;
       width: 150px;

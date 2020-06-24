@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import FormInput from '../components/styles/FormInput';
 import { useRouter } from 'next/router';
 
-function Items({ page, fields }) {
+function Items({ page, fields, sort }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,7 @@ function Items({ page, fields }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/items?page=${page}&limit=8${
+          `${process.env.BASE_URL}/items?page=${page}&limit=8&sort=${sort}${
             fields.length > 0 ? `&fields=${fields.join(',')}` : ''
           }`
         );
@@ -64,7 +64,7 @@ function Items({ page, fields }) {
     }
     setLoading(true);
     fetchData();
-  }, [page, fields]);
+  }, [page, fields, sort]);
 
   return loading ? (
     <Loader />

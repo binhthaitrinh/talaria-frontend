@@ -98,6 +98,10 @@ export default function Items() {
     'name',
     'actualCost',
   ]);
+  const [sort, setSort] = useState({ sortBy: 'createdAt', orderBy: 'asc' });
+  const [showSort, setShowSort] = useState(false);
+  const [sortStr, setSortStr] = useState('createdAt');
+
   const router = useRouter();
 
   const populate = () => {
@@ -111,48 +115,103 @@ export default function Items() {
   };
 
   return (
-    <div onClick={() => setShowFieldSelected(false)}>
+    <div
+      onClick={() => {
+        setShowFieldSelected(false);
+        setShowSort(false);
+      }}
+    >
       <Meta title="Dashboard" />
       <MainCntHeader>
         <Title>Items</Title>
-        <LimitDiv onClick={(e) => e.stopPropagation()}>
-          <button onClick={() => setShowFieldSelected(!showFieldSelected)}>
-            Limit fields
-          </button>
-          {showFieldSelected ? (
-            <div>
-              <form>
-                {fieldArr.map((field) => (
-                  <div key={field}>
-                    <input
-                      type="checkbox"
-                      checked={fieldSelected[field]}
-                      onChange={() =>
-                        setFieldSelected((fieldSelected) => ({
-                          ...fieldSelected,
-                          [field]: !fieldSelected[field],
-                        }))
-                      }
-                      id={field}
-                    />
-                    <label htmlFor={field}>{field}</label>
-                  </div>
-                ))}
-                <button
-                  onClick={(e) => {
+        <div style={{ display: 'flex' }}>
+          <LimitDiv onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setShowSort((showSort) => !showSort)}>
+              Sort
+            </button>
+            {showSort ? (
+              <div>
+                <form
+                  onSubmit={(e) => {
                     e.preventDefault();
-                    populate();
-                    setShowFieldSelected(false);
+                    setSortStr(
+                      `${sort.orderBy === 'asc' ? '' : '-'}${sort.sortBy}`
+                    );
+                    setShowSort(false);
                   }}
                 >
-                  Limit
-                </button>
-              </form>
-            </div>
-          ) : null}
-        </LimitDiv>
+                  <select
+                    onChange={(e) =>
+                      setSort({ ...sort, sortBy: e.target.value })
+                    }
+                    defaultValue={sort.sortBy}
+                  >
+                    {fieldArr.map((field) => (
+                      <option key={field} value={field}>
+                        {field}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    onChange={(e) =>
+                      setSort({ ...sort, orderBy: e.target.value })
+                    }
+                    defaultValue={sort.orderBy}
+                  >
+                    <option value="asc">asc</option>
+                    <option value="desc">desc</option>
+                  </select>
+                  <button>Sort</button>
+                </form>
+              </div>
+            ) : null}
+          </LimitDiv>
+          <LimitDiv
+            style={{ marginLeft: '1rem' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button onClick={() => setShowFieldSelected(!showFieldSelected)}>
+              Limit fields
+            </button>
+            {showFieldSelected ? (
+              <div>
+                <form>
+                  {fieldArr.map((field) => (
+                    <div key={field}>
+                      <input
+                        type="checkbox"
+                        checked={fieldSelected[field]}
+                        onChange={() =>
+                          setFieldSelected((fieldSelected) => ({
+                            ...fieldSelected,
+                            [field]: !fieldSelected[field],
+                          }))
+                        }
+                        id={field}
+                      />
+                      <label htmlFor={field}>{field}</label>
+                    </div>
+                  ))}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      populate();
+                      setShowFieldSelected(false);
+                    }}
+                  >
+                    Limit
+                  </button>
+                </form>
+              </div>
+            ) : null}
+          </LimitDiv>
+        </div>
       </MainCntHeader>
-      <MainContent page={router.query.page || 1} fields={fieldLimit} />
+      <MainContent
+        page={router.query.page || 1}
+        fields={fieldLimit}
+        sort={sortStr}
+      />
     </div>
   );
 }
