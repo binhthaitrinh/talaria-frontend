@@ -7,9 +7,9 @@ const Table = styled.table`
   /* box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3); */
   text-align: left;
   /* border-spacing: 0 8px; */
-  width: 100%;
+  min-width: 100%;
   /* border: 1px solid ${(props) => props.theme.offWhite}; */
-  table-layout: fixed;
+  table-layout: auto;
   
     font-size: 1.3rem;
   
@@ -19,6 +19,7 @@ const Table = styled.table`
        /* background-color: ${(props) => props.theme.primary}; */
        color: ${(props) => props.theme.grey};
       font-weight: 700;
+      padding: 0.6rem 2rem 0.6rem 1rem;
 
       :first-child {
        width: 12rem;
@@ -47,9 +48,10 @@ const Table = styled.table`
   th {
    
     position: relative;
-    padding: 0.6rem 0 0.6rem 0rem;
+    padding: 0.6rem 1.6rem 0.6rem 1rem;
     font-weight: 400;
     border-right: none;
+    min-width: 12rem;
     &:last-child {
       border-right: none;
       width: 150px;
@@ -79,7 +81,10 @@ const Table = styled.table`
       visibility: visible;
       opacity: .8;
     }
-    
+  
+  a {
+    color: ${(props) => props.theme.primary};
+  }
    
   }
 

@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import FormInput from '../components/styles/FormInput';
 import { useRouter } from 'next/router';
 
-function Items({ page }) {
+function Items({ page, fields }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,9 @@ function Items({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/items?page=${page}&limit=8`
+          `${process.env.BASE_URL}/items?page=${page}&limit=8${
+            fields.length > 0 ? `&fields=${fields.join(',')}` : ''
+          }`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
@@ -60,9 +62,9 @@ function Items({ page }) {
         console.log(err);
       }
     }
-
+    setLoading(true);
     fetchData();
-  }, [page]);
+  }, [page, fields]);
 
   return loading ? (
     <Loader />
@@ -72,6 +74,10 @@ function Items({ page }) {
         <thead>
           <tr>
             <th>Selected</th>
+            {fields.map((field) => (
+              <th key={field}>{field}</th>
+            ))}
+            {/* <th>Selected</th>
             <th>Created At</th>
             <th>Tracking Link</th>
             <th>Item Link</th>
@@ -79,7 +85,7 @@ function Items({ page }) {
             <th>Price</th>
             <th>Quantity</th>
             <th>Actual Cost</th>
-            <th>Status</th>
+            <th>Status</th> */}
 
             <th>Action</th>
           </tr>
@@ -92,6 +98,7 @@ function Items({ page }) {
               index={index}
               items={items}
               setItems={setItems}
+              fields={fields}
             >
               <form>
                 <input

@@ -13,8 +13,58 @@ const ItemRow = ({
   selected,
   setSelected,
   children,
+  fields,
 }) => {
   const [showDetail, setShowDetail] = useState(false);
+
+  const renderField = (field) => {
+    if (item[field]) {
+      if (item[field]['$numberDecimal']) {
+        if (field === 'actualCost') {
+          return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'VND',
+          }).format(item[field]['$numberDecimal']);
+        } else if (field.startsWith('tax')) {
+          return new Intl.NumberFormat('en-US', {
+            style: 'percent',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(item[field]['$numberDecimal']);
+        } else {
+          return item[field]['$numberDecimal'];
+        }
+      } else if (field === 'link' || field === 'trackingLink') {
+        return (
+          <a href={item[field]} target="_blank">
+            {item[field].slice(0, 15)}...
+          </a>
+        );
+      } else if (field === 'pricePerItem') {
+        return new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(item[field]);
+      } else if (field === 'createdAt') {
+        return new Date(item.createdAt).toLocaleString('en-us', {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+        });
+      } else if (field === 'orderAccount') {
+        return (
+          <Link href={`/accounts/${item[field]._id}`} passHref>
+            <a>
+              {item[field].loginID.slice(0, 15)}...{' '}
+              <span className="tooltip">{item[field].loginID}</span>
+            </a>
+          </Link>
+        );
+      }
+    }
+
+    return item[field];
+  };
 
   const deleteItem = async () => {
     await axios.delete(`${process.env.BASE_URL}/items/${item.id}`);
@@ -28,7 +78,10 @@ const ItemRow = ({
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
       <th>{children}</th>
-      <th>
+      {fields.map((field) => (
+        <th>{renderField(field)}</th>
+      ))}
+      {/* <th>
         {new Date(item.createdAt).toLocaleString('en-us', {
           month: 'long',
           year: 'numeric',
@@ -68,7 +121,7 @@ const ItemRow = ({
           }).format(item.actualCost['$numberDecimal'])
         )}
       </th>
-      <th>{item.status}</th>
+      <th>{item.status}</th> */}
 
       <th>
         <ActionBtn
