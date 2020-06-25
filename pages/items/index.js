@@ -9,6 +9,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 const fields = {
+  _id: true,
   status: true,
   tax: false,
   taxForCustomer: false,
@@ -28,6 +29,7 @@ const fields = {
 };
 
 const fieldArr = [
+  '_id',
   'status',
   'tax',
   'taxForCustomer',
@@ -89,6 +91,7 @@ export default function Items() {
   const [fieldSelected, setFieldSelected] = useState(fields);
   const [showFieldSelected, setShowFieldSelected] = useState(false);
   const [fieldLimit, setFieldLimit] = useState([
+    '_id',
     'status',
     'pricePerItem',
     'quantity',
@@ -101,8 +104,33 @@ export default function Items() {
   const [sort, setSort] = useState({ sortBy: 'createdAt', orderBy: 'asc' });
   const [showSort, setShowSort] = useState(false);
   const [sortStr, setSortStr] = useState('createdAt');
+  const [filter, setFilter] = useState([]);
+  const [filterNo, setFilterNo] = useState(0);
+  const [showFilter, setShowFilter] = useState(false);
+  const [singleFilter, setSingleFilter] = useState({
+    field: 'name',
+    operator: 'gte',
+    value: null,
+  });
+  const [filterStr, setFilterStr] = useState(null);
 
   const router = useRouter();
+
+  // const onUpdateItem = (fieldName, e) => {
+  //   setFilter((filter) => {
+  //     const list = filter.map((item, i) => {
+  //       if (i === filterNo) {
+  //         return {
+  //           ...item,
+  //           [fieldName]: e.target.value,
+  //         };
+  //       } else {
+  //         return item;
+  //       }
+  //     });
+  //     return list;
+  //   });
+  // };
 
   const populate = () => {
     setFieldLimit([]);
@@ -112,6 +140,15 @@ export default function Items() {
       }
     });
     console.log(fieldLimit);
+  };
+
+  const getFilterStr = () => {
+    let result = '';
+    filter.forEach((item) => {
+      result += `${item.field}[${item.operator}]=${item.value}`;
+    });
+    result += `${singleFilter.field}[${singleFilter.operator}]=${singleFilter.value}`;
+    return result;
   };
 
   return (
@@ -125,8 +162,93 @@ export default function Items() {
       <MainCntHeader>
         <Title>Items</Title>
         <div style={{ display: 'flex' }}>
+          <LimitDiv>
+            <button onClick={() => setShowFilter(!showFilter)}>Filter</button>
+            {showFilter ? (
+              <div>
+                {filter.map((item, i) => (
+                  <div key={i}>
+                    <p>
+                      {item.field} {item.operator} {item.value}
+                    </p>
+                  </div>
+                ))}
+                <form>
+                  <select
+                    onChange={(e) => {
+                      setSingleFilter({
+                        ...singleFilter,
+                        field: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">Choose a field</option>
+                    {fieldArr.map((field) => (
+                      <option key={field} value={field}>
+                        {field}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    onChange={(e) => {
+                      setSingleFilter({
+                        ...singleFilter,
+                        operator: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">Choose an operator</option>
+                    <option value="gte">Greater than</option>
+                    <option value="eq">Equal</option>
+                    <option value="lte">Less than</option>
+                  </select>
+                  <input
+                    type="text"
+                    value={singleFilter.value}
+                    onChange={(e) => {
+                      setSingleFilter({
+                        ...singleFilter,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setFilter([...filter, singleFilter]);
+                      setSingleFilter({
+                        field: '_id',
+                        operator: 'gte',
+                        value: '',
+                      });
+                    }}
+                  >
+                    Add more field
+                  </button>
+                </form>
+
+                <button
+                  onClick={() => {
+                    setFilterStr(getFilterStr());
+                  }}
+                >
+                  Filter
+                </button>
+                <button
+                  onClick={() => {
+                    setFilterStr('');
+                  }}
+                >
+                  Clear filter
+                </button>
+              </div>
+            ) : null}
+          </LimitDiv>
           <LimitDiv onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowSort((showSort) => !showSort)}>
+            <button
+              style={{ marginLeft: '1rem' }}
+              onClick={() => setShowSort((showSort) => !showSort)}
+            >
               Sort
             </button>
             {showSort ? (
@@ -211,6 +333,7 @@ export default function Items() {
         page={router.query.page || 1}
         fields={fieldLimit}
         sort={sortStr}
+        filter={filterStr}
       />
     </div>
   );
