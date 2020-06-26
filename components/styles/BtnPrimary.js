@@ -5,7 +5,7 @@ const BtnPrimary = styled.button`
   ${Btn};
   background-color: ${(props) => props.theme.primary};
   color: #fff;
-  padding: 0.8rem 1.6rem;
+  padding: 1.2rem 1.8rem;
 `;
 
 export default BtnPrimary;

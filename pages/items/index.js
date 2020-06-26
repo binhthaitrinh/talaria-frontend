@@ -6,7 +6,10 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import LinkPrimary from '../../components/styles/LinkPrimary';
 import Link from 'next/link';
+import BtnGrey from '../../components/styles/BtnGrey';
+import BtnGreySm from '../../components/styles/BtnGreySm';
 import styled from 'styled-components';
+import BtnPrimary from '../../components/styles/BtnPrimary';
 
 const fields = {
   _id: true,
@@ -87,6 +90,89 @@ const LimitDiv = styled.div`
   } */
 `;
 
+const Filter = styled.div`
+  position: relative;
+`;
+
+const FilterPopup = styled.div`
+  position: absolute;
+  z-index: 999;
+  background-color: #fff;
+  top: 4.8rem;
+  right: 0;
+  border-radius: 6px;
+  box-shadow: 0 1rem 8rem rgba(0, 0, 0, 0.1), 0 -1rem 8rem rgba(0, 0, 0, 0.1);
+  padding: 3rem 3rem;
+  font-size: 1.4rem;
+`;
+
+const Option = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  & > div {
+    margin-left: 2rem;
+  }
+`;
+
+const FormInputSm = styled.input`
+  font-size: 1.2rem;
+  font-family: inherit;
+  color: inherit;
+  padding: 0.8rem 1.6rem;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.offWhite};
+  border: none;
+  border-bottom: 5px solid transparent;
+  display: block;
+  transition: all 0.3s;
+
+  &:focus {
+    border-bottom: 5px solid ${(props) => props.theme.primary};
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+    outline: none;
+  }
+
+  &:focus:invalid {
+    border-bottom: 5px solid red;
+  }
+`;
+
+const FilterFormContainer = styled.form`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 75rem;
+  margin-bottom: 1.8rem;
+
+  & > * {
+    margin-right: 1.8rem;
+  }
+`;
+
+const FilterActionContainer = styled.div`
+  display: flex;
+
+  & > button {
+    margin-right: 1.8rem;
+  }
+`;
+
+const Select = styled.select`
+  font-size: 1.2rem;
+  font-family: inherit;
+  color: inherit;
+  padding: 0.8rem 1.6rem;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.offWhite};
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  border-top: 2.5px solid transparent;
+  display: block;
+  transition: all 0.3s;
+`;
+
 export default function Items() {
   const [fieldSelected, setFieldSelected] = useState(fields);
   const [showFieldSelected, setShowFieldSelected] = useState(false);
@@ -110,7 +196,7 @@ export default function Items() {
   const [singleFilter, setSingleFilter] = useState({
     field: 'name',
     operator: 'gte',
-    value: null,
+    value: '',
   });
   const [filterStr, setFilterStr] = useState(null);
 
@@ -161,20 +247,28 @@ export default function Items() {
       <Meta title="Dashboard" />
       <MainCntHeader>
         <Title>Items</Title>
-        <div style={{ display: 'flex' }}>
-          <LimitDiv>
-            <button onClick={() => setShowFilter(!showFilter)}>Filter</button>
+        <Option>
+          <Filter>
+            <BtnGrey onClick={() => setShowFilter(!showFilter)}>Filter</BtnGrey>
             {showFilter ? (
-              <div>
+              <FilterPopup>
                 {filter.map((item, i) => (
-                  <div key={i}>
-                    <p>
-                      {item.field} {item.operator} {item.value}
-                    </p>
-                  </div>
+                  <FilterFormContainer key={i}>
+                    <Select readOnly disabled>
+                      <option value={item.field}>{item.field}</option>
+                    </Select>
+                    <Select readOnly disabled>
+                      <option value={item.operator}>{item.operator}</option>
+                    </Select>
+                    <FormInputSm
+                      value={item.value}
+                      readOnly
+                      disabled
+                    ></FormInputSm>
+                  </FilterFormContainer>
                 ))}
-                <form>
-                  <select
+                <FilterFormContainer>
+                  <Select
                     onChange={(e) => {
                       setSingleFilter({
                         ...singleFilter,
@@ -188,8 +282,8 @@ export default function Items() {
                         {field}
                       </option>
                     ))}
-                  </select>
-                  <select
+                  </Select>
+                  <Select
                     onChange={(e) => {
                       setSingleFilter({
                         ...singleFilter,
@@ -201,8 +295,8 @@ export default function Items() {
                     <option value="gte">Greater than</option>
                     <option value="eq">Equal</option>
                     <option value="lte">Less than</option>
-                  </select>
-                  <input
+                  </Select>
+                  <FormInputSm
                     type="text"
                     value={singleFilter.value}
                     onChange={(e) => {
@@ -211,8 +305,9 @@ export default function Items() {
                         value: e.target.value,
                       });
                     }}
+                    placeHolder="value"
                   />
-                  <button
+                  <BtnGreySm
                     onClick={(e) => {
                       e.preventDefault();
                       setFilter([...filter, singleFilter]);
@@ -224,31 +319,30 @@ export default function Items() {
                     }}
                   >
                     Add more field
-                  </button>
-                </form>
-
-                <button
-                  onClick={() => {
-                    setFilterStr(getFilterStr());
-                  }}
-                >
-                  Filter
-                </button>
-                <button
-                  onClick={() => {
-                    setFilterStr('');
-                  }}
-                >
-                  Clear filter
-                </button>
-              </div>
+                  </BtnGreySm>
+                </FilterFormContainer>
+                <FilterActionContainer>
+                  <BtnPrimary
+                    onClick={() => {
+                      setFilterStr(getFilterStr());
+                    }}
+                  >
+                    Filter
+                  </BtnPrimary>
+                  <BtnGrey
+                    onClick={() => {
+                      setFilterStr('');
+                      setFilter([]);
+                    }}
+                  >
+                    Clear filter
+                  </BtnGrey>
+                </FilterActionContainer>
+              </FilterPopup>
             ) : null}
-          </LimitDiv>
+          </Filter>
           <LimitDiv onClick={(e) => e.stopPropagation()}>
-            <button
-              style={{ marginLeft: '1rem' }}
-              onClick={() => setShowSort((showSort) => !showSort)}
-            >
+            <button onClick={() => setShowSort((showSort) => !showSort)}>
               Sort
             </button>
             {showSort ? (
@@ -288,10 +382,7 @@ export default function Items() {
               </div>
             ) : null}
           </LimitDiv>
-          <LimitDiv
-            style={{ marginLeft: '1rem' }}
-            onClick={(e) => e.stopPropagation()}
-          >
+          <LimitDiv onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setShowFieldSelected(!showFieldSelected)}>
               Limit fields
             </button>
@@ -327,7 +418,7 @@ export default function Items() {
               </div>
             ) : null}
           </LimitDiv>
-        </div>
+        </Option>
       </MainCntHeader>
       <MainContent
         page={router.query.page || 1}
