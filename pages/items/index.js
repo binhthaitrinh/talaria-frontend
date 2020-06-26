@@ -173,6 +173,19 @@ const Select = styled.select`
   transition: all 0.3s;
 `;
 
+const LimitFieldForm = styled.form`
+  width: 60rem;
+  & > div {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 1.8rem;
+
+    input {
+      margin-right: 1.6rem;
+    }
+  }
+`;
+
 export default function Items() {
   const [fieldSelected, setFieldSelected] = useState(fields);
   const [showFieldSelected, setShowFieldSelected] = useState(false);
@@ -249,7 +262,9 @@ export default function Items() {
         <Title>Items</Title>
         <Option>
           <Filter>
-            <BtnGrey onClick={() => setShowFilter(!showFilter)}>Filter</BtnGrey>
+            <BtnGrey onClick={() => setShowFilter(!showFilter)}>
+              Filter <ion-icon name="filter-outline"></ion-icon>
+            </BtnGrey>
             {showFilter ? (
               <FilterPopup>
                 {filter.map((item, i) => (
@@ -341,13 +356,14 @@ export default function Items() {
               </FilterPopup>
             ) : null}
           </Filter>
-          <LimitDiv onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowSort((showSort) => !showSort)}>
-              Sort
-            </button>
+          <Filter onClick={(e) => e.stopPropagation()}>
+            <BtnGrey onClick={() => setShowSort((showSort) => !showSort)}>
+              Sort <ion-icon name="funnel-outline"></ion-icon>
+            </BtnGrey>
             {showSort ? (
-              <div>
-                <form
+              <FilterPopup>
+                <FilterFormContainer
+                  style={{ width: '35rem' }}
                   onSubmit={(e) => {
                     e.preventDefault();
                     setSortStr(
@@ -356,7 +372,7 @@ export default function Items() {
                     setShowSort(false);
                   }}
                 >
-                  <select
+                  <Select
                     onChange={(e) =>
                       setSort({ ...sort, sortBy: e.target.value })
                     }
@@ -367,8 +383,8 @@ export default function Items() {
                         {field}
                       </option>
                     ))}
-                  </select>
-                  <select
+                  </Select>
+                  <Select
                     onChange={(e) =>
                       setSort({ ...sort, orderBy: e.target.value })
                     }
@@ -376,36 +392,39 @@ export default function Items() {
                   >
                     <option value="asc">asc</option>
                     <option value="desc">desc</option>
-                  </select>
-                  <button>Sort</button>
-                </form>
-              </div>
+                  </Select>
+                  <BtnPrimary>Sort</BtnPrimary>
+                </FilterFormContainer>
+              </FilterPopup>
             ) : null}
-          </LimitDiv>
-          <LimitDiv onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowFieldSelected(!showFieldSelected)}>
-              Limit fields
-            </button>
+          </Filter>
+          <Filter onClick={(e) => e.stopPropagation()}>
+            <BtnGrey onClick={() => setShowFieldSelected(!showFieldSelected)}>
+              Limit fields <ion-icon name="remove-circle-outline"></ion-icon>
+            </BtnGrey>
             {showFieldSelected ? (
-              <div>
-                <form>
-                  {fieldArr.map((field) => (
-                    <div key={field}>
-                      <input
-                        type="checkbox"
-                        checked={fieldSelected[field]}
-                        onChange={() =>
-                          setFieldSelected((fieldSelected) => ({
-                            ...fieldSelected,
-                            [field]: !fieldSelected[field],
-                          }))
-                        }
-                        id={field}
-                      />
-                      <label htmlFor={field}>{field}</label>
-                    </div>
-                  ))}
-                  <button
+              <FilterPopup>
+                <LimitFieldForm>
+                  <div>
+                    {fieldArr.map((field) => (
+                      <div key={field}>
+                        <input
+                          type="checkbox"
+                          checked={fieldSelected[field]}
+                          onChange={() =>
+                            setFieldSelected((fieldSelected) => ({
+                              ...fieldSelected,
+                              [field]: !fieldSelected[field],
+                            }))
+                          }
+                          id={field}
+                        />
+                        <label htmlFor={field}>{field}</label>
+                      </div>
+                    ))}
+                  </div>
+
+                  <BtnPrimary
                     onClick={(e) => {
                       e.preventDefault();
                       populate();
@@ -413,11 +432,11 @@ export default function Items() {
                     }}
                   >
                     Limit
-                  </button>
-                </form>
-              </div>
+                  </BtnPrimary>
+                </LimitFieldForm>
+              </FilterPopup>
             ) : null}
-          </LimitDiv>
+          </Filter>
         </Option>
       </MainCntHeader>
       <MainContent

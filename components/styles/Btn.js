@@ -7,7 +7,9 @@ const Btn = css`
     text-transform: uppercase;
     text-decoration: none;
 
-    display: inline-block;
+    display: inline-flex;
+
+    align-items: center;
     border-radius: 10rem;
     transition: all 0.2s;
     position: relative;

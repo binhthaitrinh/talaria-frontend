@@ -8,6 +8,10 @@ const BtnGrey = styled.button`
   padding: 1.2rem 2rem;
   text-transform: capitalize !important;
 
+  ion-icon {
+    margin-left: 0.8rem;
+  }
+
   &:hover {
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
   }
