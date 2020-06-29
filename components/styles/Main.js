@@ -9,6 +9,7 @@ const Main = styled.div`
   padding: 4rem 4rem 0 4rem;
   font-weight: 300;
   position: relative;
+  font-size: 1.6rem;
 `;
 
 export default Main;

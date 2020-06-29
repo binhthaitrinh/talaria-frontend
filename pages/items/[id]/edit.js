@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react';
 import Loader from '../../../components/styles/Loader';
 import axios from 'axios';
 import EditItem from '../../../components/EditItem';
+import Btn from '../../../components/styles/Btn';
+import BtnText from '../../../components/styles/BtnText';
 
 export default function Edit() {
   const [item, setItem] = useState({});
@@ -33,7 +35,9 @@ export default function Edit() {
   return (
     <>
       <Meta title="Edit item" />
-
+      <Link href="/items" passHref>
+        <BtnText>&larr; Back to Items</BtnText>
+      </Link>
       <MainCntHeader>
         <Title>Item {id}</Title>
       </MainCntHeader>

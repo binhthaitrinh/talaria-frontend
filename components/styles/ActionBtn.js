@@ -7,10 +7,10 @@ const ActionBtn = styled.button`
   height: 4rem;
   padding: 1rem;
   background-color: transparent;
+  justify-content: center;
 
   :hover {
-    background-color: ${(props) => props.theme.primary};
-    color: #fff;
+    background-color: ${(props) => props.theme.lightGrey};
   }
 `;
 

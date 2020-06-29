@@ -5,6 +5,7 @@ import SingleItem from '../../components/SingleItem';
 import MainCntHeader from '../../components/styles/MainCntHeader';
 import LinkPrimary from '../../components/styles/LinkPrimary';
 import Link from 'next/link';
+import BtnText from '../../components/styles/BtnText';
 
 export default function ItemDetail(props) {
   const router = useRouter();
@@ -12,6 +13,9 @@ export default function ItemDetail(props) {
   return (
     <>
       <Meta title="Detail" />
+      <Link href="/items" passHref>
+        <BtnText>&larr; Back to items</BtnText>
+      </Link>
       <MainCntHeader>
         <Title>Item {id}</Title>
         <Link href={`/items/${id}/edit`} passHref>

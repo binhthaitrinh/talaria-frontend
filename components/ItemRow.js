@@ -3,7 +3,6 @@ import Link from 'next/link';
 import ActionBtn from './styles/ActionBtn';
 import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
-import StickerBtn from './styles/StickerBtn';
 
 const ItemRow = ({
   item,
@@ -20,11 +19,16 @@ const ItemRow = ({
   const renderField = (field) => {
     if (item[field]) {
       if (item[field]['$numberDecimal']) {
-        if (field === 'actualCost') {
+        if (field === 'actualCost' && item[field]['$numberDecimal'] > 0) {
           return new Intl.NumberFormat('de-DE', {
             style: 'currency',
             currency: 'VND',
           }).format(item[field]['$numberDecimal']);
+        } else if (
+          field === 'actualCost' &&
+          item[field]['$numberDecimal'] === '0'
+        ) {
+          return '---';
         } else if (field.startsWith('tax')) {
           return new Intl.NumberFormat('en-US', {
             style: 'percent',
@@ -59,6 +63,13 @@ const ItemRow = ({
               <span className="tooltip">{item[field].loginID}</span>
             </a>
           </Link>
+        );
+      } else if (field === '_id') {
+        return (
+          <div>
+            {`${item[field].slice(0, 10)}...`}
+            <span className="tooltip">{item[field]}</span>
+          </div>
         );
       }
     }

@@ -10,6 +10,7 @@ import ActionBtnGroup from '../components/styles/ActionBtnGroup';
 import styled from 'styled-components';
 import FormInput from '../components/styles/FormInput';
 import { useRouter } from 'next/router';
+import _ from 'lodash';
 
 function Items({ page, fields, sort, filter }) {
   const router = useRouter();
@@ -77,7 +78,7 @@ function Items({ page, fields, sort, filter }) {
           <tr>
             <th>Selected</th>
             {fields.map((field) => (
-              <th key={field}>{field}</th>
+              <th key={field}>{_.startCase(field)}</th>
             ))}
             {/* <th>Selected</th>
             <th>Created At</th>

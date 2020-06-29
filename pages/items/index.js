@@ -10,43 +10,47 @@ import BtnGrey from '../../components/styles/BtnGrey';
 import BtnGreySm from '../../components/styles/BtnGreySm';
 import styled from 'styled-components';
 import BtnPrimary from '../../components/styles/BtnPrimary';
+import _ from 'lodash';
 
 const fields = {
   _id: true,
-  status: true,
-  tax: false,
-  taxForCustomer: false,
-  usShippingFee: false,
-  estimatedWeight: false,
-  actualWeight: false,
-  actualCost: true,
-  quantity: true,
-  orderedWebsite: false,
   createdAt: true,
-  link: true,
   name: true,
-  trackingLink: true,
   pricePerItem: true,
+  quantity: true,
+  usShippingFee: true,
+  estimatedWeight: false,
+  orderedWebsite: false,
+  actualCost: true,
+  tax: false,
+  link: true,
+  trackingLink: true,
+  status: true,
+  taxForCustomer: false,
+
+  actualWeight: false,
+
   orderAccount: false,
   notes: true,
 };
 
 const fieldArr = [
   '_id',
-  'status',
-  'tax',
-  'taxForCustomer',
+  'createdAt',
+  'name',
+  'pricePerItem',
+  'quantity',
   'usShippingFee',
   'estimatedWeight',
-  'actualWeight',
-  'actualCost',
-  'quantity',
   'orderedWebsite',
-  'createdAt',
+  'actualCost',
+  'tax',
   'link',
-  'name',
   'trackingLink',
-  'pricePerItem',
+  'status',
+  'taxForCustomer',
+  'actualWeight',
+
   'orderAccount',
   'notes',
 ];
@@ -186,20 +190,22 @@ const LimitFieldForm = styled.form`
   }
 `;
 
+const initialFields = [
+  '_id',
+  'createdAt',
+  'name',
+  'pricePerItem',
+  'quantity',
+  'actualCost',
+  'link',
+  'trackingLink',
+  'status',
+];
+
 export default function Items() {
   const [fieldSelected, setFieldSelected] = useState(fields);
   const [showFieldSelected, setShowFieldSelected] = useState(false);
-  const [fieldLimit, setFieldLimit] = useState([
-    '_id',
-    'status',
-    'pricePerItem',
-    'quantity',
-    'createdAt',
-    'link',
-    'trackingLink',
-    'name',
-    'actualCost',
-  ]);
+  const [fieldLimit, setFieldLimit] = useState(initialFields);
   const [sort, setSort] = useState({ sortBy: 'createdAt', orderBy: 'asc' });
   const [showSort, setShowSort] = useState(false);
   const [sortStr, setSortStr] = useState('createdAt');
@@ -270,7 +276,9 @@ export default function Items() {
                 {filter.map((item, i) => (
                   <FilterFormContainer key={i}>
                     <Select readOnly disabled>
-                      <option value={item.field}>{item.field}</option>
+                      <option value={item.field}>
+                        {_.startCase(item.field)}
+                      </option>
                     </Select>
                     <Select readOnly disabled>
                       <option value={item.operator}>{item.operator}</option>
@@ -294,7 +302,7 @@ export default function Items() {
                     <option value="">Choose a field</option>
                     {fieldArr.map((field) => (
                       <option key={field} value={field}>
-                        {field}
+                        {_.startCase(field)}
                       </option>
                     ))}
                   </Select>
@@ -380,7 +388,7 @@ export default function Items() {
                   >
                     {fieldArr.map((field) => (
                       <option key={field} value={field}>
-                        {field}
+                        {_.startCase(field)}
                       </option>
                     ))}
                   </Select>
@@ -419,7 +427,7 @@ export default function Items() {
                           }
                           id={field}
                         />
-                        <label htmlFor={field}>{field}</label>
+                        <label htmlFor={field}>{_.startCase(field)}</label>
                       </div>
                     ))}
                   </div>
@@ -433,6 +441,27 @@ export default function Items() {
                   >
                     Limit
                   </BtnPrimary>
+                  <BtnGrey
+                    style={{ marginLeft: '1.6rem' }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setFieldLimit(initialFields);
+                      fieldArr.forEach((field) => {
+                        setFieldSelected((fieldSelected) => ({
+                          ...fieldSelected,
+                          [field]: false,
+                        }));
+                      });
+                      fieldLimit.forEach((field) => {
+                        setFieldSelected((fieldSelected) => ({
+                          ...fieldSelected,
+                          [field]: true,
+                        }));
+                      });
+                    }}
+                  >
+                    Reset to default
+                  </BtnGrey>
                 </LimitFieldForm>
               </FilterPopup>
             ) : null}

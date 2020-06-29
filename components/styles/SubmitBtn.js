@@ -8,6 +8,7 @@ const BtnPrimary = styled.button`
 
   height: 4.8rem;
   width: 12rem;
+  justify-content: center;
 
   &:disabled {
     background-color: ${(props) => props.theme.primaryDark};

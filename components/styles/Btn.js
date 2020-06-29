@@ -29,11 +29,14 @@ const Btn = css`
     }
   }
 
-  &:active,
-  &:focus {
+  &:active {
     outline: none;
     transform: translateY(-1px);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 
