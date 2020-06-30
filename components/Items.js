@@ -12,7 +12,7 @@ import FormInput from '../components/styles/FormInput';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 
-function Items({ page, fields, sort, filter }) {
+function Items({ page, fields, sort, filter, freezeNo }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -73,14 +73,46 @@ function Items({ page, fields, sort, filter }) {
     <Loader />
   ) : (
     <MainContent>
-      <Table>
-        <thead>
-          <tr>
-            <th>Selected</th>
-            {fields.map((field) => (
-              <th key={field}>{_.startCase(field)}</th>
-            ))}
-            {/* <th>Selected</th>
+      <div
+        style={{
+          marginLeft: `${12 * (freezeNo + 1)}rem`,
+          overflowX: 'scroll',
+          overflowY: 'hidden',
+        }}
+      >
+        <Table>
+          <thead>
+            <tr>
+              <th
+                style={{
+                  position: 'absolute',
+                  top: 'auto',
+                  left: '4rem',
+                  borderBottom: '1px solid rgba(0,0,0,0.09)',
+                }}
+              >
+                Selected
+              </th>
+              {fields.map((field, index) => {
+                if (index < freezeNo) {
+                  return (
+                    <th
+                      style={{
+                        position: 'absolute',
+                        top: 'auto',
+                        left: `${(index + 1) * 12 + 4}rem`,
+                        borderBottom: '1px solid rgba(0,0,0,0.09)',
+                      }}
+                      key={field}
+                    >
+                      {_.startCase(field)}
+                    </th>
+                  );
+                } else {
+                  return <td key={field}>{_.startCase(field)}</td>;
+                }
+              })}
+              {/* <th>Selected</th>
             <th>Created At</th>
             <th>Tracking Link</th>
             <th>Item Link</th>
@@ -90,30 +122,32 @@ function Items({ page, fields, sort, filter }) {
             <th>Actual Cost</th>
             <th>Status</th> */}
 
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <ItemRow
-              item={item}
-              key={item.id}
-              index={index}
-              items={items}
-              setItems={setItems}
-              fields={fields}
-            >
-              <form>
-                <input
-                  type="checkbox"
-                  checked={selected[item._id]}
-                  onChange={() => onSelectChange(item._id)}
-                />
-              </form>
-            </ItemRow>
-          ))}
-        </tbody>
-      </Table>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <ItemRow
+                item={item}
+                key={item.id}
+                index={index}
+                items={items}
+                setItems={setItems}
+                fields={fields}
+                freezeNo={freezeNo}
+              >
+                <form>
+                  <input
+                    type="checkbox"
+                    checked={selected[item._id]}
+                    onChange={() => onSelectChange(item._id)}
+                  />
+                </form>
+              </ItemRow>
+            ))}
+          </tbody>
+        </Table>{' '}
+      </div>
       <ActionBtnGroup>
         <div>
           <Link href={`/items?page=${page * 1 - 1}`} passHref>

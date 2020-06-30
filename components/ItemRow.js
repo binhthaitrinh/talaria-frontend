@@ -13,6 +13,7 @@ const ItemRow = ({
   setSelected,
   children,
   fields,
+  freezeNo,
 }) => {
   const [showDetail, setShowDetail] = useState(false);
 
@@ -88,10 +89,43 @@ const ItemRow = ({
       onClick={() => setShowDetail(false)}
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
-      <th>{children}</th>
-      {fields.map((field) => (
-        <th key={field}>{renderField(field)}</th>
-      ))}
+      <th
+        style={{
+          position: 'absolute',
+          top: 'auto',
+          left: '4rem',
+          height: '5.3rem',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          borderBottom: '1px solid rgba(0,0,0,0.09)',
+        }}
+      >
+        {children}
+      </th>
+      {fields.map((field, index) => {
+        if (index < freezeNo) {
+          return (
+            <th
+              style={{
+                position: 'absolute',
+                top: 'auto',
+                left: `${(index + 1) * 12 + 4}rem`,
+                height: '5.3rem',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                borderBottom: '1px solid rgba(0,0,0,0.09)',
+              }}
+              key={field}
+            >
+              {renderField(field)}
+            </th>
+          );
+        } else {
+          return <td key={field}>{renderField(field)}</td>;
+        }
+      })}
       {/* <th>
         {new Date(item.createdAt).toLocaleString('en-us', {
           month: 'long',

@@ -7,9 +7,9 @@ const Table = styled.table`
   /* box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3); */
   text-align: left;
   /* border-spacing: 0 8px; */
-  min-width: 100%;
+  width: 100%;
   /* border: 1px solid ${(props) => props.theme.offWhite}; */
-  table-layout: auto;
+  table-layout: fixed;
   
     font-size: 1.3rem;
   
@@ -20,16 +20,7 @@ const Table = styled.table`
        color: ${(props) => props.theme.grey};
       font-weight: 700;
       padding: 0.6rem 2rem 0.6rem 1rem;
-
-      :first-child {
-       width: 12rem;
-       border-top-left-radius: 4px;
-    }
-
-      :last-child {
-        width: 12rem;
-       border-top-right-radius: 4px;
-    }
+      width: 12rem;
     }
   }
 
@@ -45,13 +36,13 @@ const Table = styled.table`
   }
 
   td,
-  th {
-   
+  th, td {
+   width: 12rem;
     position: relative;
     padding: 0.6rem 1.6rem 0.6rem 1rem;
     font-weight: 400;
     border-right: none;
-    min-width: 12rem;
+ 
     white-space: nowrap;
     &:last-child {
       border-right: none;

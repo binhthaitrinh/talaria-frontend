@@ -218,6 +218,9 @@ export default function Items() {
     value: '',
   });
   const [filterStr, setFilterStr] = useState(null);
+  const [freezeNo, setFreezeNo] = useState(4);
+  const [freezePass, setFreezePass] = useState(4);
+  const [freezeShow, setFreezeShow] = useState(false);
 
   const router = useRouter();
 
@@ -282,6 +285,47 @@ export default function Items() {
       <MainCntHeader>
         <Title>Items</Title>
         <Option>
+          <Filter>
+            <BtnGrey onClick={() => setFreezeShow(!freezeShow)}>
+              Freeze Col
+            </BtnGrey>
+            {freezeShow ? (
+              <FilterPopup>
+                <FilterFormContainer
+                  style={{ width: '36rem', marginBottom: 0 }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setFreezePass(freezeNo);
+                    setFreezeShow(false);
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-start',
+                    }}
+                  >
+                    <label style={{ marginRight: '2rem' }}>
+                      Number of freeze col
+                    </label>
+                    <Select
+                      defaultValue={freezeNo}
+                      onChange={(e) => setFreezeNo(parseInt(e.target.value))}
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </Select>
+                  </div>
+                  <BtnPrimary>Submit</BtnPrimary>
+                </FilterFormContainer>
+              </FilterPopup>
+            ) : null}
+          </Filter>
           <Filter>
             <BtnGrey onClick={() => setShowFilter(!showFilter)}>
               Filter <ion-icon name="filter-outline"></ion-icon>
@@ -476,6 +520,7 @@ export default function Items() {
         fields={fieldLimit}
         sort={sortStr}
         filter={filterStr}
+        freezeNo={freezePass}
       />
     </div>
   );
