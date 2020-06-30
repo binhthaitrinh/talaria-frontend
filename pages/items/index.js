@@ -3,7 +3,7 @@ import Title from '../../components/styles/Title';
 import MainCntHeader from '../../components/styles/MainCntHeader';
 import MainContent from '../../components/Items';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LinkPrimary from '../../components/styles/LinkPrimary';
 import Link from 'next/link';
 import BtnGrey from '../../components/styles/BtnGrey';
@@ -256,6 +256,21 @@ export default function Items() {
     return result;
   };
 
+  useEffect(() => {
+    fieldArr.forEach((field) => {
+      setFieldSelected((fieldSelected) => ({
+        ...fieldSelected,
+        [field]: false,
+      }));
+    });
+    fieldLimit.forEach((field) => {
+      setFieldSelected((fieldSelected) => ({
+        ...fieldSelected,
+        [field]: true,
+      }));
+    });
+  }, [fieldLimit]);
+
   return (
     <div
       onClick={() => {
@@ -446,18 +461,6 @@ export default function Items() {
                     onClick={(e) => {
                       e.preventDefault();
                       setFieldLimit(initialFields);
-                      fieldArr.forEach((field) => {
-                        setFieldSelected((fieldSelected) => ({
-                          ...fieldSelected,
-                          [field]: false,
-                        }));
-                      });
-                      fieldLimit.forEach((field) => {
-                        setFieldSelected((fieldSelected) => ({
-                          ...fieldSelected,
-                          [field]: true,
-                        }));
-                      });
                     }}
                   >
                     Reset to default
