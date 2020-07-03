@@ -17,7 +17,7 @@ const Container = styled.div`
   left: 50%;
   background-color: #fff;
   font-size: 1.6rem;
-  padding: 0.8rem 1.6rem;
+  padding: 2.4rem 3.2rem;
   transform: translate(-50%, -50%);
   color: ${(props) => props.theme.primaryDark};
   border-radius: 4px;

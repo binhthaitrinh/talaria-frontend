@@ -7,6 +7,10 @@ const FormGroup = styled.div`
   &:not(:last-child) {
     margin-bottom: 2rem;
   }
+
+  & > *:not(:last-child) {
+    margin-right: 2rem;
+  }
 `;
 
 export default FormGroup;

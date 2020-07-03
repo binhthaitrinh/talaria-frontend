@@ -12,31 +12,58 @@ import Router from 'next/router';
 import Loader from './styles/Loader';
 import Modal from './Modal';
 import BtnGrey from './styles/BtnGrey';
+import { Select } from './styles/FormComponent';
+import styled from 'styled-components';
+import DetailItem from './styles/DetailItem';
+
+const InlineBtn = styled.button`
+  padding: 0.4rem 0.8rem;
+  background-color: ${(props) => props.theme.lightGrey};
+  border-radius: 5rem;
+  border: none;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    background-color: ${(props) => props.theme.danger};
+    color: ${(props) => props.theme.offWhite};
+  }
+`;
 
 const EditItem = (props) => {
   const [items, setItems] = useState(props.items ? props.items.split(',') : []);
-  const [customerName, setCustomerName] = useState('');
+
   const [vndUsdRate, setVndUsdRate] = useState(23500);
   const [customers, setCustomers] = useState([]);
+  const [customerName, setCustomerName] = useState('');
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(true);
 
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
-  const [trackingLink, setTrackingLink] = useState('');
-  const [tax, setTax] = useState('');
+
+  const [tax, setTax] = useState(0);
   const [taxForCustomer, setTaxForCustomer] = useState(0.0875);
-  const [usShippingFee, setUsShippingFee] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [estimatedWeight, setEstimatedWeight] = useState('');
+  const [usShippingFee, setUsShippingFee] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [estimatedWeight, setEstimatedWeight] = useState(0);
   const [orderedWebsite, setOrderedWebsite] = useState('amazon');
-  const [orderAccount, setOrderAccount] = useState('');
-  const [pricePerItem, setPrice] = useState('');
+  const [pricePerItem, setPrice] = useState(0);
+
+  const [custName, setCustName] = useState('');
+  const [phoneNo, setPhoneNo] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [customerType, setCustomerType] = useState('');
+  const [discountRate, setDiscountRate] = useState('');
 
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
   const [alertType, setAlertType] = useState('');
   const [showAddItem, setShowAddItem] = useState(false);
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
 
   const config = {
     headers: {
@@ -51,6 +78,7 @@ const EditItem = (props) => {
         const cusRes = await axios.get(`${process.env.BASE_URL}/customers`);
         console.log(cusRes.data.data.data);
         setCustomers(cusRes.data.data.data);
+
         setFormLoading(false);
       } catch (err) {
         console.log(err.response);
@@ -100,9 +128,210 @@ const EditItem = (props) => {
     <Loader />
   ) : (
     <MainContent>
+      {showAddCustomer && (
+        <Modal setShowModal={setShowAddCustomer}>
+          <Form
+            onSubmit={async (e) => {
+              e.preventDefault();
+
+              try {
+                const res = await axios.post(
+                  `${process.env.BASE_URL}/customers`,
+                  {
+                    customerName: custName,
+                    dateOfBirth,
+                    phoneNumber: phoneNo,
+                    address: {
+                      address1: address,
+                      city,
+                    },
+                    customerType,
+                    discountRate,
+                  },
+                  config
+                );
+
+                setCustomerName(res.data.data.data._id);
+                setCustomers((customers) => [...customers, res.data.data.data]);
+                setCustName('');
+                setDateOfBirth('');
+                setAddress('');
+                setPhoneNo('');
+                setCity('');
+                setCustomerType('');
+                setDiscountRate('');
+
+                setMessage('Customer added');
+                setAlertType('success');
+                setShowNoti(true);
+                setShowAddCustomer(false);
+                setTimeout(() => {
+                  setShowNoti(false);
+                  setMessage('');
+                  setAlertType('');
+                }, 1500);
+              } catch (err) {
+                setMessage(err.response.data.message);
+                setAlertType('danger');
+                setShowNoti(true);
+                setTimeout(() => {
+                  setShowNoti(false);
+                  setMessage('');
+                  setAlertType('');
+                }, 1500);
+              }
+            }}
+          >
+            <FormGroup>
+              <FormLabel htmlFor="name">Tên khách hàng</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter customer name..."
+                id="name"
+                name="name"
+                onChange={(e) => setCustName(e.target.value)}
+                value={custName}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="dateOfBirth">Ngày sinh</FormLabel>
+              <FormInput
+                type="date"
+                placeholder="Enter customer dateOfBirth..."
+                id="dateOfBirth"
+                name="dateOfBirth"
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                value={dateOfBirth.slice(0, 10)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="phoneNo">Số điện thoại</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter customer phoneNo..."
+                id="phoneNo"
+                name="phoneNo"
+                onChange={(e) => setPhoneNo(e.target.value)}
+                value={phoneNo}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="address">Địa chỉ</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter customer address..."
+                id="address"
+                name="address"
+                onChange={(e) => setAddress(e.target.value)}
+                value={address}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="city">Thành phố</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter customer city..."
+                id="city"
+                name="city"
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="customerType">Loại khách hàng</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter customer customerType..."
+                id="customerType"
+                name="customerType"
+                onChange={(e) => setCustomerType(e.target.value)}
+                value={customerType}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="discountRate">Discount Rate</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter customer discountRate..."
+                id="discountRate"
+                name="discountRate"
+                onChange={(e) => setDiscountRate(e.target.value)}
+                value={discountRate}
+              />
+            </FormGroup>
+            <SubmitBtn>Submit</SubmitBtn>
+          </Form>
+        </Modal>
+      )}
       {showAddItem && (
         <Modal setShowModal={setShowAddItem}>
-          <Form>
+          <Form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                console.log({
+                  name,
+                  link,
+                  pricePerItem,
+                  tax,
+                  taxForCustomer,
+                  usShippingFee,
+                  quantity,
+                  estimatedWeight,
+                  orderedWebsite,
+                });
+                const res = await axios.post(
+                  `${process.env.BASE_URL}/items`,
+
+                  {
+                    name,
+                    link,
+                    pricePerItem: parseFloat(pricePerItem),
+                    tax,
+                    taxForCustomer,
+                    usShippingFee,
+                    quantity,
+                    estimatedWeight,
+                    orderedWebsite,
+                  },
+                  config
+                );
+                setItems((items) => [
+                  ...items,
+                  {
+                    id: res.data.data.data._id,
+                    name: res.data.data.data.name,
+                    quantity: res.data.data.data.quantity,
+                  },
+                ]);
+                setName('');
+                setLink('');
+                setPrice(0);
+                setTax(0);
+                setUsShippingFee(0);
+                setQuantity(1);
+                setEstimatedWeight(0);
+                setMessage('Item added');
+                setAlertType('success');
+                setShowNoti(true);
+                setShowAddItem(false);
+                setTimeout(() => {
+                  setShowNoti(false);
+                  setMessage('');
+                  setAlertType('');
+                }, 1500);
+              } catch (err) {
+                setMessage(err.response.data.message);
+                setAlertType('danger');
+                setShowNoti(true);
+                setTimeout(() => {
+                  setShowNoti(false);
+                  setMessage('');
+                  setAlertType('');
+                }, 1500);
+              }
+            }}
+          >
             <FormGroup>
               <FormLabel htmlFor="name">Product name</FormLabel>
               <FormInput
@@ -188,12 +417,16 @@ const EditItem = (props) => {
             </FormGroup>
             <FormGroup>
               <FormLabel htmlFor="orderedWebsite">order Website</FormLabel>
-              <select onChange={(e) => setOrderedWebsite(e.target.value)}>
+              <Select
+                onChange={(e) => setOrderedWebsite(e.target.value)}
+                value={orderedWebsite}
+                style={{ width: '22rem' }}
+              >
                 <option value="amazon">Amazon</option>
                 <option value="sephora">Sephora</option>
                 <option value="ebay">Ebay</option>
                 <option value="bestbuy">Best Buy</option>
-              </select>
+              </Select>
             </FormGroup>
             <SubmitBtn>Submit</SubmitBtn>
           </Form>
@@ -207,31 +440,47 @@ const EditItem = (props) => {
           // console.log(pocketMoney);
           submitForm({
             customer: customerName,
-            items: items,
+            items: items.map((item) => item.id),
             vndUsdRate,
           });
         }}
       >
         <div className="form-content">
-          <FormGroup>
+          <FormGroup style={{ alignItems: 'flex-start' }}>
             <FormLabel htmlFor="items">Item Ids</FormLabel>
-            <FormInput
-              readOnly
-              type="text"
-              placeholder="Enter item ids..."
-              id="items"
-              name="items"
-              onChange={(e) => setItems(e.target.value)}
-              value={items}
-            />
+            {items.length === 0 ? (
+              <p>Wow. Such Empty!</p>
+            ) : (
+              <ul>
+                {items.map((item) => (
+                  <DetailItem key={item.id}>
+                    {item.quantity} x {item.name}{' '}
+                    <InlineBtn
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setItems((items) => {
+                          return items.filter((elm) => elm.id != item.id);
+                        });
+                      }}
+                    >
+                      x
+                    </InlineBtn>
+                  </DetailItem>
+                ))}
+              </ul>
+            )}
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="name">Tên khách hàng</FormLabel>
-            <select onChange={(e) => setCustomerName(e.target.value)}>
+            <Select
+              onChange={(e) => setCustomerName(e.target.value)}
+              value={customerName}
+            >
+              <option value="">Choose a customer</option>
               {customers.map((customer) => (
                 <option value={customer._id}>{customer.customerName}</option>
               ))}
-            </select>
+            </Select>
           </FormGroup>
 
           <FormGroup>
@@ -259,6 +508,15 @@ const EditItem = (props) => {
             }}
           >
             Add an item
+          </BtnGrey>
+          <BtnGrey
+            style={{ padding: '1.5rem 2rem', marginLeft: '2rem' }}
+            onClick={(e) => {
+              e.preventDefault();
+              setShowAddCustomer(true);
+            }}
+          >
+            Add customer
           </BtnGrey>
         </div>
       </Form>

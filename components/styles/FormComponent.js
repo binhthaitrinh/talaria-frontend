@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Select = styled.select`
-  font-size: 1.2rem;
+  font-size: inherit;
   font-family: inherit;
   color: inherit;
   padding: 0.8rem 1.6rem;
@@ -24,6 +24,7 @@ const FormInputSm = styled.input`
   border: none;
   border-bottom: 5px solid transparent;
   display: block;
+
   transition: all 0.3s;
 
   &:focus {
