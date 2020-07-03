@@ -1,4 +1,4 @@
-const getFilterStr2 = (arr, element) => {
+const getFilterStr = (arr, element) => {
   let result = '';
   arr.forEach((item) => {
     result += `${item.field}[${item.operator}]=${item.value}&`;
@@ -12,4 +12,4 @@ const getFilterStr2 = (arr, element) => {
   return result;
 };
 
-export { getFilterStr2 };
+export { getFilterStr };
