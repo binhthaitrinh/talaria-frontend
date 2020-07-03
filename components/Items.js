@@ -153,7 +153,6 @@ function Items({ page, fields, sort, filter, freezeNo }) {
           <Link href={`/items?page=${page * 1 - 1}`} passHref>
             <LinkPrimary
               onClick={() => setLoading(true)}
-              style={{ marginRight: '2rem' }}
               aria-disabled={page <= 1}
             >
               Previous
@@ -163,13 +162,15 @@ function Items({ page, fields, sort, filter, freezeNo }) {
             <LinkPrimary
               onClick={() => setLoading(true)}
               aria-disabled={page >= numOfPages}
-              style={{ marginRight: '2rem' }}
             >
               Next
             </LinkPrimary>
           </Link>
           <Link href={`/bills/new?ids=${ids}`} passHref>
             <LinkPrimary>Create a bill</LinkPrimary>
+          </Link>
+          <Link href="/items/new" passHref>
+            <LinkPrimary>Create a new item</LinkPrimary>
           </Link>
         </div>
 

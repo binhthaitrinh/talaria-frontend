@@ -10,8 +10,13 @@ const ActionBtnGroup = styled.div`
   div {
     display: flex;
     justify-content: flex-start;
-
     align-items: center;
+
+    a {
+      &:not(:last-child) {
+        margin-right: 2rem;
+      }
+    }
   }
 `;
 

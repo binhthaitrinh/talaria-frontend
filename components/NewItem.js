@@ -15,11 +15,11 @@ const EditItem = () => {
   const [link, setLink] = useState('');
   const [trackingLink, setTrackingLink] = useState('');
   const [tax, setTax] = useState('');
-  const [taxForCustomer, setTaxForCustomer] = useState('');
+  const [taxForCustomer, setTaxForCustomer] = useState(0.0875);
   const [usShippingFee, setUsShippingFee] = useState('');
   const [quantity, setQuantity] = useState('');
   const [estimatedWeight, setEstimatedWeight] = useState('');
-  const [orderedWebsite, setOrderedWebsite] = useState('');
+  const [orderedWebsite, setOrderedWebsite] = useState('amazon');
   const [orderAccount, setOrderAccount] = useState('');
   const [pricePerItem, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
@@ -114,7 +114,7 @@ const EditItem = () => {
           <FormGroup>
             <FormLabel htmlFor="pricePerItem">Price per item</FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter price..."
               id="pricePerItem"
               value={pricePerItem}
@@ -124,7 +124,7 @@ const EditItem = () => {
           <FormGroup>
             <FormLabel htmlFor="tax">Tax</FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter tax..."
               id="tax"
               value={tax}
@@ -136,7 +136,7 @@ const EditItem = () => {
               Enter tax to charge customer
             </FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter price..."
               id="taxForCustomer"
               value={taxForCustomer}
@@ -146,7 +146,7 @@ const EditItem = () => {
           <FormGroup>
             <FormLabel htmlFor="usShippingFee">usShippingFee</FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter price..."
               id="usShippingFee"
               value={usShippingFee}
@@ -156,7 +156,7 @@ const EditItem = () => {
           <FormGroup>
             <FormLabel htmlFor="quantity">quantity</FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter price..."
               id="quantity"
               value={quantity}
@@ -166,7 +166,7 @@ const EditItem = () => {
           <FormGroup>
             <FormLabel htmlFor="estimatedWeight">Estimated weight</FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter price..."
               id="estimatedWeight"
               value={estimatedWeight}
@@ -175,13 +175,20 @@ const EditItem = () => {
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="orderedWebsite">order Website</FormLabel>
-            <FormInput
+            {/* <FormInput
               type="text"
               placeholder="Enter price..."
               id="orderedWebsite"
               value={orderedWebsite}
               onChange={(e) => setOrderedWebsite(e.target.value)}
-            />
+            /> */}
+
+            <select onChange={(e) => setOrderedWebsite(e.target.value)}>
+              <option value="amazon">Amazon</option>
+              <option value="sephora">Sephora</option>
+              <option value="ebay">Ebay</option>
+              <option value="bestbuy">Best Buy</option>
+            </select>
           </FormGroup>
         </div>
 

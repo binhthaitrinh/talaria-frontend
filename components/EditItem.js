@@ -26,7 +26,8 @@ const EditItem = ({ item }) => {
     parseFloat(item.estimatedWeight['$numberDecimal'])
   );
   const [orderedWebsite, setOrderedWebsite] = useState(item.orderedWebsite);
-  const [orderAccount, setOrderAccount] = useState(item.orderAccount);
+  const [orderAccount, setOrderAccount] = useState(item.orderAccount._id);
+  const [accounts, setAccounts] = useState([]);
   const [pricePerItem, setPrice] = useState(item.pricePerItem);
   const [loading, setLoading] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
@@ -38,6 +39,27 @@ const EditItem = ({ item }) => {
       'Access-Control-Allow-Origin': '*',
     },
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get(`${process.env.BASE_URL}/accounts`);
+
+        setAccounts(res.data.data.data);
+      } catch (err) {
+        setMessage(err.response.data.message);
+        setAlertType('danger');
+        setShowNoti(true);
+        setTimeout(() => {
+          setShowNoti(false);
+          setMessage('');
+          setAlertType('');
+        }, 3000);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const submitForm = async (formData) => {
     setLoading(true);
@@ -90,6 +112,7 @@ const EditItem = ({ item }) => {
             usShippingFee,
             estimatedWeight,
             orderedWebsite,
+            orderAccount,
           });
         }}
       >
@@ -186,6 +209,22 @@ const EditItem = ({ item }) => {
               value={orderedWebsite}
               onChange={(e) => setOrderedWebsite(e.target.value)}
             />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>Account</FormLabel>
+
+            {accounts.length > 0 ? (
+              <select
+                defaultValue={orderAccount}
+                onChange={(e) => setOrderAccount(e.target.value)}
+              >
+                {accounts.map((acct) => (
+                  <option key={acct._id} value={acct._id}>
+                    {acct.loginID}
+                  </option>
+                ))}
+              </select>
+            ) : null}
           </FormGroup>
         </div>
 

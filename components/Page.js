@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState, createContext } from 'react';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import Container from './styles/Container';
 import Header from './Header';
@@ -6,6 +6,7 @@ import Sidebar from './Sidebar';
 import Main from './styles/Main';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import OptionContext from './OptionContext';
 
 Router.onRouteChangeStart = () => {
   NProgress.start();
@@ -76,15 +77,38 @@ img {
   background-image: linear-gradient(to right, #D2D6DC, #D2D6DC)
 }`;
 
-class Page extends React.Component {
-  render() {
-    return (
-      <ThemeProvider theme={theme}>
+const Page = (props) => {
+  const [showFilter, setShowFilter] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [showLimitField, setShowLimitField] = useState(false);
+  const [showFreezeCol, setShowFreezeCol] = useState(false);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <OptionContext.Provider
+        value={{
+          showFilter,
+          setShowFilter,
+          showSort,
+          setShowSort,
+          showLimitField,
+          setShowLimitField,
+          showFreezeCol,
+          setShowFreezeCol,
+        }}
+      >
         <GlobalStyle />
-        <Container>
+        <Container
+          onClick={() => {
+            setShowFilter(false);
+            setShowSort(false);
+            setShowLimitField(false);
+            setShowFreezeCol(false);
+          }}
+        >
           <Header />
           <Sidebar />
-          <Main>{this.props.children}</Main>
+          <Main>{props.children}</Main>
         </Container>
         <script
           type="module"
@@ -94,9 +118,9 @@ class Page extends React.Component {
           noModule=""
           src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"
         ></script>
-      </ThemeProvider>
-    );
-  }
-}
+      </OptionContext.Provider>
+    </ThemeProvider>
+  );
+};
 
 export default Page;

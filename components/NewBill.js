@@ -10,6 +10,8 @@ import LoadingBtn from './styles/LoadingBtn';
 import Noti from './Noti';
 import Router from 'next/router';
 import Loader from './styles/Loader';
+import Modal from './Modal';
+import BtnGrey from './styles/BtnGrey';
 
 const EditItem = (props) => {
   const [items, setItems] = useState(props.items ? props.items.split(',') : []);
@@ -19,9 +21,23 @@ const EditItem = (props) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(true);
 
+  const [name, setName] = useState('');
+  const [link, setLink] = useState('');
+  const [trackingLink, setTrackingLink] = useState('');
+  const [tax, setTax] = useState('');
+  const [taxForCustomer, setTaxForCustomer] = useState(0.0875);
+  const [usShippingFee, setUsShippingFee] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [estimatedWeight, setEstimatedWeight] = useState('');
+  const [orderedWebsite, setOrderedWebsite] = useState('amazon');
+  const [orderAccount, setOrderAccount] = useState('');
+  const [pricePerItem, setPrice] = useState('');
+
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
   const [alertType, setAlertType] = useState('');
+  const [showAddItem, setShowAddItem] = useState(false);
+
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -84,6 +100,105 @@ const EditItem = (props) => {
     <Loader />
   ) : (
     <MainContent>
+      {showAddItem && (
+        <Modal setShowModal={setShowAddItem}>
+          <Form>
+            <FormGroup>
+              <FormLabel htmlFor="name">Product name</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter product name..."
+                id="name"
+                name="name"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="name">Product Link</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Enter product link..."
+                id="link"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="pricePerItem">Price per item</FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Enter price..."
+                id="pricePerItem"
+                value={pricePerItem}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="tax">Tax</FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Enter tax..."
+                id="tax"
+                value={tax}
+                onChange={(e) => setTax(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="pricePerItem">
+                Enter tax to charge customer
+              </FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Enter price..."
+                id="taxForCustomer"
+                value={taxForCustomer}
+                onChange={(e) => setTaxForCustomer(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="usShippingFee">usShippingFee</FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Enter price..."
+                id="usShippingFee"
+                value={usShippingFee}
+                onChange={(e) => setUsShippingFee(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="quantity">quantity</FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Enter price..."
+                id="quantity"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="estimatedWeight">Estimated weight</FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Enter price..."
+                id="estimatedWeight"
+                value={estimatedWeight}
+                onChange={(e) => setEstimatedWeight(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="orderedWebsite">order Website</FormLabel>
+              <select onChange={(e) => setOrderedWebsite(e.target.value)}>
+                <option value="amazon">Amazon</option>
+                <option value="sephora">Sephora</option>
+                <option value="ebay">Ebay</option>
+                <option value="bestbuy">Best Buy</option>
+              </select>
+            </FormGroup>
+            <SubmitBtn>Submit</SubmitBtn>
+          </Form>
+        </Modal>
+      )}
       {showNoti ? <Noti message={message} type={alertType} /> : null}
       <Form
         onSubmit={(e) => {
@@ -103,7 +218,7 @@ const EditItem = (props) => {
             <FormInput
               readOnly
               type="text"
-              placeholder="Enter customer items..."
+              placeholder="Enter item ids..."
               id="items"
               name="items"
               onChange={(e) => setItems(e.target.value)}
@@ -131,9 +246,21 @@ const EditItem = (props) => {
             />
           </FormGroup>
         </div>
-        <SubmitBtn disabled={loading ? true : false}>
-          {loading ? <LoadingBtn /> : 'Submit'}
-        </SubmitBtn>
+        <div></div>
+        <div>
+          <SubmitBtn disabled={loading ? true : false}>
+            {loading ? <LoadingBtn /> : 'Submit'}
+          </SubmitBtn>
+          <BtnGrey
+            style={{ padding: '1.5rem 2rem', marginLeft: '2rem' }}
+            onClick={(e) => {
+              e.preventDefault();
+              setShowAddItem(true);
+            }}
+          >
+            Add an item
+          </BtnGrey>
+        </div>
       </Form>
     </MainContent>
   );

@@ -15,7 +15,7 @@ export default function Customers() {
       <Meta title="Dashboard" />
       <MainCntHeader>
         <Title>Bills</Title>
-        <Link href="/customers/new" passHref>
+        <Link href="/bills/new" passHref>
           <LinkPrimary>Create a bill</LinkPrimary>
         </Link>
       </MainCntHeader>
