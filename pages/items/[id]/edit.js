@@ -35,11 +35,11 @@ export default function Edit() {
   return (
     <>
       <Meta title="Edit item" />
-      <Link href="/items" passHref>
-        <BtnText>&larr; Back to Items</BtnText>
+      <Link href={`/items/${id}`} passHref>
+        <BtnText>&larr; Back to Item Detail</BtnText>
       </Link>
       <MainCntHeader>
-        <Title>Item {id}</Title>
+        <Title>Update Item {id}</Title>
       </MainCntHeader>
       {loading ? <Loader /> : <EditItem item={item} />}
     </>

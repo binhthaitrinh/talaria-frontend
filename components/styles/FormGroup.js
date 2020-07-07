@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 const FormGroup = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
   justify-content: space-between;
   align-items: center;
   &:not(:last-child) {
@@ -10,6 +11,15 @@ const FormGroup = styled.div`
 
   & > *:not(:last-child) {
     margin-right: 2rem;
+  }
+
+  input,
+  select {
+    grid-column: 4 / -1;
+  }
+
+  label {
+    grid-column: 1 / 4;
   }
 `;
 

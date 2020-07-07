@@ -168,7 +168,7 @@ const EditItem = () => {
             />
           </FormGroup>
           <FormGroup>
-            <FormLabel htmlFor="orderedWebsite">order Website</FormLabel>
+            <FormLabel htmlFor="orderedWebsite">Order Website</FormLabel>
             {/* <FormInput
               type="text"
               placeholder="Enter price..."
@@ -180,6 +180,7 @@ const EditItem = () => {
             <Select
               onChange={(e) => setOrderedWebsite(e.target.value)}
               value="amazon"
+              style={{ width: '22rem' }}
             >
               <option value="amazon">Amazon</option>
               <option value="sephora">Sephora</option>
