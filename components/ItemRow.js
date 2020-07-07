@@ -77,6 +77,19 @@ const ItemRow = ({
             <span className="tooltip">{item[field]}</span>
           </div>
         );
+      } else if (field === 'name') {
+        return (
+          <div>
+            {item[field].length > 15
+              ? `${item[field].slice(0, 10)}...`
+              : item[field]}
+            {item[field].length > 15 ? (
+              <span className="tooltip">{item[field]}</span>
+            ) : (
+              ''
+            )}
+          </div>
+        );
       }
     }
 

@@ -5,9 +5,10 @@ const Detail = styled.div`
   box-shadow: 2px 2px 18px -2px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-95%, 15%);
+
+  /* top: 50%;
+  left: 50%; */
+  transform: translate(-110%, 2%);
   padding: 0.6rem 0rem;
   text-align: left;
   opacity: 0;
