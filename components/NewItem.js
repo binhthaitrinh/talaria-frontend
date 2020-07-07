@@ -9,14 +9,14 @@ import axios from 'axios';
 import LoadingBtn from './styles/LoadingBtn';
 import Noti from './Noti';
 import Router from 'next/router';
+import { Select } from './styles/FormComponent';
 
 const EditItem = () => {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
   const [trackingLink, setTrackingLink] = useState('');
-  const [tax, setTax] = useState('');
-  const [taxForCustomer, setTaxForCustomer] = useState(0.0875);
-  const [usShippingFee, setUsShippingFee] = useState('');
+  const [tax, setTax] = useState(0);
+  const [usShippingFee, setUsShippingFee] = useState(0);
   const [quantity, setQuantity] = useState('');
   const [estimatedWeight, setEstimatedWeight] = useState('');
   const [orderedWebsite, setOrderedWebsite] = useState('amazon');
@@ -81,7 +81,7 @@ const EditItem = () => {
             link,
             trackingLink,
             tax,
-            taxForCustomer,
+
             quantity,
             usShippingFee,
             estimatedWeight,
@@ -91,10 +91,10 @@ const EditItem = () => {
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="name">Product name</FormLabel>
+            <FormLabel htmlFor="name">Tên sản phẩm</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter product name..."
+              placeholder="Tên sản phẩm..."
               id="name"
               name="name"
               onChange={(e) => setName(e.target.value)}
@@ -102,73 +102,67 @@ const EditItem = () => {
             />
           </FormGroup>
           <FormGroup>
-            <FormLabel htmlFor="name">Product Link</FormLabel>
+            <FormLabel htmlFor="link">Link sản phẩm</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter product link..."
+              placeholder="Link sản phẩm..."
               id="link"
+              name="link"
               value={link}
               onChange={(e) => setLink(e.target.value)}
             />
           </FormGroup>
           <FormGroup>
-            <FormLabel htmlFor="pricePerItem">Price per item</FormLabel>
+            <FormLabel htmlFor="pricePerItem">Giá bán lẻ</FormLabel>
             <FormInput
               type="number"
               placeholder="Enter price..."
               id="pricePerItem"
+              name="pricePerItem"
               value={pricePerItem}
               onChange={(e) => setPrice(e.target.value)}
             />
           </FormGroup>
           <FormGroup>
-            <FormLabel htmlFor="tax">Tax</FormLabel>
+            <FormLabel htmlFor="quantity">Số lượng</FormLabel>
             <FormInput
               type="number"
-              placeholder="Enter tax..."
-              id="tax"
-              value={tax}
-              onChange={(e) => setTax(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel htmlFor="pricePerItem">
-              Enter tax to charge customer
-            </FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter price..."
-              id="taxForCustomer"
-              value={taxForCustomer}
-              onChange={(e) => setTaxForCustomer(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel htmlFor="usShippingFee">usShippingFee</FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter price..."
-              id="usShippingFee"
-              value={usShippingFee}
-              onChange={(e) => setUsShippingFee(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel htmlFor="quantity">quantity</FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter price..."
+              placeholder="Số lượng..."
               id="quantity"
+              name="quantity"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />
           </FormGroup>
           <FormGroup>
-            <FormLabel htmlFor="estimatedWeight">Estimated weight</FormLabel>
+            <FormLabel htmlFor="tax">Thuế</FormLabel>
             <FormInput
               type="number"
-              placeholder="Enter price..."
+              placeholder="Thuế..."
+              id="tax"
+              name="tax"
+              value={tax}
+              onChange={(e) => setTax(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="usShippingFee">Ship nội địa Mỹ</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Ship nội địa Mỹ..."
+              id="usShippingFee"
+              name="usShippingFee"
+              value={usShippingFee}
+              onChange={(e) => setUsShippingFee(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="estimatedWeight">Cân nặng ước tính</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Cân nặng ước tính..."
               id="estimatedWeight"
+              name="estimatedWeight"
               value={estimatedWeight}
               onChange={(e) => setEstimatedWeight(e.target.value)}
             />
@@ -183,17 +177,21 @@ const EditItem = () => {
               onChange={(e) => setOrderedWebsite(e.target.value)}
             /> */}
 
-            <select onChange={(e) => setOrderedWebsite(e.target.value)}>
+            <Select
+              onChange={(e) => setOrderedWebsite(e.target.value)}
+              value="amazon"
+            >
               <option value="amazon">Amazon</option>
               <option value="sephora">Sephora</option>
               <option value="ebay">Ebay</option>
               <option value="bestbuy">Best Buy</option>
-            </select>
+              <option value="others">Others</option>
+            </Select>
           </FormGroup>
         </div>
 
         <SubmitBtn disabled={loading ? true : false}>
-          {loading ? <LoadingBtn /> : 'Submit'}
+          {loading ? <LoadingBtn /> : 'Create'}
         </SubmitBtn>
       </Form>
     </MainContent>

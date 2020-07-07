@@ -75,7 +75,7 @@ function Items({ page, fields, sort, filter, freezeNo }) {
     <MainContent>
       <div
         style={{
-          marginLeft: `${12 * (freezeNo + 1)}rem`,
+          marginLeft: `${14 * (freezeNo + 1) - 4}rem`,
           overflowX: 'scroll',
           overflowY: 'hidden',
         }}
@@ -89,6 +89,7 @@ function Items({ page, fields, sort, filter, freezeNo }) {
                   top: 'auto',
                   left: '4rem',
                   borderBottom: '1px solid rgba(0,0,0,0.09)',
+                  width: '10rem',
                 }}
               >
                 Selected
@@ -100,7 +101,7 @@ function Items({ page, fields, sort, filter, freezeNo }) {
                       style={{
                         position: 'absolute',
                         top: 'auto',
-                        left: `${(index + 1) * 12 + 4}rem`,
+                        left: `${(index + 1) * 14}rem`,
                         borderBottom: '1px solid rgba(0,0,0,0.09)',
                       }}
                       key={field}

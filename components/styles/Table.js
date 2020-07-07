@@ -20,7 +20,7 @@ const Table = styled.table`
        color: ${(props) => props.theme.grey};
       font-weight: 700;
       padding: 0.6rem 2rem 0.6rem 1rem;
-      width: 12rem;
+      width: 14rem;
     }
   }
 
@@ -37,7 +37,7 @@ const Table = styled.table`
 
   td,
   th, td {
-   width: 12rem;
+   width: 14rem;
     position: relative;
     padding: 0.6rem 1.6rem 0.6rem 1rem;
     font-weight: 400;

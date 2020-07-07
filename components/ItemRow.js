@@ -36,6 +36,11 @@ const ItemRow = ({
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           }).format(item[field]['$numberDecimal']);
+        } else if (field === 'pricePerItem') {
+          return new Intl.NumberFormat('us-US', {
+            style: 'currency',
+            currency: 'usd',
+          }).format(item[field]['$numberDecimal']);
         } else {
           return item[field]['$numberDecimal'];
         }
@@ -65,7 +70,7 @@ const ItemRow = ({
             </a>
           </Link>
         );
-      } else if (field === '_id') {
+      } else if (field === '_id' || field === 'status') {
         return (
           <div>
             {`${item[field].slice(0, 10)}...`}
@@ -99,6 +104,7 @@ const ItemRow = ({
           justifyContent: 'flex-start',
           alignItems: 'center',
           borderBottom: '1px solid rgba(0,0,0,0.09)',
+          width: '10rem',
         }}
       >
         {children}
@@ -110,7 +116,7 @@ const ItemRow = ({
               style={{
                 position: 'absolute',
                 top: 'auto',
-                left: `${(index + 1) * 12 + 4}rem`,
+                left: `${(index + 1) * 14}rem`,
                 height: '5.3rem',
                 display: 'flex',
                 justifyContent: 'flex-start',
