@@ -7,7 +7,7 @@ const Table = styled.table`
   /* box-shadow: 2px 2px 6px -2px rgba(0,0,0,0.3); */
   text-align: left;
   /* border-spacing: 0 8px; */
-  width: 100%;
+  /* width: 100%; // idk why I set this */
   /* border: 1px solid ${(props) => props.theme.offWhite}; */
   table-layout: fixed;
   
@@ -38,6 +38,7 @@ const Table = styled.table`
   td,
   th, td {
    width: 14rem;
+   height: 5.3rem;
     position: relative;
     padding: 0.6rem 1.6rem 0.6rem 1rem;
     font-weight: 400;

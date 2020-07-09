@@ -10,7 +10,7 @@ import ActionBtnGroup from '../components/styles/ActionBtnGroup';
 
 import { useRouter } from 'next/router';
 
-function Items({ page }) {
+function Items({ page, fields, freezeNo }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,11 @@ function Items({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/bills?page=${page}&limit=8&sort=-date`
+          `${
+            process.env.BASE_URL
+          }/bills?page=${page}&limit=8&sort=-createdAt&fields=${fields.join(
+            ','
+          )}`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
@@ -39,31 +43,58 @@ function Items({ page }) {
     <Loader />
   ) : (
     <MainContent>
-      <Table>
-        <thead>
-          <tr>
-            <th>Ngày tạo</th>
-            <th>Items</th>
-            <th>Total Bill USD</th>
-            <th>Total Bill VND</th>
-            <th>Tiền nợ</th>
-            <th>Tên khách</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <BillRow
-              item={item}
-              key={item._id}
-              index={index}
-              items={items}
-              setItems={setItems}
-            />
-          ))}
-        </tbody>
-      </Table>
+      <div
+        style={{
+          marginLeft: `${14 * freezeNo}rem`,
+          overflowX: 'scroll',
+          overflowY: 'hidden',
+        }}
+      >
+        <Table>
+          <thead>
+            <tr>
+              {fields.map((field, index) => {
+                if (index < freezeNo) {
+                  return (
+                    <th
+                      style={{
+                        position: 'absolute',
+                        top: 'auto',
+                        left: `${index * 14 + 4}rem`,
+                        borderBottom: '1px solid rgba(0,0,0,0.09)',
+                      }}
+                      key={field}
+                    >
+                      {field}
+                    </th>
+                  );
+                } else {
+                  return (
+                    <td style={{ position: 'relative', left: 0 }} key={field}>
+                      {field}
+                    </td>
+                  );
+                }
+              })}
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <BillRow
+                item={item}
+                key={item._id}
+                index={index}
+                items={items}
+                setItems={setItems}
+                fields={fields}
+                freezeNo={freezeNo}
+              />
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
       <ActionBtnGroup>
         <div>
           <Link href={`/bills?page=${page * 1 - 1}`} passHref>

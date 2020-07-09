@@ -75,7 +75,7 @@ function Items({ page, fields, sort, filter, freezeNo }) {
     <MainContent>
       <div
         style={{
-          marginLeft: `${14 * (freezeNo + 1) - 4}rem`,
+          marginLeft: `${14 * (freezeNo + 2) - 8}rem`,
           overflowX: 'scroll',
           overflowY: 'hidden',
         }}
@@ -89,10 +89,25 @@ function Items({ page, fields, sort, filter, freezeNo }) {
                   top: 'auto',
                   left: '4rem',
                   borderBottom: '1px solid rgba(0,0,0,0.09)',
-                  width: '10rem',
+                  width: '9rem',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
                 Selected
+              </th>{' '}
+              <th
+                style={{
+                  position: 'absolute',
+                  top: 'auto',
+                  left: '13rem',
+                  borderBottom: '1px solid rgba(0,0,0,0.09)',
+                  width: '9rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                Actions
               </th>
               {fields.map((field, index) => {
                 if (index < freezeNo) {
@@ -101,8 +116,10 @@ function Items({ page, fields, sort, filter, freezeNo }) {
                       style={{
                         position: 'absolute',
                         top: 'auto',
-                        left: `${(index + 1) * 14}rem`,
+                        left: `${(index + 2) * 14 - 6}rem`,
                         borderBottom: '1px solid rgba(0,0,0,0.09)',
+                        display: 'flex',
+                        alignItems: 'center',
                       }}
                       key={field}
                     >
@@ -122,8 +139,6 @@ function Items({ page, fields, sort, filter, freezeNo }) {
             <th>Quantity</th>
             <th>Actual Cost</th>
             <th>Status</th> */}
-
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>

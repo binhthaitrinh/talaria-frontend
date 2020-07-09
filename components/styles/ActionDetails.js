@@ -6,9 +6,9 @@ const Detail = styled.div`
   border-radius: 4px;
   position: absolute;
 
-  /* top: 50%;
-  left: 50%; */
-  transform: translate(-110%, 2%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-95%, 15%);
   padding: 0.6rem 0rem;
   text-align: left;
   opacity: 0;

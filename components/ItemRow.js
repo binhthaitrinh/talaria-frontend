@@ -117,77 +117,22 @@ const ItemRow = ({
           justifyContent: 'flex-start',
           alignItems: 'center',
           borderBottom: '1px solid rgba(0,0,0,0.09)',
-          width: '10rem',
+          width: '9rem',
         }}
       >
         {children}
-      </th>
-      {fields.map((field, index) => {
-        if (index < freezeNo) {
-          return (
-            <th
-              style={{
-                position: 'absolute',
-                top: 'auto',
-                left: `${(index + 1) * 14}rem`,
-                height: '5.3rem',
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                borderBottom: '1px solid rgba(0,0,0,0.09)',
-              }}
-              key={field}
-            >
-              {renderField(field)}
-            </th>
-          );
-        } else {
-          return <td key={field}>{renderField(field)}</td>;
-        }
-      })}
-      {/* <th>
-        {new Date(item.createdAt).toLocaleString('en-us', {
-          month: 'long',
-          year: 'numeric',
-          day: 'numeric',
-        })}
-      </th>
-      <th>
-        {item.trackingLink ? (
-          <a href={item.trackingLink}>Click here</a>
-        ) : (
-          <p>No link available</p>
-        )}
-      </th>
-      <th>
-        {item.link ? (
-          <a href={item.link}>Click here</a>
-        ) : (
-          <p>No link available</p>
-        )}
-      </th>
-      <th>{item.name}</th>
-
-      <th>
-        {new Intl.NumberFormat('en-us', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(item.pricePerItem)}
-      </th>
-      <th>{item.quantity}</th>
-      <th>
-        {item.status === 'not-yet-ordered' ? (
-          <StickerBtn type="danger">N/A</StickerBtn>
-        ) : (
-          new Intl.NumberFormat('de-DE', {
-            style: 'currency',
-            currency: 'VND',
-          }).format(item.actualCost['$numberDecimal'])
-        )}
-      </th>
-      <th>{item.status}</th> */}
-
-      <th>
+      </th>{' '}
+      <th
+        style={{
+          position: 'absolute',
+          top: 'auto',
+          left: '13rem',
+          borderBottom: '1px solid rgba(0,0,0,0.09)',
+          width: '9rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <ActionBtn
           onClick={(e) => {
             e.stopPropagation();
@@ -247,6 +192,70 @@ const ItemRow = ({
           </ul>
         </ActionDetail>
       </th>
+      {fields.map((field, index) => {
+        if (index < freezeNo) {
+          return (
+            <th
+              style={{
+                position: 'absolute',
+                top: 'auto',
+                left: `${(index + 2) * 14 - 6}rem`,
+                height: '5.3rem',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                borderBottom: '1px solid rgba(0,0,0,0.09)',
+              }}
+              key={field}
+            >
+              {renderField(field)}
+            </th>
+          );
+        } else {
+          return <td key={field}>{renderField(field)}</td>;
+        }
+      })}
+      {/* <th>
+        {new Date(item.createdAt).toLocaleString('en-us', {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+        })}
+      </th>
+      <th>
+        {item.trackingLink ? (
+          <a href={item.trackingLink}>Click here</a>
+        ) : (
+          <p>No link available</p>
+        )}
+      </th>
+      <th>
+        {item.link ? (
+          <a href={item.link}>Click here</a>
+        ) : (
+          <p>No link available</p>
+        )}
+      </th>
+      <th>{item.name}</th>
+
+      <th>
+        {new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(item.pricePerItem)}
+      </th>
+      <th>{item.quantity}</th>
+      <th>
+        {item.status === 'not-yet-ordered' ? (
+          <StickerBtn type="danger">N/A</StickerBtn>
+        ) : (
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'VND',
+          }).format(item.actualCost['$numberDecimal'])
+        )}
+      </th>
+      <th>{item.status}</th> */}
     </tr>
   );
 };

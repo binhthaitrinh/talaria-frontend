@@ -7,6 +7,7 @@ import StickerBtn from './styles/StickerBtn';
 import styled from 'styled-components';
 import Modal from './Modal';
 import Noti from './Noti';
+import BtnText from './styles/BtnText';
 
 const DropBtn = styled.button`
   background-color: #4caf50;
@@ -36,13 +37,68 @@ const Drop = styled.div`
   }
 `;
 
-const ItemRow = ({ item, index, items, setItems }) => {
+const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
   const [showDetail, setShowDetail] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
   const [type, setType] = useState('');
+
+  const renderField = (field) => {
+    if (item[field]) {
+      if (item[field]['$numberDecimal']) {
+        if (field === 'moneyChargeCustomerVND') {
+          return '---';
+        } else if (field === 'totalBillInUsd') {
+          return new Intl.NumberFormat('us-US', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(item[field]['$numberDecimal']);
+        } else {
+          return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'VND',
+          }).format(item[field]['$numberDecimal']);
+        }
+      } else if (field === 'items') {
+        if (item[field].length >= 1) {
+          return (
+            <Drop>
+              <StickerBtn type="success">List of items...</StickerBtn>
+              <Dropdown>
+                {item[field].map((single) => (
+                  <li key={single._id}>
+                    {single.quantity} x {single.name}
+                  </li>
+                ))}
+              </Dropdown>
+            </Drop>
+          );
+        } else {
+          return 'Nothing here...';
+        }
+      } else if (field === 'customer') {
+        return (
+          <Link href={`/customers/${item[field]._id}`} passHref>
+            <BtnText style={{ marginBottom: 0 }}>
+              {item[field].customerName}
+            </BtnText>
+          </Link>
+        );
+      } else if (field === 'createdAt') {
+        return new Date(item.createdAt).toLocaleString('en-us', {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+        });
+      } else {
+        return item[field];
+      }
+    }
+
+    return '---';
+  };
 
   return (
     <tr
@@ -112,47 +168,29 @@ const ItemRow = ({ item, index, items, setItems }) => {
           </form>
         </Modal>
       ) : null}
-      <th>
-        {' '}
-        {new Date(item.date).toLocaleString('en-us', {
-          month: 'long',
-          year: 'numeric',
-          day: 'numeric',
-        })}
-      </th>
-      <th>
-        <Drop>
-          <StickerBtn type="success">List of items...</StickerBtn>
-          <Dropdown>
-            {item.items.length >= 1
-              ? item.items.map((single) => (
-                  <li key={single._id}>
-                    {single.quantity} x {single.name}
-                  </li>
-                ))
-              : 'Nothing here'}
-          </Dropdown>
-        </Drop>
-      </th>
-      <th>{item.totalBillInUsd['$numberDecimal']}</th>
-      <th>
-        {new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency: 'vnd',
-        }).format(item.moneyChargeCustomerVND['$numberDecimal'])}
-      </th>
-      <th>
-        {new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency: 'vnd',
-        }).format(item.remaining['$numberDecimal'])}
-      </th>
-      <th>{item.customer.customerName}</th>
-      <th>
-        <StickerBtn type={item.status === 'fully-paid' ? 'success' : 'danger'}>
-          {item.status}
-        </StickerBtn>
-      </th>
+      {fields.map((field, index) => {
+        if (index < freezeNo) {
+          return (
+            <th
+              style={{
+                position: 'absolute',
+                top: 'auto',
+                left: `${index * 14 + 4}rem`,
+                height: '5.3rem',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                borderBottom: '1px solid rgba(0,0,0,0.09)',
+              }}
+              key={field}
+            >
+              {renderField(field)}
+            </th>
+          );
+        } else {
+          return <td key={field}>{renderField(field)}</td>;
+        }
+      })}
 
       <th>
         <ActionBtn
