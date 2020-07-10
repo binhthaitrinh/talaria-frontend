@@ -10,7 +10,7 @@ import ActionBtnGroup from '../components/styles/ActionBtnGroup';
 
 import { useRouter } from 'next/router';
 
-function Items({ page, fields, freezeNo }) {
+function Items({ page, fields, freezeNo, sort }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,9 +22,9 @@ function Items({ page, fields, freezeNo }) {
         const res = await axios.get(
           `${
             process.env.BASE_URL
-          }/bills?page=${page}&limit=8&sort=-createdAt&fields=${fields.join(
+          }/bills?page=${page}&limit=8&fields=${fields.join(
             ','
-          )}`
+          )},vndUsdRate,moneyChargeCustomerUSD&sort=${sort}`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
@@ -37,7 +37,7 @@ function Items({ page, fields, freezeNo }) {
     }
 
     fetchData();
-  }, [page]);
+  }, [page, fields, sort]);
 
   return loading ? (
     <Loader />
@@ -45,7 +45,7 @@ function Items({ page, fields, freezeNo }) {
     <MainContent>
       <div
         style={{
-          marginLeft: `${14 * freezeNo}rem`,
+          marginLeft: `${14 * freezeNo + 9}rem`,
           overflowX: 'scroll',
           overflowY: 'hidden',
         }}
@@ -53,6 +53,19 @@ function Items({ page, fields, freezeNo }) {
         <Table>
           <thead>
             <tr>
+              <th
+                style={{
+                  position: 'absolute',
+                  top: 'auto',
+                  left: '4rem',
+                  borderBottom: '1px solid rgba(0,0,0,0.09)',
+                  width: '9rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                Action
+              </th>
               {fields.map((field, index) => {
                 if (index < freezeNo) {
                   return (
@@ -60,23 +73,24 @@ function Items({ page, fields, freezeNo }) {
                       style={{
                         position: 'absolute',
                         top: 'auto',
-                        left: `${index * 14 + 4}rem`,
+                        left: `${index * 14 + 13}rem`,
                         borderBottom: '1px solid rgba(0,0,0,0.09)',
+                        display: 'flex',
+                        alignItems: 'center',
                       }}
                       key={field}
                     >
-                      {field}
+                      {_.startCase(field)}
                     </th>
                   );
                 } else {
                   return (
                     <td style={{ position: 'relative', left: 0 }} key={field}>
-                      {field}
+                      {_.startCase(field)}
                     </td>
                   );
                 }
               })}
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>

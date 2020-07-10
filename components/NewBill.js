@@ -36,12 +36,15 @@ const EditItem = (props) => {
 
   const [vndUsdRate, setVndUsdRate] = useState(23500);
   const [customers, setCustomers] = useState([]);
+  const [affiliates, setAffiliates] = useState([]);
   const [customerName, setCustomerName] = useState('');
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(true);
 
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
+
+  const [affiliate, setAffiliate] = useState('');
 
   const [tax, setTax] = useState(0);
   const [taxForCustomer, setTaxForCustomer] = useState(0.0875);
@@ -76,8 +79,27 @@ const EditItem = (props) => {
     async function fetchData() {
       try {
         const cusRes = await axios.get(`${process.env.BASE_URL}/customers`);
+
         console.log(cusRes.data.data.data);
         setCustomers(cusRes.data.data.data);
+
+        setFormLoading(false);
+      } catch (err) {
+        console.log(err.response);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const affiRes = await axios.get(`${process.env.BASE_URL}/affiliates`);
+
+        console.log(affiRes.data.data.data);
+
+        setAffiliates(affiRes.data.data.data);
 
         setFormLoading(false);
       } catch (err) {
@@ -269,17 +291,6 @@ const EditItem = (props) => {
             onSubmit={async (e) => {
               e.preventDefault();
               try {
-                console.log({
-                  name,
-                  link,
-                  pricePerItem,
-                  tax,
-                  taxForCustomer,
-                  usShippingFee,
-                  quantity,
-                  estimatedWeight,
-                  orderedWebsite,
-                });
                 const res = await axios.post(
                   `${process.env.BASE_URL}/items`,
 
@@ -288,7 +299,7 @@ const EditItem = (props) => {
                     link,
                     pricePerItem: parseFloat(pricePerItem),
                     tax,
-                    taxForCustomer,
+
                     usShippingFee,
                     quantity,
                     estimatedWeight,
@@ -333,10 +344,10 @@ const EditItem = (props) => {
             }}
           >
             <FormGroup>
-              <FormLabel htmlFor="name">Product name</FormLabel>
+              <FormLabel htmlFor="name">Tên sản phẩm</FormLabel>
               <FormInput
                 type="text"
-                placeholder="Enter product name..."
+                placeholder="Tên sản phẩm..."
                 id="name"
                 name="name"
                 onChange={(e) => setName(e.target.value)}
@@ -344,83 +355,78 @@ const EditItem = (props) => {
               />
             </FormGroup>
             <FormGroup>
-              <FormLabel htmlFor="name">Product Link</FormLabel>
+              <FormLabel htmlFor="link">Link sản phẩm</FormLabel>
               <FormInput
                 type="text"
-                placeholder="Enter product link..."
+                placeholder="Link sản phẩm..."
                 id="link"
+                name="link"
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
-              <FormLabel htmlFor="pricePerItem">Price per item</FormLabel>
+              <FormLabel htmlFor="pricePerItem">Giá bán lẻ</FormLabel>
               <FormInput
                 type="number"
-                placeholder="Enter price..."
+                placeholder="Giá bán lẻ..."
                 id="pricePerItem"
+                name="pricePerItem"
                 value={pricePerItem}
                 onChange={(e) => setPrice(e.target.value)}
               />
-            </FormGroup>
+            </FormGroup>{' '}
             <FormGroup>
-              <FormLabel htmlFor="tax">Tax</FormLabel>
+              <FormLabel htmlFor="quantity">Số lượng</FormLabel>
               <FormInput
                 type="number"
-                placeholder="Enter tax..."
-                id="tax"
-                value={tax}
-                onChange={(e) => setTax(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <FormLabel htmlFor="pricePerItem">
-                Enter tax to charge customer
-              </FormLabel>
-              <FormInput
-                type="number"
-                placeholder="Enter price..."
-                id="taxForCustomer"
-                value={taxForCustomer}
-                onChange={(e) => setTaxForCustomer(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <FormLabel htmlFor="usShippingFee">usShippingFee</FormLabel>
-              <FormInput
-                type="number"
-                placeholder="Enter price..."
-                id="usShippingFee"
-                value={usShippingFee}
-                onChange={(e) => setUsShippingFee(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <FormLabel htmlFor="quantity">quantity</FormLabel>
-              <FormInput
-                type="number"
-                placeholder="Enter price..."
+                placeholder="Số lượng..."
                 id="quantity"
+                name="quantity"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
-              <FormLabel htmlFor="estimatedWeight">Estimated weight</FormLabel>
+              <FormLabel htmlFor="tax">Thuế</FormLabel>
               <FormInput
                 type="number"
-                placeholder="Enter price..."
+                placeholder="Thuế..."
+                id="tax"
+                name="tax"
+                value={tax}
+                onChange={(e) => setTax(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="usShippingFee">Giá ship nội bộ Mỹ</FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Giá ship nội bộ Mỹ..."
+                id="usShippingFee"
+                name="usShippingFee"
+                value={usShippingFee}
+                onChange={(e) => setUsShippingFee(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="estimatedWeight">Cân nặng ước tính</FormLabel>
+              <FormInput
+                type="number"
+                placeholder="Cân nặng ước tính..."
                 id="estimatedWeight"
+                name="estimatedWeight"
                 value={estimatedWeight}
                 onChange={(e) => setEstimatedWeight(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
-              <FormLabel htmlFor="orderedWebsite">order Website</FormLabel>
+              <FormLabel htmlFor="orderedWebsite">Order Website</FormLabel>
               <Select
                 onChange={(e) => setOrderedWebsite(e.target.value)}
                 value={orderedWebsite}
-                style={{ width: '22rem' }}
+                name="orderWebiste"
+                id="orderWebsite"
               >
                 <option value="amazon">Amazon</option>
                 <option value="sephora">Sephora</option>
@@ -442,18 +448,20 @@ const EditItem = (props) => {
             customer: customerName,
             items: items.map((item) => item.id),
             vndUsdRate,
+            affiliate,
+            taxForCustomer,
           });
         }}
       >
         <div className="form-content">
-          <FormGroup style={{ alignItems: 'flex-start' }}>
+          <FormGroup>
             <FormLabel htmlFor="items">Item Ids</FormLabel>
             {items.length === 0 ? (
               <p>Wow. Such Empty!</p>
             ) : (
               <ul>
                 {items.map((item) => (
-                  <DetailItem key={item.id}>
+                  <DetailItem key={item._id}>
                     {item.quantity} x {item.name}{' '}
                     <InlineBtn
                       onClick={(e) => {
@@ -492,6 +500,35 @@ const EditItem = (props) => {
               name="vnsUsdRate"
               onChange={(e) => setVndUsdRate(e.target.value)}
               value={vndUsdRate}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="name">Cộng tác viên</FormLabel>
+            {affiliates.length > 0 ? (
+              <Select
+                onChange={(e) => setAffiliate(e.target.value)}
+                value={affiliate}
+              >
+                <option value="">Choose an affiliate</option>
+                {affiliates.map((aff) => (
+                  <option value={aff._id} key={aff._id}>
+                    {aff.name}
+                  </option>
+                ))}
+              </Select>
+            ) : null}
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="taxForCustomer">Thuế tính cho khách</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Thuế tính cho khách..."
+              id="taxForCustomer"
+              name="taxForCustomer"
+              onChange={(e) => setTaxForCustomer(e.target.value)}
+              value={taxForCustomer}
             />
           </FormGroup>
         </div>

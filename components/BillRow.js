@@ -9,23 +9,27 @@ import Modal from './Modal';
 import Noti from './Noti';
 import BtnText from './styles/BtnText';
 
-const DropBtn = styled.button`
-  background-color: #4caf50;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-`;
-
 const Dropdown = styled.ul`
   display: none;
   position: absolute;
   background-color: #fff;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  top: 2.8rem;
+  right: 0;
   z-index: 1;
   border-radius: 4px;
-  padding: 0.8rem 1.2rem;
+  padding: 1.2rem 0;
+
+  li a {
+    display: block;
+    padding: 0.8rem 0.8rem 0.8rem 1rem;
+    color: ${(props) => props.theme.grey};
+
+    &:hover {
+      background-color: ${(props) => props.theme.lightGrey};
+    }
+  }
 `;
 
 const Drop = styled.div`
@@ -48,28 +52,41 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
   const renderField = (field) => {
     if (item[field]) {
       if (item[field]['$numberDecimal']) {
-        if (field === 'moneyChargeCustomerVND') {
-          return '---';
-        } else if (field === 'totalBillInUsd') {
+        if (field === 'totalBillInUsd') {
           return new Intl.NumberFormat('us-US', {
             style: 'currency',
             currency: 'USD',
           }).format(item[field]['$numberDecimal']);
-        } else {
+        } else if (field === 'estimatedWeight') {
+          return item[field]['$numberDecimal'];
+        } else if (field === 'remaining') {
           return new Intl.NumberFormat('de-DE', {
             style: 'currency',
             currency: 'VND',
+          }).format(item.remaining['$numberDecimal']);
+        } else {
+          return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
           }).format(item[field]['$numberDecimal']);
         }
       } else if (field === 'items') {
         if (item[field].length >= 1) {
           return (
             <Drop>
-              <StickerBtn type="success">List of items...</StickerBtn>
+              <StickerBtn
+                style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+              >
+                List of items...
+              </StickerBtn>
               <Dropdown>
                 {item[field].map((single) => (
                   <li key={single._id}>
-                    {single.quantity} x {single.name}
+                    <Link href={`/items/${single._id}`} passHref>
+                      <a>
+                        {single.quantity} x {single.name}
+                      </a>
+                    </Link>
                   </li>
                 ))}
               </Dropdown>
@@ -86,6 +103,12 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
             </BtnText>
           </Link>
         );
+      } else if (field === 'affiliate') {
+        return (
+          <Link href={`/affiliates/${item[field]._id}`} passHref>
+            <BtnText style={{ marginBottom: 0 }}>{item[field].name}</BtnText>
+          </Link>
+        );
       } else if (field === 'createdAt') {
         return new Date(item.createdAt).toLocaleString('en-us', {
           month: 'long',
@@ -95,6 +118,14 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
       } else {
         return item[field];
       }
+    } else if (field === 'moneyChargeCustomerVND') {
+      return new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency: 'VND',
+      }).format(
+        item.vndUsdRate['$numberDecimal'] *
+          item.moneyChargeCustomerUSD['$numberDecimal']
+      );
     }
 
     return '---';
@@ -168,31 +199,17 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
           </form>
         </Modal>
       ) : null}
-      {fields.map((field, index) => {
-        if (index < freezeNo) {
-          return (
-            <th
-              style={{
-                position: 'absolute',
-                top: 'auto',
-                left: `${index * 14 + 4}rem`,
-                height: '5.3rem',
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                borderBottom: '1px solid rgba(0,0,0,0.09)',
-              }}
-              key={field}
-            >
-              {renderField(field)}
-            </th>
-          );
-        } else {
-          return <td key={field}>{renderField(field)}</td>;
-        }
-      })}
-
-      <th>
+      <th
+        style={{
+          position: 'absolute',
+          top: 'auto',
+          left: '4rem',
+          borderBottom: '1px solid rgba(0,0,0,0.09)',
+          width: '9rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <ActionBtn
           onClick={(e) => {
             e.stopPropagation();
@@ -239,6 +256,29 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
           </ul>
         </ActionDetail>
       </th>
+      {fields.map((field, index) => {
+        if (index < freezeNo) {
+          return (
+            <th
+              style={{
+                position: 'absolute',
+                top: 'auto',
+                left: `${index * 14 + 13}rem`,
+                height: '5.3rem',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                borderBottom: '1px solid rgba(0,0,0,0.09)',
+              }}
+              key={field}
+            >
+              {renderField(field)}
+            </th>
+          );
+        } else {
+          return <td key={field}>{renderField(field)}</td>;
+        }
+      })}
     </tr>
   );
 };

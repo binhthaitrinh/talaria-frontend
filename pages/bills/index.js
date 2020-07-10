@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import LinkPrimary from '../../components/styles/LinkPrimary';
 import FreezeCol from '../../components/Options/FreezeCol';
+import Sort from '../../components/Options/Sort';
 import LimitField from '../../components/Options/LimitField';
 import OptionContext from '../../components/OptionContext';
 import Option from '../../components/styles/Option';
@@ -40,7 +41,7 @@ const fieldArr = [
   'estimatedWeight',
   'shippingRateToVnInUSD',
   'shippingFeeToVnInUSD',
-  'taxForCusomter',
+  'taxForCustomer',
   'vndUsdRate',
   'moneyChargeCustomerUSD',
   'moneyChargeCustomerVND',
@@ -50,9 +51,11 @@ const fieldArr = [
 const initialFields = [
   'createdAt',
   'items',
-  'totalBillInUsd',
+  'moneyChargeCustomerVND',
   'remaining',
+  'totalBillInUsd',
   'customer',
+  'affiliate',
   'status',
 ];
 
@@ -60,6 +63,10 @@ export default function Customers() {
   const router = useRouter();
   const [freezeNo, setFreezeNo] = useState(4);
   const [freezePass, setFreezePass] = useState(4);
+
+  // sort state
+  const [sort, setSort] = useState({ sortBy: 'createdAt', orderBy: 'desc' });
+  const [sortStr, setSortStr] = useState('-createdAt');
 
   const [fieldSelected, setFieldSelected] = useState(fields);
   const [fieldLimit, setFieldLimit] = useState(initialFields);
@@ -107,6 +114,12 @@ export default function Customers() {
                 setFreezePass={setFreezePass}
                 freezeNo={freezeNo}
               />
+              <Sort
+                setSortStr={setSortStr}
+                sort={sort}
+                setSort={setSort}
+                fieldArr={fieldArr}
+              />
               <LimitField
                 fieldArr={fieldArr}
                 fieldSelected={fieldSelected}
@@ -125,6 +138,7 @@ export default function Customers() {
             page={router.query.page || 1}
             fields={fieldLimit}
             freezeNo={freezePass}
+            sort={sortStr}
           />
         </>
       )}

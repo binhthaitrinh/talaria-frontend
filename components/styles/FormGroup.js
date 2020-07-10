@@ -21,6 +21,14 @@ const FormGroup = styled.div`
   label {
     grid-column: 1 / 4;
   }
+
+  p {
+    grid-column: 4 / -1;
+  }
+
+  & > *:nth-child(2) {
+    grid-column: 4 / -1;
+  }
 `;
 
 export default FormGroup;

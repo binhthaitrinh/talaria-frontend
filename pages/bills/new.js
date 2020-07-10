@@ -11,7 +11,7 @@ export default function Items() {
     <>
       <Meta title="Dashboard" />
       <MainCntHeader>
-        <Title>Create a new Item</Title>
+        <Title>Create a new Bill</Title>
       </MainCntHeader>
       <NewBill items={router.query.ids} />
     </>

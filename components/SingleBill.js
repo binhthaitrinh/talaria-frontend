@@ -8,7 +8,7 @@ import DetailItemTitle from './styles/DetailItemTitle';
 import DetailItemInfo from './styles/DetailItemInfo';
 import Link from 'next/link';
 import LinkPrimary from './styles/LinkPrimary';
-
+import BtnText from './styles/BtnText';
 import StickerBtn from './styles/StickerBtn';
 
 const SingleItem = (props) => {
@@ -69,7 +69,7 @@ const SingleItem = (props) => {
           <DetailItemTitle>Ngày tạo</DetailItemTitle>
           <DetailItemInfo>
             {' '}
-            {new Date(item.date).toLocaleString('en-us', {
+            {new Date(item.createdAt).toLocaleString('en-us', {
               month: 'long',
               year: 'numeric',
               day: 'numeric',
@@ -81,12 +81,24 @@ const SingleItem = (props) => {
           <DetailItemInfo>{item.status}</DetailItemInfo>
         </DetailItem>
         <DetailItem>
+          <DetailItemTitle>Tỉ giá VND/USD</DetailItemTitle>
+          <DetailItemInfo>
+            {new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'VND',
+            }).format(item.vndUsdRate['$numberDecimal'])}
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
           <DetailItemTitle>Tổng bill in VND</DetailItemTitle>
           <DetailItemInfo>
             {new Intl.NumberFormat('de-DE', {
               style: 'currency',
               currency: 'VND',
-            }).format(item.moneyChargeCustomerVND['$numberDecimal'])}
+            }).format(
+              item.vndUsdRate['$numberDecimal'] *
+                item.moneyChargeCustomerUSD['$numberDecimal']
+            )}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -96,7 +108,11 @@ const SingleItem = (props) => {
               {new Intl.NumberFormat('de-DE', {
                 style: 'currency',
                 currency: 'VND',
-              }).format(item.moneyReceived['$numberDecimal'])}
+              }).format(
+                item.vndUsdRate['$numberDecimal'] *
+                  item.moneyChargeCustomerUSD['$numberDecimal'] -
+                  item.remaining['$numberDecimal']
+              )}
             </StickerBtn>
           </DetailItemInfo>
         </DetailItem>
@@ -109,15 +125,6 @@ const SingleItem = (props) => {
                 currency: 'VND',
               }).format(item.remaining['$numberDecimal'])}
             </StickerBtn>
-          </DetailItemInfo>
-        </DetailItem>
-        <DetailItem>
-          <DetailItemTitle>Tỉ giá VND/USD</DetailItemTitle>
-          <DetailItemInfo>
-            {new Intl.NumberFormat('de-DE', {
-              style: 'currency',
-              currency: 'VND',
-            }).format(item.vndUsdRate['$numberDecimal'])}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -154,16 +161,45 @@ const SingleItem = (props) => {
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
+          <DetailItemTitle>Thuế</DetailItemTitle>
+          <DetailItemInfo>
+            {new Intl.NumberFormat('en-US', {
+              style: 'percent',
+              maximumFractionDigits: 2,
+            }).format(item.taxForCustomer['$numberDecimal'])}
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
           <DetailItemTitle>Khách hàng</DetailItemTitle>
           <DetailItemInfo>
             <Link href={`/customers/${item.customer._id}`} passHref>
-              <LinkPrimary> {item.customer.customerName}</LinkPrimary>
+              <BtnText style={{ marginBottom: 0 }}>
+                {' '}
+                {item.customer.customerName}
+              </BtnText>
+            </Link>
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Cộng tác viên</DetailItemTitle>
+          <DetailItemInfo>
+            <Link href={`/affiliates/${item.affiliate._id}`} passHref>
+              <BtnText style={{ marginBottom: 0 }}>
+                {' '}
+                {item.affiliate.name}
+              </BtnText>
             </Link>
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle></DetailItemTitle>
           <DetailItemInfo></DetailItemInfo>
+        </DetailItem>{' '}
+        <DetailItem>
+          <DetailItemTitle>Hóa đơn chuyển tiền</DetailItemTitle>
+          <DetailItemInfo>
+            {item.moneyTransferReceipt ? item.moneyTransferReceipt : '---'}
+          </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Items</DetailItemTitle>

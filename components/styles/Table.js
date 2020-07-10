@@ -21,6 +21,7 @@ const Table = styled.table`
       font-weight: 700;
       padding: 0.6rem 2rem 0.6rem 1rem;
       width: 14rem;
+ 
     }
   }
 
@@ -35,7 +36,6 @@ const Table = styled.table`
     }
   }
 
-  td,
   th, td {
    width: 14rem;
    height: 5.3rem;
@@ -43,8 +43,10 @@ const Table = styled.table`
     padding: 0.6rem 1.6rem 0.6rem 1rem;
     font-weight: 400;
     border-right: none;
+    white-space: inherit;
+    line-height: 1.2;
  
-    white-space: nowrap;
+ 
     &:last-child {
       border-right: none;
       width: 150px;

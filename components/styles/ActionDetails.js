@@ -8,7 +8,7 @@ const Detail = styled.div`
 
   top: 50%;
   left: 50%;
-  transform: translate(-95%, 15%);
+  transform: translate(-18%, 15%);
   padding: 0.6rem 0rem;
   text-align: left;
   opacity: 0;
