@@ -208,9 +208,9 @@ const SingleItem = (props) => {
               {item.items.map((doc) => (
                 <li>
                   <Link href={`/items/${doc._id}`} passHref>
-                    <a>
+                    <BtnText>
                       {doc.quantity} x {doc.name}
-                    </a>
+                    </BtnText>
                   </Link>
                 </li>
               ))}

@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import FormInput from '../components/styles/FormInput';
 import { useRouter } from 'next/router';
 
-function Items({ page }) {
+function Items({ page, freezeNo, fields }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +21,9 @@ function Items({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/paxfuls?page=${page}&limit=8`
+          `${
+            process.env.BASE_URL
+          }/paxfuls?page=${page}&limit=8&fields=${fields.join(',')}`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
@@ -34,40 +36,85 @@ function Items({ page }) {
     }
 
     fetchData();
-  }, [page]);
+  }, [page, fields]);
 
   return loading ? (
     <Loader />
   ) : (
     <MainContent>
-      <Table>
-        <thead>
-          <tr>
-            <th>Ngày</th>
-            <th>Loại</th>
+      <div
+        style={{
+          marginLeft: `${14 * freezeNo + 9}rem`,
+          overflowX: 'scroll',
+          overflowY: 'hidden',
+        }}
+      >
+        <Table>
+          <thead>
+            <tr>
+              <th
+                style={{
+                  position: 'absolute',
+                  top: 'auto',
+                  left: '4rem',
+                  borderBottom: '1px solid rgba(0,0,0,0.09)',
+                  width: '9rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                Action
+              </th>
+              {fields.map((field, index) => {
+                if (index < freezeNo) {
+                  return (
+                    <th
+                      style={{
+                        position: 'absolute',
+                        top: 'auto',
+                        left: `${index * 14 + 13}rem`,
+                        borderBottom: '1px solid rgba(0,0,0,0.09)',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                      key={field}
+                    >
+                      {_.startCase(field)}
+                    </th>
+                  );
+                } else {
+                  return (
+                    <td
+                      style={{
+                        position: 'relative',
+                        left: 0,
+                        whiteSpace: 'nowrap',
+                      }}
+                      key={field}
+                    >
+                      {_.startCase(field)}
+                    </td>
+                  );
+                }
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <PaxfulRow
+                item={item}
+                key={item._id}
+                index={index}
+                items={items}
+                setItems={setItems}
+                fields={fields}
+                freezeNo={freezeNo}
+              />
+            ))}
+          </tbody>
+        </Table>
+      </div>
 
-            <th>Lượng Bitcoin</th>
-            <th>Phí rút BTC</th>
-            <th>BTC balance</th>
-            <th>Người mua</th>
-            <th>Tiền vốn?</th>
-            <th>Số tiền chi</th>
-            <th>Tỉ giá VND/BTC</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <PaxfulRow
-              item={item}
-              key={item._id}
-              index={index}
-              items={items}
-              setItems={setItems}
-            />
-          ))}
-        </tbody>
-      </Table>
       <ActionBtnGroup>
         <div>
           <Link href={`/paxfuls?page=${page * 1 - 1}`} passHref>
