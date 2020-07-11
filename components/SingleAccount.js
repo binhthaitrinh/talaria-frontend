@@ -53,17 +53,14 @@ const SingleItem = (props) => {
             })}
           </DetailItemInfo>
         </DetailItem>
-
         <DetailItem>
           <DetailItemTitle>loginID</DetailItemTitle>
           <DetailItemInfo>{item.loginID}</DetailItemInfo>
         </DetailItem>
-
         <DetailItem>
           <DetailItemTitle>Account Website </DetailItemTitle>
           <DetailItemInfo>{item.accountWebsite}</DetailItemInfo>
         </DetailItem>
-
         <DetailItem>
           <DetailItemTitle>Balance</DetailItemTitle>
           <DetailItemInfo>
@@ -73,7 +70,6 @@ const SingleItem = (props) => {
             }).format(item.balance)}
           </DetailItemInfo>
         </DetailItem>
-
         <DetailItem>
           <DetailItemTitle>Status</DetailItemTitle>
           <DetailItemInfo>{item.status}</DetailItemInfo>
@@ -83,14 +79,11 @@ const SingleItem = (props) => {
           <DetailItemInfo>{item.accountType}</DetailItemInfo>
         </DetailItem>
         <DetailItem>
-          <DetailItemTitle>Notes</DetailItemTitle>
-          <DetailItemInfo>{item.notes}</DetailItemInfo>
-        </DetailItem>
-        <DetailItem></DetailItem>
-        <DetailItem>
           <DetailItemTitle>Lịch sử giao dịch </DetailItemTitle>
           <DetailItemInfo>
-            <button onClick={() => setShowModal(true)}>Show</button>
+            <StickerBtn type="success" onClick={() => setShowModal(true)}>
+              Show
+            </StickerBtn>
             {showModal ? (
               <Modal setShowModal={setShowModal}>
                 <ul>
@@ -131,6 +124,10 @@ const SingleItem = (props) => {
               </Modal>
             ) : null}
           </DetailItemInfo>
+        </DetailItem>{' '}
+        <DetailItem>
+          <DetailItemTitle>Notes</DetailItemTitle>
+          <DetailItemInfo>{item.notes}</DetailItemInfo>
         </DetailItem>
       </DetailList>
     </MainContent>

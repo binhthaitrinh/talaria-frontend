@@ -50,7 +50,7 @@ const Table = styled.table`
     &:last-child {
       border-right: none;
       width: 150px;
-      position: static;
+      position: relative;
       
     }
     label {
