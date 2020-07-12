@@ -7,13 +7,47 @@ import DetailItem from './styles/DetailItem';
 import DetailItemTitle from './styles/DetailItemTitle';
 import DetailItemInfo from './styles/DetailItemInfo';
 import Link from 'next/link';
-import LinkPrimary from './styles/LinkPrimary';
-
+import Modal from './Modal';
+import styled from 'styled-components';
 import StickerBtn from './styles/StickerBtn';
+
+const Dropdown = styled.ul`
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  top: 2.8rem;
+  right: 0;
+  z-index: 1;
+  border-radius: 4px;
+  padding: 1.2rem 0;
+
+  li a {
+    display: block;
+    padding: 0.8rem 0.8rem 0.8rem 1rem;
+    color: ${(props) => props.theme.grey};
+
+    &:hover {
+      background-color: ${(props) => props.theme.lightGrey};
+    }
+  }
+`;
+
+const Drop = styled.div`
+  position: relative;
+  display: inline-block;
+
+  &:hover ul {
+    display: block;
+  }
+`;
 
 const SingleItem = (props) => {
   const [item, setItem] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const [showModal, setShowModal] = useState(false);
 
   const caclTotalItems = () => {
     let total = 0;
@@ -29,8 +63,10 @@ const SingleItem = (props) => {
   const caclTotalMoney = () => {
     let total = 0;
     item.bills.forEach((bill) => {
-      if (bill.moneyChargeCustomerVND) {
-        total = parseFloat(bill.moneyChargeCustomerVND['$numberDecimal']);
+      if (bill.moneyChargeCustomerUSD) {
+        total +=
+          parseFloat(bill.moneyChargeCustomerUSD['$numberDecimal']) *
+          parseFloat(bill.vndUsdRate['$numberDecimal']);
       }
     });
 
@@ -112,8 +148,33 @@ const SingleItem = (props) => {
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
+          <DetailItemTitle>Discount rate</DetailItemTitle>
+          <DetailItemInfo>
+            {new Intl.NumberFormat('us-US', {
+              style: 'percent',
+              maximumFractionDigits: 2,
+            }).format(parseFloat(item.discountRate['$numberDecimal']) / 100)}
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Bank Account</DetailItemTitle>
+          <DetailItemInfo>
+            {item.bankAccounts.length > 0
+              ? item.bankAccounts.map((acct) => (
+                  <p>
+                    {acct.bankName} - {acct.accountNumber}
+                  </p>
+                ))
+              : 'Not Available'}
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
           <DetailItemTitle>Số đơn mua thành công</DetailItemTitle>
           <DetailItemInfo>{item.bills.length}</DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Loại khách hàng</DetailItemTitle>
+          <DetailItemInfo>{item.customerType}</DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Số item mua thành công</DetailItemTitle>
@@ -132,10 +193,39 @@ const SingleItem = (props) => {
         <DetailItem>
           <DetailItemTitle>Danh sách đơn hàng</DetailItemTitle>
           <DetailItemInfo>
-            <Link href="/" pasHref>
-              <LinkPrimary>Click here</LinkPrimary>
-            </Link>
+            {showModal && (
+              <Modal setShowModal={setShowModal}>
+                {item.bills.length > 0 ? (
+                  <ul style={{ listStyle: 'none' }}>
+                    {item.bills.map((bill) =>
+                      bill.items.map((single) => (
+                        <li key={single._id}>
+                          <Link href={`/items/${single._id}`} passHref>
+                            <a>
+                              {single.quantity} x {single.name}
+                            </a>
+                          </Link>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                ) : (
+                  <p>Wow! Such empty!</p>
+                )}
+              </Modal>
+            )}
+
+            <StickerBtn
+              style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+              onClick={() => setShowModal(!showModal)}
+            >
+              Click to show
+            </StickerBtn>
           </DetailItemInfo>
+        </DetailItem>{' '}
+        <DetailItem>
+          <DetailItemTitle>Ghi chú</DetailItemTitle>
+          <DetailItemInfo>{item.notes}</DetailItemInfo>
         </DetailItem>
       </DetailList>
     </MainContent>

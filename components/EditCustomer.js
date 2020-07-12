@@ -9,6 +9,9 @@ import axios from 'axios';
 import LoadingBtn from './styles/LoadingBtn';
 import Noti from './Noti';
 import Router from 'next/router';
+import { Select } from './styles/FormComponent';
+import BtnGrey from './styles/BtnGrey';
+import Modal from './Modal';
 
 const EditItem = ({ item }) => {
   const [name, setName] = useState(item.customerName);
@@ -22,8 +25,15 @@ const EditItem = ({ item }) => {
   );
   const [customerType, setCustomerType] = useState(item.customerType);
   const [discountRate, setDiscountRate] = useState(
-    item.discountRate['$numberDecimal']
+    parseFloat(item.discountRate['$numberDecimal'])
   );
+  const [bankAccounts, setBankAccounts] = useState(item.bankAccounts || []);
+  const [bankName, setBankName] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+
+  const [notes, setNotes] = useState(item.notes || '');
+
+  const [showAddBank, setShowAddBank] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
@@ -86,6 +96,8 @@ const EditItem = ({ item }) => {
             },
             customerType,
             discountRate,
+            bankAccounts,
+            notes,
           });
         }}
       >
@@ -147,19 +159,21 @@ const EditItem = ({ item }) => {
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="customerType">Loại khách hàng</FormLabel>
-            <FormInput
-              type="text"
-              placeholder="Enter customer customerType..."
+            <Select
+              value={customerType}
+              onChange={(e) => setCustomerType(e.target.value)}
               id="customerType"
               name="customerType"
-              onChange={(e) => setCustomerType(e.target.value)}
-              value={customerType}
-            />
+            >
+              <option value="">Choose one</option>
+              <option value="personal">Cá nhân</option>
+              <option value="wholesale">Khách buôn</option>
+            </Select>
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="discountRate">Discount Rate</FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter customer discountRate..."
               id="discountRate"
               name="discountRate"
@@ -167,11 +181,110 @@ const EditItem = ({ item }) => {
               value={discountRate}
             />
           </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="discountRate">Bank Accounts</FormLabel>
+            {bankAccounts.length > 0 ? (
+              <ul>
+                {bankAccounts.map((acct, index) => (
+                  <li style={{ marginBottom: '0.5rem' }}>
+                    {acct.bankName} - {acct.accountNumber}{' '}
+                    <span
+                      style={{
+                        backgroundColor: 'grey',
+                        color: 'white',
+                        padding: '0 1rem',
+                        marginLeft: '1rem',
+                        borderRadius: '50%',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() =>
+                        setBankAccounts((bankAccounts) =>
+                          bankAccounts.filter(
+                            (item) => item.accountNumber != acct.accountNumber
+                          )
+                        )
+                      }
+                    >
+                      x
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Such empty!</p>
+            )}
+            {showAddBank && (
+              <Modal setShowModal={setShowAddBank}>
+                <form
+                  className="form-content"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setBankAccounts((bankAccounts) => [
+                      ...bankAccounts,
+                      { accountNumber, bankName },
+                    ]);
+                    setShowAddBank(false);
+                    setAccountNumber('');
+                    setBankName('');
+                  }}
+                >
+                  <FormGroup>
+                    <FormLabel htmlFor="bankName">Tên ngân hàng</FormLabel>
+                    <FormInput
+                      type="text"
+                      placeholder="Tên ngân hàng..."
+                      id="bankName"
+                      name="bankName"
+                      onChange={(e) => setBankName(e.target.value)}
+                      value={bankName}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="accountNumber">Số tài khoản</FormLabel>
+                    <FormInput
+                      type="text"
+                      placeholder="Số tài khoản..."
+                      id="accountNumber"
+                      name="accountNumber"
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                      value={accountNumber}
+                    />
+                  </FormGroup>
+                  <SubmitBtn>Add</SubmitBtn>
+                </form>
+              </Modal>
+            )}
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="notes">Ghi chú</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Enter notes..."
+              id="notes"
+              name="notes"
+              onChange={(e) => setNotes(e.target.value)}
+              value={notes}
+            />
+          </FormGroup>
         </div>
 
         <SubmitBtn disabled={loading ? true : false}>
           {loading ? <LoadingBtn /> : 'Submit'}
         </SubmitBtn>
+
+        <BtnGrey
+          style={{ padding: '1.5rem 2rem', marginLeft: '2rem' }}
+          onClick={(e) => {
+            e.preventDefault();
+            setShowAddBank(true);
+          }}
+        >
+          Add Bank Account
+        </BtnGrey>
       </Form>
     </MainContent>
   );
