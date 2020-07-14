@@ -14,7 +14,7 @@ export default function ItemDetail(props) {
       <Meta title="Detail" />
       <MainCntHeader>
         <Title>Affiliate {id}</Title>
-        <Link href={`/accounts/${id}/edit`} passHref>
+        <Link href={`/affiliates/${id}/edit`} passHref>
           <LinkPrimary>CHỉnh sửa</LinkPrimary>
         </Link>
       </MainCntHeader>
