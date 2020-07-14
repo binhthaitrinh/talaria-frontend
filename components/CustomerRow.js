@@ -27,6 +27,13 @@ const ItemRow = ({ item, index, items, setItems }) => {
         })}
       </th>
       <th>{item.customerName}</th>
+      <th>
+        {new Intl.NumberFormat('en-US', {
+          style: 'percent',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format((item.discountRate['$numberDecimal'] * 1) / 100)}
+      </th>
       <th>{item.phoneNumber}</th>
       <th>
         {new Date(item.dateOfBirth).toLocaleString('en-us', {

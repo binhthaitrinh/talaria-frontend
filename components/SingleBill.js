@@ -183,12 +183,14 @@ const SingleItem = (props) => {
         <DetailItem>
           <DetailItemTitle>Cộng tác viên</DetailItemTitle>
           <DetailItemInfo>
-            <Link href={`/affiliates/${item.affiliate._id}`} passHref>
-              <BtnText style={{ marginBottom: 0 }}>
-                {' '}
-                {item.affiliate.name}
-              </BtnText>
-            </Link>
+            {item.affiliate && (
+              <Link href={`/affiliates/${item.affiliate._id}`} passHref>
+                <BtnText style={{ marginBottom: 0 }}>
+                  {' '}
+                  {item.affiliate.name}
+                </BtnText>
+              </Link>
+            )}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>

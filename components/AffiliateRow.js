@@ -4,6 +4,7 @@ import ActionBtn from './styles/ActionBtn';
 import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
 import StickerBtn from './styles/StickerBtn';
+import { Drop, Dropdown } from './styles/Dropdown';
 
 const ItemRow = ({ item, index, items, setItems }) => {
   const [showDetail, setShowDetail] = useState(false);
@@ -19,16 +20,57 @@ const ItemRow = ({ item, index, items, setItems }) => {
       onClick={() => setShowDetail(false)}
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
-      <th></th>
+      <th>
+        {new Date(item.createdAt).toLocaleString('en-us', {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+        })}
+      </th>
       <th>{item.name}</th>
       <th>{item.phoneNumber}</th>
       <th>
-        {item.socialMediaLinks.length >= 1
-          ? item.socialMediaLinks[0].link
-          : '---'}
+        {item.socialMediaLinks.length >= 1 ? (
+          <Drop>
+            <StickerBtn
+              style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+            >
+              List
+            </StickerBtn>
+            <Dropdown>
+              {item.socialMediaLinks.map((single) => (
+                <li key={single._id}>
+                  {single.socialMediaType} - {single.link}
+                </li>
+              ))}
+            </Dropdown>
+          </Drop>
+        ) : (
+          '---'
+        )}
       </th>
       <th>{item.commissionRate['$numberDecimal']}</th>
-      <th>{item.bankAccounts.length >= 1 ? item.bankAccounts[0] : '---'}</th>
+      <th>
+        {item.bankAccounts.length >= 1 ? (
+          <Drop>
+            <StickerBtn
+              style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+            >
+              List
+            </StickerBtn>
+            <Dropdown>
+              {item.bankAccounts.map((single) => (
+                <li key={single._id}>
+                  {single.bankName} - {single.accountNumber}
+                </li>
+              ))}
+            </Dropdown>
+          </Drop>
+        ) : (
+          '---'
+        )}
+      </th>
+      <th>{item.notes}</th>
       {/* <th>
         {new Date(item.date).toLocaleString('en-us', {
           month: 'long',

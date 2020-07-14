@@ -15,7 +15,7 @@ export default function Customers() {
       <Meta title="Dashboard" />
       <MainCntHeader>
         <Title>Affiliates</Title>
-        <Link href="/customers/new" passHref>
+        <Link href="/affiliates/new" passHref>
           <LinkPrimary>Create an affiliate</LinkPrimary>
         </Link>
       </MainCntHeader>

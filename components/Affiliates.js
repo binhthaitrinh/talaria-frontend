@@ -48,6 +48,7 @@ function Items({ page }) {
             <th>Link social media</th>
             <th>% hoa hồng</th>
             <th>Bank Account</th>
+            <th>Notes</th>
             <th>Action</th>
           </tr>
         </thead>

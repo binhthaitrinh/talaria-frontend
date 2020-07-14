@@ -44,6 +44,7 @@ function Items({ page }) {
           <tr>
             <th>Ngày tạo</th>
             <th>Họ tên</th>
+            <th>Discount</th>
             <th>Số điện thoại</th>
             <th>Ngày sinh</th>
             <th>Địa chỉ</th>

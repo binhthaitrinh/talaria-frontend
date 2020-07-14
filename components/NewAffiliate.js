@@ -9,28 +9,48 @@ import axios from 'axios';
 import LoadingBtn from './styles/LoadingBtn';
 import Noti from './Noti';
 import Router from 'next/router';
+import Loader from './styles/Loader';
 import Modal from './Modal';
 import BtnGrey from './styles/BtnGrey';
+import { Select } from './styles/FormComponent';
+import styled from 'styled-components';
+import DetailItem from './styles/DetailItem';
 
-const EditItem = () => {
+const InlineBtn = styled.button`
+  padding: 0.4rem 0.8rem;
+  background-color: ${(props) => props.theme.lightGrey};
+  border-radius: 5rem;
+  border: none;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    background-color: ${(props) => props.theme.danger};
+    color: ${(props) => props.theme.offWhite};
+  }
+`;
+
+const EditItem = (props) => {
+  const [socialMediaLinks, setSocialMediaLinks] = useState([]);
   const [name, setName] = useState('');
-  const [phoneNo, setPhoneNo] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [customerType, setCustomerType] = useState('');
-  const [discountRate, setDiscountRate] = useState('');
-  const [notes, setNotes] = useState('');
-
-  const [showAddBank, setShowAddBank] = useState(false);
-
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [commissionRate, setCommissionRate] = useState(0);
   const [bankAccounts, setBankAccounts] = useState([]);
-  const [bankName, setBankName] = useState('');
+  const [notes, setNotes] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
+  const [bankName, setBankName] = useState('');
+  const [socialMediaType, setSocialMediaType] = useState('');
+  const [link, setLink] = useState('');
+
   const [loading, setLoading] = useState(false);
+
+  const [showAddSocialMedia, setShowAddSocialMedia] = useState(false);
+  const [showAddBank, setShowAddBank] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
   const [alertType, setAlertType] = useState('');
+
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -40,9 +60,10 @@ const EditItem = () => {
 
   const submitForm = async (formData) => {
     setLoading(true);
+    console.log(formData.items);
     try {
       const res = await axios.post(
-        `${process.env.BASE_URL}/customers`,
+        `${process.env.BASE_URL}/affiliates`,
         formData,
         config
       );
@@ -54,7 +75,7 @@ const EditItem = () => {
       setShowNoti(true);
       setTimeout(() => {
         setShowNoti(false);
-        Router.push(`/customers`);
+        Router.push(`/affiliates${res.data.data.data._id}`);
         setMessage('');
         setAlertType('');
       }, 2000);
@@ -82,94 +103,50 @@ const EditItem = () => {
           // console.log(currency);
           // console.log(pocketMoney);
           submitForm({
-            customerName: name,
-            customerType,
-            address: {
-              address1: address,
-              city,
-            },
-            phoneNumber: phoneNo,
-            discountRate,
-            dateOfBirth,
+            name,
+            commissionRate,
+            phoneNumber,
+            socialMediaLinks,
+            bankAccounts,
+            notes,
           });
         }}
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="name">Tên khách hàng</FormLabel>
+            <FormLabel htmlFor="name">Tên CTV</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter customer name..."
+              placeholder="Enter name..."
               id="name"
               name="name"
               onChange={(e) => setName(e.target.value)}
               value={name}
             />
           </FormGroup>
+
           <FormGroup>
-            <FormLabel htmlFor="dateOfBirth">Ngày sinh</FormLabel>
-            <FormInput
-              type="date"
-              placeholder="Enter customer dateOfBirth..."
-              id="dateOfBirth"
-              name="dateOfBirth"
-              onChange={(e) => setDateOfBirth(e.target.value)}
-              value={dateOfBirth.slice(0, 10)}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel htmlFor="phoneNo">Số điện thoại</FormLabel>
+            <FormLabel htmlFor="phoneNumber">Số điện thoại</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter customer phoneNo..."
-              id="phoneNo"
-              name="phoneNo"
-              onChange={(e) => setPhoneNo(e.target.value)}
-              value={phoneNo}
+              placeholder="Số điện thoại..."
+              id="phoneNumber"
+              name="phoneNumber"
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={phoneNumber}
             />
           </FormGroup>
+
           <FormGroup>
-            <FormLabel htmlFor="address">Địa chỉ</FormLabel>
+            <FormLabel htmlFor="commissionRate">% hoa hồng</FormLabel>
             <FormInput
-              type="text"
-              placeholder="Enter customer address..."
-              id="address"
-              name="address"
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel htmlFor="city">Thành phố</FormLabel>
-            <FormInput
-              type="text"
-              placeholder="Enter customer city..."
-              id="city"
-              name="city"
-              onChange={(e) => setCity(e.target.value)}
-              value={city}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel htmlFor="customerType">Loại khách hàng</FormLabel>
-            <FormInput
-              type="text"
-              placeholder="Enter customer customerType..."
-              id="customerType"
-              name="customerType"
-              onChange={(e) => setCustomerType(e.target.value)}
-              value={customerType}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel htmlFor="discountRate">Discount Rate</FormLabel>
-            <FormInput
-              type="text"
-              placeholder="Enter customer discountRate..."
-              id="discountRate"
-              name="discountRate"
-              onChange={(e) => setDiscountRate(e.target.value)}
-              value={discountRate}
+              type="number"
+              step="0.001"
+              placeholder="% hoa hồng"
+              id="commissionRate"
+              name="commissionRate"
+              onChange={(e) => setCommissionRate(e.target.value)}
+              value={commissionRate}
             />
           </FormGroup>
 
@@ -183,6 +160,90 @@ const EditItem = () => {
               onChange={(e) => setNotes(e.target.value)}
               value={notes}
             />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="socialMediaLinks">Social Media Links</FormLabel>
+            {socialMediaLinks.length > 0 ? (
+              <ul>
+                {socialMediaLinks.map((acct, index) => (
+                  <li style={{ marginBottom: '0.5rem' }}>
+                    {acct.socialMediaType} - {acct.link}{' '}
+                    <span
+                      style={{
+                        backgroundColor: 'grey',
+                        color: 'white',
+                        padding: '0 1rem',
+                        marginLeft: '1rem',
+                        borderRadius: '50%',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() =>
+                        setSocialMediaLinks((socialMediaLinks) =>
+                          socialMediaLinks.filter(
+                            (item) => item.link != acct.link
+                          )
+                        )
+                      }
+                    >
+                      x
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Such empty!</p>
+            )}
+            {showAddSocialMedia && (
+              <Modal setShowModal={setShowAddSocialMedia}>
+                <form
+                  className="form-content"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSocialMediaLinks((socialMediaLinks) => [
+                      ...socialMediaLinks,
+                      { socialMediaType, link },
+                    ]);
+                    setShowAddSocialMedia(false);
+                    setSocialMediaType('');
+                    setLink('');
+                  }}
+                >
+                  <FormGroup>
+                    <FormLabel htmlFor="socialMediaType">Loại</FormLabel>
+                    <Select
+                      value={socialMediaType}
+                      onChange={(e) => setSocialMediaType(e.target.value)}
+                      id="socialMediaType"
+                      name="socialMediaType"
+                    >
+                      <option value="">Choose</option>
+                      <option value="facebook">Facebook</option>
+                      <option value="instagram">Instagram</option>
+                      <option value="tiktok">Tiktok</option>
+                      <option value="pinterest">Pinterest</option>
+                      <option value="others">Khác</option>
+                    </Select>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="link">Link</FormLabel>
+                    <FormInput
+                      type="text"
+                      placeholder="Link..."
+                      id="link"
+                      name="link"
+                      onChange={(e) => setLink(e.target.value)}
+                      value={link}
+                    />
+                  </FormGroup>
+                  <SubmitBtn>Add</SubmitBtn>
+                </form>
+              </Modal>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -272,11 +333,21 @@ const EditItem = () => {
           style={{ padding: '1.5rem 2rem', marginLeft: '2rem' }}
           onClick={(e) => {
             e.preventDefault();
-            setShowAddBank(true);
+            setShowAddSocialMedia(true);
           }}
         >
           {' '}
-          Add Bank Account
+          Add Social Media
+        </BtnGrey>
+
+        <BtnGrey
+          style={{ padding: '1.5rem 2rem', marginLeft: '2rem' }}
+          onClick={(e) => {
+            e.preventDefault();
+            setShowAddBank(true);
+          }}
+        >
+          Add bank account
         </BtnGrey>
       </Form>
     </MainContent>
