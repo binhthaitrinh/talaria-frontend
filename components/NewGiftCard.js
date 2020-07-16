@@ -72,7 +72,7 @@ const EditItem = (props) => {
     console.log(formData.items);
     try {
       const res = await axios.post(
-        `${process.env.BASE_URL}/accounts`,
+        `${process.env.BASE_URL}/giftcards`,
         formData,
         config
       );
@@ -84,7 +84,7 @@ const EditItem = (props) => {
       setShowNoti(true);
       setTimeout(() => {
         setShowNoti(false);
-        Router.push(`/accounts/${res.data.data.data._id}`);
+        Router.push(`/giftcards/${res.data.data.data._id}`);
         setMessage('');
         setAlertType('');
       }, 2000);
@@ -142,8 +142,8 @@ const EditItem = (props) => {
             <FormLabel htmlFor="name">Tài khoản</FormLabel>
             {accounts.length > 0 ? (
               <Select
-                value={giftCardType}
-                onChange={(e) => setGiftCardType(e.target.value)}
+                value={accountID}
+                onChange={(e) => setAccountID(e.target.value)}
               >
                 <option value="">Choose</option>
                 {accounts.map((acct) => (
