@@ -44,7 +44,6 @@ function Items({ page }) {
         <thead>
           <tr>
             <th>Ngày</th>
-            <th>Items</th>
             <th>Account</th>
             <th>Amount</th>
             <th>Loại giao dịch</th>

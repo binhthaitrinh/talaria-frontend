@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ActionBtn from './styles/ActionBtn';
 import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
+import Modal from './Modal';
+import Form from './styles/Form';
+import FormGroup from './styles/FormGroup';
+import FormLabel from './styles/FormLabel';
+import { Select } from './styles/FormComponent';
+import BtnPrimary from './styles/BtnPrimary';
+import Noti from './Noti';
 
 const ItemRow = ({
   item,
@@ -16,6 +23,28 @@ const ItemRow = ({
   freezeNo,
 }) => {
   const [showDetail, setShowDetail] = useState(false);
+  const [showCharge, setShowCharge] = useState(false);
+  const [orderAccount, setOrderAccount] = useState('');
+  const [accounts, setAccounts] = useState([]);
+  const [showNoti, setShowNoti] = useState(false);
+  const [message, setMessage] = useState('');
+  const [alertType, setAlertType] = useState('');
+
+  useEffect(() => {
+    async function fetchAccounts() {
+      try {
+        const res = await axios.get(
+          `${process.env.BASE_URL}/accounts?fields=loginID`
+        );
+
+        setAccounts(res.data.data.data);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    }
+
+    fetchAccounts();
+  }, [showCharge]);
 
   const renderField = (field) => {
     if (item[field]) {
@@ -174,20 +203,98 @@ const ItemRow = ({
               </button>
             </li>
             <li>
-              <button
-                onClick={async () => {
-                  try {
-                    await axios.post(
-                      `${process.env.BASE_URL}/items/${item._id}/charge`
-                    );
-                    window.location.reload();
-                  } catch (err) {
-                    console.log(err.response.data.message);
-                  }
-                }}
-              >
-                Charge
-              </button>
+              <button onClick={() => setShowCharge(true)}>Charge</button>
+              {showNoti ? <Noti message={message} type={alertType} /> : null}
+              {showCharge && (
+                <Modal setShowModal={setShowCharge}>
+                  <Form>
+                    <FormGroup>
+                      <FormLabel>Choose an account</FormLabel>
+
+                      {accounts.length > 0 ? (
+                        <Select
+                          value={orderAccount}
+                          onChange={(e) => setOrderAccount(e.target.value)}
+                        >
+                          <option value="">Choose</option>
+                          {accounts.map((acct) => (
+                            <option key={acct._id} value={acct._id}>
+                              {acct.loginID}
+                            </option>
+                          ))}
+                        </Select>
+                      ) : null}
+                    </FormGroup>
+                    <BtnPrimary
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          await axios.patch(
+                            `${process.env.BASE_URL}/items/${item._id}`,
+                            { orderAccount },
+                            {
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': '*',
+                              },
+                            }
+                          );
+
+                          const res = await axios.post(
+                            `${process.env.BASE_URL}/items/${item._id}/charge`
+                          );
+
+                          console.log(
+                            res.data.data.data.amount['$numberDecimal']
+                          );
+
+                          setItems((items) => {
+                            // const current = items.filter(
+                            //   (single) => single._id === item._id
+                            // );
+                            // current.actualCost = res.data.data.data.amount;
+                            // current.status = 'ordered';
+
+                            const foundIdx = items.findIndex(
+                              (single) => single._id === item._id
+                            );
+                            const temp = items[foundIdx];
+                            temp.actualCost = res.data.data.data.amount;
+                            temp.status = 'ordered';
+
+                            items.splice(foundIdx, 1, temp);
+                            return items;
+                          });
+
+                          setMessage('Charge success');
+                          setAlertType('success');
+                          setShowNoti(true);
+
+                          setShowCharge(false);
+
+                          setTimeout(() => {
+                            setShowNoti(false);
+                            setMessage('');
+                            setAlertType('');
+                          }, 2000);
+                        } catch (err) {
+                          setMessage(err.response.data);
+                          setAlertType('danger');
+                          setShowNoti(true);
+
+                          setTimeout(() => {
+                            setShowNoti(false);
+                            setMessage('');
+                            setAlertType('');
+                          }, 2000);
+                        }
+                      }}
+                    >
+                      Charge
+                    </BtnPrimary>
+                  </Form>
+                </Modal>
+              )}
             </li>
           </ul>
         </ActionDetail>
