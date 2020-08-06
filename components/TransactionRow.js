@@ -5,6 +5,7 @@ import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
 import StickerBtn from './styles/StickerBtn';
 import LinkPrimary from './styles/LinkPrimary';
+import { Drop, Dropdown } from './styles/Dropdown';
 
 const ItemRow = ({ item, index, items, setItems }) => {
   const [showDetail, setShowDetail] = useState(false);
@@ -27,6 +28,29 @@ const ItemRow = ({ item, index, items, setItems }) => {
           day: 'numeric',
         })}
       </th>
+      <th>{item.accountID ? item.accountID.loginID : '---'}</th>
+      <th>
+        {item.itemID ? (
+          <Drop>
+            <StickerBtn
+              style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+            >
+              List
+            </StickerBtn>
+            <Dropdown>
+              <li>
+                <Link href={`/items/${item.itemID._id}`}>
+                  <a>
+                    {item.itemID.quantity} - {item.itemID.name}
+                  </a>
+                </Link>
+              </li>
+            </Dropdown>
+          </Drop>
+        ) : (
+          '---'
+        )}
+      </th>
       <th>
         {new Intl.NumberFormat('de-DE', {
           style: 'currency',
@@ -40,26 +64,6 @@ const ItemRow = ({ item, index, items, setItems }) => {
         >
           {item.transactionType}
         </StickerBtn>
-      </th>
-      <th>
-        {item.itemID ? (
-          <Link href={`/items/${item.itemID._id}`} passHref>
-            <LinkPrimary>
-              {item.itemID.quantity} x {item.itemID.name}
-            </LinkPrimary>
-          </Link>
-        ) : (
-          '---'
-        )}
-      </th>
-      <th>
-        {item.accountID ? (
-          <Link href={`/accounts/${item.accountID._id}`} passHref>
-            <LinkPrimary>{item.accountID.loginID.slice(0, 15)}...</LinkPrimary>
-          </Link>
-        ) : (
-          '---'
-        )}
       </th>
       <th>{item.notes ? item.notes : '---'}</th>
 

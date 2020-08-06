@@ -29,37 +29,50 @@ const fields = {
   status: true,
   orderAccount: false,
   notes: true,
+  itemType: false,
 };
 
 const fieldArr = [
-  '_id',
+  'customId',
   'createdAt',
   'name',
   'pricePerItem',
   'quantity',
   'usShippingFee',
-  'estimatedWeight',
-  'orderedWebsite',
-  'actualCost',
-  'tax',
   'link',
+  'warehouse',
   'trackingLink',
   'status',
-
+  'notes',
+  'tax',
+  'itemType',
+  'orderedWebsite',
+  'estimatedWeight',
   'actualWeight',
   'orderAccount',
-  'notes',
+  'fromAcctBalance',
+  'actualCost',
+  'orderDate',
+  'arrivedAtWarehouseDate',
+  'shippingToVnDate',
+  'arrivedAtVnDate',
+  'customerRcvedDate',
+  'returnPkgDate',
+  'returnPkgArvlDate',
+  'invoiceLink',
 ];
 
 const initialFields = [
-  '_id',
+  'customId',
   'createdAt',
   'name',
   'pricePerItem',
   'quantity',
-  'actualCost',
+  'usShippingFee',
   'link',
+  'warehouse',
   'trackingLink',
+  'notes',
   'status',
 ];
 
@@ -69,8 +82,8 @@ export default function Items() {
   const [fieldLimit, setFieldLimit] = useState(initialFields);
 
   // sort state
-  const [sort, setSort] = useState({ sortBy: 'createdAt', orderBy: 'desc' });
-  const [sortStr, setSortStr] = useState('-createdAt');
+  const [sort, setSort] = useState({ sortBy: '_id', orderBy: 'desc' });
+  const [sortStr, setSortStr] = useState('-_id');
 
   // filter state
   const [filter, setFilter] = useState([]);

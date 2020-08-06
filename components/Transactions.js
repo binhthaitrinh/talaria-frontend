@@ -21,7 +21,7 @@ function Items({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/transactions?page=${page}&limit=8`
+          `${process.env.BASE_URL}/transactions?sort=-createdAt&page=${page}&limit=8`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
@@ -45,6 +45,7 @@ function Items({ page }) {
           <tr>
             <th>Ngày</th>
             <th>Account</th>
+            <th>Items</th>
             <th>Amount</th>
             <th>Loại giao dịch</th>
             <th>Notes</th>

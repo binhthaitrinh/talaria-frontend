@@ -75,7 +75,7 @@ function Items({ page, fields, sort, filter, freezeNo }) {
     <MainContent>
       <div
         style={{
-          marginLeft: `${14 * (freezeNo + 2) - 8}rem`,
+          marginLeft: `${14 * (freezeNo + 2) - 10}rem`,
           overflowX: 'scroll',
           overflowY: 'hidden',
         }}
@@ -120,6 +120,7 @@ function Items({ page, fields, sort, filter, freezeNo }) {
                         borderBottom: '1px solid rgba(0,0,0,0.09)',
                         display: 'flex',
                         alignItems: 'center',
+                        width: '14rem',
                       }}
                       key={field}
                     >

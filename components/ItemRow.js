@@ -10,6 +10,7 @@ import FormLabel from './styles/FormLabel';
 import { Select } from './styles/FormComponent';
 import BtnPrimary from './styles/BtnPrimary';
 import Noti from './Noti';
+import { isLength } from 'lodash';
 
 const ItemRow = ({
   item,
@@ -34,7 +35,7 @@ const ItemRow = ({
     async function fetchAccounts() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/accounts?fields=loginID`
+          `${process.env.BASE_URL}/accounts?fields=loginID,currency,accountWebsite&currency=usd`
         );
 
         setAccounts(res.data.data.data);
@@ -70,10 +71,24 @@ const ItemRow = ({
             style: 'currency',
             currency: 'usd',
           }).format(item[field]['$numberDecimal']);
+        } else if (field === 'usShippingFee') {
+          return new Intl.NumberFormat('us-US', {
+            style: 'currency',
+            currency: 'usd',
+          }).format(item[field]['$numberDecimal']);
+        } else if (field === 'fromAcctBalance') {
+          return new Intl.NumberFormat('us-US', {
+            style: 'currency',
+            currency: 'usd',
+          }).format(item[field]['$numberDecimal']);
         } else {
           return item[field]['$numberDecimal'];
         }
-      } else if (field === 'link' || field === 'trackingLink') {
+      } else if (
+        field === 'link' ||
+        field === 'trackingLink' ||
+        field === 'invoiceLink'
+      ) {
         return (
           <a href={item[field]} target="_blank">
             {item[field].slice(0, 15)}...
@@ -84,8 +99,17 @@ const ItemRow = ({
           style: 'currency',
           currency: 'USD',
         }).format(item[field]);
-      } else if (field === 'createdAt') {
-        return new Date(item.createdAt).toLocaleString('en-us', {
+      } else if (
+        field === 'createdAt' ||
+        field === 'orderDate' ||
+        field === 'arrivedAtWarehouseDate' ||
+        field === 'shippingToVnDate' ||
+        field === 'arrivedAtVnDate' ||
+        field === 'customerRcvedDate' ||
+        field === 'returnPkgDate' ||
+        field === 'returnPggArvlDate'
+      ) {
+        return new Date(item[field]).toLocaleString('en-us', {
           month: 'long',
           year: 'numeric',
           day: 'numeric',
@@ -102,8 +126,8 @@ const ItemRow = ({
       } else if (field === '_id' || field === 'status') {
         return (
           <div>
-            {`${item[field].slice(0, 10)}...`}
-            <span className="tooltip">{item[field]}</span>
+            {`${item[field].slice(0, 10).split('-').join(' ')}...`}
+            <span className="tooltip">{item[field].split('-').join(' ')}</span>
           </div>
         );
       } else if (field === 'name') {
@@ -120,6 +144,8 @@ const ItemRow = ({
           </div>
         );
       }
+    } else {
+      return '---';
     }
 
     return item[field];
@@ -203,7 +229,12 @@ const ItemRow = ({
               </button>
             </li>
             <li>
-              <button onClick={() => setShowCharge(true)}>Charge</button>
+              <button
+                disabled={item.status !== 'not-yet-ordered'}
+                onClick={() => setShowCharge(true)}
+              >
+                Charge
+              </button>
               {showNoti ? <Noti message={message} type={alertType} /> : null}
               {showCharge && (
                 <Modal setShowModal={setShowCharge}>
@@ -219,7 +250,8 @@ const ItemRow = ({
                           <option value="">Choose</option>
                           {accounts.map((acct) => (
                             <option key={acct._id} value={acct._id}>
-                              {acct.loginID}
+                              {acct.accountWebsite} - {acct.loginID} -{' '}
+                              {acct.currency}
                             </option>
                           ))}
                         </Select>
@@ -229,24 +261,27 @@ const ItemRow = ({
                       onClick={async (e) => {
                         e.preventDefault();
                         try {
-                          await axios.patch(
-                            `${process.env.BASE_URL}/items/${item._id}`,
-                            { orderAccount },
+                          // await axios.patch(
+                          //   `${process.env.BASE_URL}/items/${item._id}`,
+                          //   { orderAccount },
+                          //   {
+                          //     headers: {
+                          //       'Content-Type': 'application/json',
+                          //       'Access-Control-Allow-Origin': '*',
+                          //     },
+                          //   }
+                          // );
+
+                          const res = await axios.post(
+                            `${process.env.BASE_URL}/items/${item._id}/charge`,
                             {
-                              headers: {
-                                'Content-Type': 'application/json',
-                                'Access-Control-Allow-Origin': '*',
-                              },
+                              account: orderAccount,
                             }
                           );
 
-                          const res = await axios.post(
-                            `${process.env.BASE_URL}/items/${item._id}/charge`
-                          );
-
-                          console.log(
-                            res.data.data.data.amount['$numberDecimal']
-                          );
+                          // console.log(
+                          //   res.data.data.data.amount['$numberDecimal']
+                          // );
 
                           setItems((items) => {
                             // const current = items.filter(
@@ -259,8 +294,14 @@ const ItemRow = ({
                               (single) => single._id === item._id
                             );
                             const temp = items[foundIdx];
-                            temp.actualCost = res.data.data.data.amount;
+                            // let temp = res.data.data.data;
+
+                            temp.actualCost = res.data.data.data.actualCost;
+                            temp.orderAccount = res.data.data.data.orderAccount;
+                            temp.fromAcctBalance =
+                              res.data.data.data.fromAcctBalance;
                             temp.status = 'ordered';
+                            temp.orderDate = res.data.data.data.createdAt;
 
                             items.splice(foundIdx, 1, temp);
                             return items;
@@ -278,7 +319,8 @@ const ItemRow = ({
                             setAlertType('');
                           }, 2000);
                         } catch (err) {
-                          setMessage(err.response.data);
+                          console.log(err);
+                          setMessage(err.response.data.message);
                           setAlertType('danger');
                           setShowNoti(true);
 
@@ -312,6 +354,7 @@ const ItemRow = ({
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 borderBottom: '1px solid rgba(0,0,0,0.09)',
+                width: '14rem',
               }}
               key={field}
             >

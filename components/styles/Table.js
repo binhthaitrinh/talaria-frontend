@@ -20,7 +20,7 @@ const Table = styled.table`
        color: ${(props) => props.theme.grey};
       font-weight: 700;
       padding: 0.6rem 2rem 0.6rem 1rem;
-      width: 14rem;
+      /* width: 14rem; */
  
     }
   }
@@ -37,19 +37,19 @@ const Table = styled.table`
   }
 
   th, td {
-   width: 14rem;
+   /* width: 14rem; */
    height: 5.3rem;
     position: relative;
     padding: 0.6rem 1.6rem 0.6rem 1rem;
     font-weight: 400;
     border-right: none;
-    white-space: inherit;
+    white-space: nowrap;
     line-height: 1.2;
  
  
     &:last-child {
       border-right: none;
-      width: 150px;
+      /* width: 150px; */
       position: relative;
       
     }
