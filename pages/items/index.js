@@ -11,6 +11,11 @@ import FreezeCol from '../../components/Options/FreezeCol';
 import Filter from '../../components/Options/Filter';
 import Sort from '../../components/Options/Sort';
 import LimitField from '../../components/Options/LimitField';
+import { FormInputSm, Select } from '../../components/styles/FormComponent';
+import FormContainer from '../../components/styles/FormContainer';
+import FilterAction from '../../components/styles/FilterAction';
+import BtnPrimary from '../../components/styles/BtnPrimary';
+import BtnGrey from '../../components/styles/BtnGrey';
 
 const fields = {
   _id: true,
@@ -72,8 +77,8 @@ const initialFields = [
   'link',
   'warehouse',
   'trackingLink',
-  'notes',
   'status',
+  'notes',
 ];
 
 export default function Items() {
@@ -97,6 +102,15 @@ export default function Items() {
   // freeze column state
   const [freezeNo, setFreezeNo] = useState(4);
   const [freezePass, setFreezePass] = useState(4);
+
+  const [priceFilter, setPriceFilter] = useState({ min: '', max: '' });
+  const [createdAtFilter, setCreatedAtFilter] = useState({
+    from: null,
+    to: new Date().toISOString(),
+  });
+  const [warehouse, setWarehouse] = useState('');
+  const [status, setStatus] = useState('');
+  const [orderWebsite, setOrderWebsite] = useState('');
 
   const router = useRouter();
 
@@ -130,6 +144,33 @@ export default function Items() {
     }
   };
 
+  const setSortString = () => {
+    let result = [];
+    if (priceFilter.min) {
+      result.push(`pricePerItem[gte]=${priceFilter.min}`);
+    }
+    if (priceFilter.max) {
+      result.push(`pricePerItem[lte]=${priceFilter.max}`);
+    }
+    if (createdAtFilter.from) {
+      result.push(`createdAt[gte]=${createdAtFilter.from.slice(0, 10)}`);
+    }
+    if (createdAtFilter.to) {
+      result.push(`createdAt[lte]=${createdAtFilter.to.slice(0, 10)}`);
+    }
+    if (warehouse) {
+      result.push(`warehouse=${warehouse}`);
+    }
+    if (status) {
+      result.push(`status=${status}`);
+    }
+    if (orderWebsite) {
+      result.push(`orderWebsite=${orderWebsite}`);
+    }
+    console.log(result.join('&'));
+    setFilterStr(result.join('&'));
+  };
+
   return (
     <OptionContext.Consumer>
       {(ctx) => (
@@ -151,7 +192,169 @@ export default function Items() {
                 fieldArr={fieldArr}
                 setFilter={setFilter}
                 setFilterStr={setFilterStr}
-              />
+              >
+                <FormContainer>
+                  <div>
+                    <h2>Price</h2>
+                    <div>
+                      <label>Min</label>
+                      <FormInputSm
+                        type="number"
+                        value={priceFilter.min}
+                        onChange={(e) => {
+                          setPriceFilter({
+                            ...priceFilter,
+                            min: e.target.value,
+                          });
+                        }}
+                        placeholder="no min"
+                      />
+                    </div>
+
+                    <div>
+                      <label>Max</label>
+
+                      <FormInputSm
+                        type="number"
+                        value={priceFilter.max}
+                        onChange={(e) =>
+                          setPriceFilter({
+                            ...priceFilter,
+                            max: e.target.value,
+                          })
+                        }
+                        placeholder="no max"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <h2>Created At</h2>
+                    <div>
+                      <label>From</label>
+                      <FormInputSm
+                        type="date"
+                        value={
+                          createdAtFilter.from
+                            ? createdAtFilter.from.slice(0, 10)
+                            : null
+                        }
+                        onChange={(e) =>
+                          setCreatedAtFilter({
+                            ...createdAtFilter,
+                            from: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>To</label>
+                      <FormInputSm
+                        type="date"
+                        value={createdAtFilter.to.slice(0, 10)}
+                        onChange={(e) =>
+                          setCreatedAtFilter({
+                            ...createdAtFilter,
+                            to: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <h2>Warehouse</h2>
+                    <div>
+                      <Select
+                        value={warehouse}
+                        onChange={(e) => setWarehouse(e.target.value)}
+                      >
+                        <option value="">Choose one</option>
+                        <option value="unihan">UNIHAN</option>
+                        <option value="unisgn">UNISGN</option>
+                        <option value="pacific">PACIFIC</option>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h2>Status</h2>
+                    <div>
+                      <Select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                      >
+                        <option value="">Choose one</option>
+                        <option value="not-yet-ordered">Not Ordered Yet</option>
+                        <option value="ordered">Ordered</option>
+                        <option value="on-the-way-to-warehouse">
+                          On the way to Warehouse
+                        </option>
+                        <option value="on-the-way-to-viet-nam">
+                          On the way to VN
+                        </option>
+                        <option value="arrived-at-viet-nam">
+                          Arrived at VN
+                        </option>
+                        <option value="done">Done</option>
+                        <option value="returning">Returning</option>
+                        <option value="returned">Returned</option>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <h2>Order Website</h2>
+                    <div>
+                      <Select
+                        value={orderWebsite}
+                        onChange={(e) => setOrderWebsite(e.target.value)}
+                      >
+                        <option value="">Choose one</option>
+                        <option value="amazon">Amazon</option>
+                        <option value="sephora">Sephora</option>
+                        <option value="ebay">Ebay</option>
+                        <option value="bestbuy">Best buy</option>
+                        <option value="costco">Costco</option>
+                        <option value="walmart">Walmart</option>
+                        <option value="others">Others</option>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <h2>Order Account</h2>
+                    <div>
+                      <Select>
+                        <option value="">Choose one</option>
+                        <option value="unihan">Not Ordered Yet</option>
+                        <option value="unisgn">Ordered</option>
+                        <option value="pacific">On the way to Warehouse</option>
+                        <option value="pacific">On the way to VN</option>
+                        <option value="pacific">Done</option>
+                        <option value="pacific">Returning</option>
+                        <option value="pacific">Returned</option>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <FilterAction>
+                    <BtnPrimary
+                      onClick={() => {
+                        setSortString();
+                        ctx.setShowFilter(false);
+                      }}
+                    >
+                      Filter
+                    </BtnPrimary>
+                    <BtnGrey
+                      onClick={() => {
+                        setFilterStr('');
+                        setFilter([]);
+                        ctx.setShowFilter(false);
+                      }}
+                    >
+                      Clear filter
+                    </BtnGrey>
+                  </FilterAction>
+                </FormContainer>
+              </Filter>
 
               <Sort
                 setSortStr={setSortStr}

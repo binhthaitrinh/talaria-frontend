@@ -25,7 +25,7 @@ const Sort = ({ setSortStr, sort, setSort, fieldArr }) => {
           {ctx.showSort && (
             <OptionPopup>
               <FormContainer
-                style={{ width: '35rem' }}
+                style={{ width: '40rem' }}
                 onSubmit={(e) => {
                   e.preventDefault();
                   setSortStr(
@@ -34,26 +34,30 @@ const Sort = ({ setSortStr, sort, setSort, fieldArr }) => {
                   ctx.setShowSort(false);
                 }}
               >
-                <Select
-                  onChange={(e) => setSort({ ...sort, sortBy: e.target.value })}
-                  defaultValue={sort.sortBy}
-                >
-                  {fieldArr.map((field) => (
-                    <option key={field} value={field}>
-                      {_.startCase(field)}
-                    </option>
-                  ))}
-                </Select>
-                <Select
-                  onChange={(e) =>
-                    setSort({ ...sort, orderBy: e.target.value })
-                  }
-                  defaultValue={sort.orderBy}
-                >
-                  <option value="asc">asc</option>
-                  <option value="desc">desc</option>
-                </Select>
-                <BtnPrimary>Sort</BtnPrimary>
+                <div>
+                  <Select
+                    onChange={(e) =>
+                      setSort({ ...sort, sortBy: e.target.value })
+                    }
+                    defaultValue={sort.sortBy}
+                  >
+                    {fieldArr.map((field) => (
+                      <option key={field} value={field}>
+                        {_.startCase(field)}
+                      </option>
+                    ))}
+                  </Select>
+                  <Select
+                    onChange={(e) =>
+                      setSort({ ...sort, orderBy: e.target.value })
+                    }
+                    defaultValue={sort.orderBy}
+                  >
+                    <option value="asc">asc</option>
+                    <option value="desc">desc</option>
+                  </Select>
+                  <BtnPrimary>Sort</BtnPrimary>
+                </div>
               </FormContainer>
             </OptionPopup>
           )}

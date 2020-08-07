@@ -17,6 +17,7 @@ const Filter = ({
   fieldArr,
   setFilter,
   setFilterStr,
+  children,
 }) => {
   return (
     <OptionContext.Consumer>
@@ -52,7 +53,7 @@ const Filter = ({
                 </FormContainer>
               ))}
               <FormContainer>
-                <Select
+                {/* <Select
                   onChange={(e) => {
                     setSingleFilter({
                       ...singleFilter,
@@ -106,9 +107,10 @@ const Filter = ({
                   }}
                 >
                   Add more field
-                </BtnGreySm>
+                </BtnGreySm> */}
               </FormContainer>
-              <FilterAction>
+              {children}
+              {/* <FilterAction>
                 <BtnPrimary
                   onClick={() => {
                     setFilterStr(getFilterStr(filter, singleFilter));
@@ -126,7 +128,7 @@ const Filter = ({
                 >
                   Clear filter
                 </BtnGrey>
-              </FilterAction>
+              </FilterAction> */}
             </OptionPopup>
           )}
         </OptionContainer>

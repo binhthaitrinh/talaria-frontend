@@ -32,22 +32,24 @@ const FreezeCol = ({ setFreezePass, freezeNo, setFreezeNo }) => {
                   ctx.setShowFreezeCol(false);
                 }}
               >
-                <label style={{ marginRight: '2rem' }}>
-                  Number of freeze col
-                </label>
-                <Select
-                  defaultValue={freezeNo}
-                  onChange={(e) => setFreezeNo(parseInt(e.target.value))}
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                </Select>
+                <div>
+                  <label style={{ marginRight: '2rem' }}>
+                    Number of freeze col
+                  </label>
+                  <Select
+                    defaultValue={freezeNo}
+                    onChange={(e) => setFreezeNo(parseInt(e.target.value))}
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                  </Select>
 
-                <BtnPrimary>Submit</BtnPrimary>
+                  <BtnPrimary>Submit</BtnPrimary>
+                </div>
               </FormContainer>
             </OptionPopup>
           )}
