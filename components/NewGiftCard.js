@@ -32,13 +32,17 @@ const InlineBtn = styled.button`
 `;
 
 const EditItem = (props) => {
+  const [price, setPrice] = useState({ value: '', currency: 'btc' });
+  const [fee, setFee] = useState({ value: 0, currency: 'btc' });
+  const [giftCardValue, setGiftCardValue] = useState('');
   const [giftCardType, setGiftCardType] = useState('');
+  const [fromAccount, setFromAccount] = useState('');
+  const [toAccount, setToAccount] = useState('');
+  const [btcUsdRate, setBtcUsdRate] = useState('');
+  const [usdVndRate, setUsdVndRate] = useState('');
+  const [notes, setNotes] = useState('');
+
   const [accounts, setAccounts] = useState([]);
-  const [accountID, setAccountID] = useState('');
-  const [priceInBTC, setPriceInBTC] = useState(0);
-  const [feeBTC, setFeeBTC] = useState(0);
-  const [btcUsdRate, setBtcUsdRate] = useState(0);
-  const [giftCardValue, setGiftCardValue] = useState(0);
 
   const [loading, setLoading] = useState(false);
 
@@ -84,7 +88,7 @@ const EditItem = (props) => {
       setShowNoti(true);
       setTimeout(() => {
         setShowNoti(false);
-        Router.push(`/giftcards/${res.data.data.data._id}`);
+        Router.push(`/giftcards`);
         setMessage('');
         setAlertType('');
       }, 2000);
@@ -112,21 +116,32 @@ const EditItem = (props) => {
           // console.log(currency);
           // console.log(pocketMoney);
           submitForm({
-            giftCardValue,
             giftCardType,
-            accountID,
-            priceInBTC,
-            feeBTC,
-            btcUsdRate,
+            giftCardValue: giftCardValue * 1,
+            price: {
+              value: price.value * 1,
+              currency: price.currency,
+            },
+            fee: {
+              value: fee.value * 1,
+              currency: fee.currency,
+            },
+            fromAccount,
+            toAccount,
+            btcUsdRate: btcUsdRate * 1,
+            usdVndRate: usdVndRate * 1,
+            notes,
           });
         }}
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="name">Loại gift card</FormLabel>
+            <FormLabel htmlFor="giftCardType">Loại gift card</FormLabel>
             <Select
               value={giftCardType}
               onChange={(e) => setGiftCardType(e.target.value)}
+              id="giftCardType"
+              name="giftCardType"
             >
               <option value="">Choose</option>
               <option value="amazon">Amazon</option>
@@ -137,60 +152,6 @@ const EditItem = (props) => {
               <option value="others">Others</option>
             </Select>
           </FormGroup>
-
-          <FormGroup>
-            <FormLabel htmlFor="name">Tài khoản</FormLabel>
-            {accounts.length > 0 ? (
-              <Select
-                value={accountID}
-                onChange={(e) => setAccountID(e.target.value)}
-              >
-                <option value="">Choose</option>
-                {accounts.map((acct) => (
-                  <option key={acct._id} value={acct._id}>
-                    {acct.loginID}
-                  </option>
-                ))}
-              </Select>
-            ) : null}
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel htmlFor="priceInBTC">Giá BTC</FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter priceInBTC..."
-              id="priceInBTC"
-              name="priceInBTC"
-              onChange={(e) => setPriceInBTC(e.target.value)}
-              value={priceInBTC}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel htmlFor="feeBTC">Phí rút BTC</FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter feeBTC..."
-              id="feeBTC"
-              name="feeBTC"
-              onChange={(e) => setFeeBTC(e.target.value)}
-              value={feeBTC}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel htmlFor="btcUsdRate">Tỷ giá USD / BTC</FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter btcUsdRate..."
-              id="btcUsdRate"
-              name="btcUsdRate"
-              onChange={(e) => setBtcUsdRate(e.target.value)}
-              value={btcUsdRate}
-            />
-          </FormGroup>
-
           <FormGroup>
             <FormLabel htmlFor="giftCardValue">Mệnh giá gift card</FormLabel>
             <FormInput
@@ -200,6 +161,133 @@ const EditItem = (props) => {
               name="giftCardValue"
               onChange={(e) => setGiftCardValue(e.target.value)}
               value={giftCardValue}
+              required={true}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="priceInBTC">Giá BTC</FormLabel>
+            <div style={{ display: 'flex' }}>
+              <FormInput
+                type="number"
+                placeholder="Enter priceInBTC..."
+                id="priceInBTC"
+                name="priceInBTC"
+                onChange={(e) => setPrice({ ...price, value: e.target.value })}
+                value={price.value}
+                required={true}
+              />
+              <select
+                onChange={(e) => {
+                  setPrice({ ...price, currency: e.target.value });
+                }}
+                value={price.currency}
+              >
+                <option value="btc">BTC</option>
+                <option value="vnd">VND</option>
+              </select>
+            </div>
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="feeBTC">Phí rút BTC</FormLabel>
+            <div style={{ display: 'flex' }}>
+              <FormInput
+                type="number"
+                placeholder="Enter feeBTC..."
+                id="feeBTC"
+                name="feeBTC"
+                onChange={(e) => setFee({ ...fee, value: e.target.value })}
+                value={fee.value}
+              />
+              <select
+                onChange={(e) => {
+                  setFee({ ...fee, currency: e.target.value });
+                }}
+                value={fee.currency}
+              >
+                <option value="btc">BTC</option>
+                <option value="vnd">VND</option>
+              </select>
+            </div>
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="name">Mua từ tài khoản</FormLabel>
+            {accounts.length > 0 ? (
+              <Select
+                value={fromAccount}
+                onChange={(e) => setFromAccount(e.target.value)}
+              >
+                <option value="">Choose</option>
+                {accounts.map((acct) => (
+                  <option key={acct._id} value={acct._id}>
+                    {acct.loginID.slice(0, 10)}... - {acct.accountWebsite} -{' '}
+                    {new Intl.NumberFormat(
+                      acct.currency === 'usd' ? 'en-US' : 'de-DE',
+                      {
+                        style: 'currency',
+                        currency: acct.currency,
+                      }
+                    ).format(acct.balance['$numberDecimal'])}
+                  </option>
+                ))}
+              </Select>
+            ) : null}
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="btcUsdRate">Tài khoản</FormLabel>
+            {accounts.length > 0 ? (
+              <Select
+                value={toAccount}
+                onChange={(e) => setToAccount(e.target.value)}
+              >
+                <option value="">Choose</option>
+                {accounts.map((acct) => (
+                  <option key={acct._id} value={acct._id}>
+                    {acct.loginID.slice(0, 10)}... - {acct.accountWebsite} -{' '}
+                    {new Intl.NumberFormat(
+                      acct.currency === 'usd' ? 'en-US' : 'de-DE',
+                      {
+                        style: 'currency',
+                        currency: acct.currency,
+                      }
+                    ).format(acct.balance['$numberDecimal'])}
+                  </option>
+                ))}
+              </Select>
+            ) : null}
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="btcUsdRate">Tỉ giá BTC/USD</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Enter btcUsdRate..."
+              id="btcUsdRate"
+              name="btcUsdRate"
+              onChange={(e) => setBtcUsdRate(e.target.value)}
+              value={btcUsdRate}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="usdVndRate">Tỉ giá USD/VND</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Enter usdVndRate..."
+              id="usdVndRate"
+              name="usdVndRate"
+              onChange={(e) => setUsdVndRate(e.target.value)}
+              value={usdVndRate}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="notes">Ghi chú</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Enter notes..."
+              id="notes"
+              name="notes"
+              onChange={(e) => setNotes(e.target.value)}
+              value={notes}
             />
           </FormGroup>
         </div>

@@ -25,6 +25,12 @@ const GiftcardRow = ({ item, index, items, setItems, freezeNo, fields }) => {
             style: 'currency',
             currency: 'vnd',
           }).format(item[field]['$numberDecimal']);
+        } else if (field === 'discountRate') {
+          return new Intl.NumberFormat('en-US', {
+            style: 'percent',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(item.discountRate['$numberDecimal'] * 1);
         } else {
           return item[field]['$numberDecimal'];
         }
