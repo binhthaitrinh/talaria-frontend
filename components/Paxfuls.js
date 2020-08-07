@@ -76,6 +76,7 @@ function Items({ page, freezeNo, fields }) {
                         borderBottom: '1px solid rgba(0,0,0,0.09)',
                         display: 'flex',
                         alignItems: 'center',
+                        width: '14rem',
                       }}
                       key={field}
                     >

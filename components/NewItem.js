@@ -14,13 +14,16 @@ import { Select } from './styles/FormComponent';
 const EditItem = () => {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
-  const [trackingLink, setTrackingLink] = useState('');
+
   const [tax, setTax] = useState(0);
   const [usShippingFee, setUsShippingFee] = useState(0);
   const [quantity, setQuantity] = useState('');
   const [estimatedWeight, setEstimatedWeight] = useState('');
   const [orderedWebsite, setOrderedWebsite] = useState('amazon');
-  const [orderAccount, setOrderAccount] = useState('');
+  const [itemType, setItemType] = useState('');
+  const [warehouse, setWarehouse] = useState('');
+  const [notes, setNotes] = useState('');
+
   const [pricePerItem, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
@@ -79,13 +82,13 @@ const EditItem = () => {
             name,
             pricePerItem,
             link,
-            trackingLink,
             tax,
-
             quantity,
             usShippingFee,
             estimatedWeight,
             orderedWebsite,
+            notes,
+            warehouse,
           });
         }}
       >
@@ -110,6 +113,7 @@ const EditItem = () => {
               name="link"
               value={link}
               onChange={(e) => setLink(e.target.value)}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -121,6 +125,7 @@ const EditItem = () => {
               name="pricePerItem"
               value={pricePerItem}
               onChange={(e) => setPrice(e.target.value)}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -132,6 +137,7 @@ const EditItem = () => {
               name="quantity"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -179,7 +185,7 @@ const EditItem = () => {
 
             <Select
               onChange={(e) => setOrderedWebsite(e.target.value)}
-              value="amazon"
+              value={orderedWebsite}
               style={{ width: '22rem' }}
             >
               <option value="amazon">Amazon</option>
@@ -188,6 +194,35 @@ const EditItem = () => {
               <option value="bestbuy">Best Buy</option>
               <option value="others">Others</option>
             </Select>
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="warehouse">Ship về đâu?</FormLabel>
+            <Select
+              onChange={(e) => setWarehouse(e.target.value)}
+              value={warehouse}
+              style={{ width: '22rem' }}
+              id="warehouse"
+              name="warehouse"
+              required={true}
+            >
+              <option value="">Please choose one</option>
+              <option value="unihan">UNIHAN</option>
+              <option value="unisgn">UNISGN</option>
+              <option value="pacific">PACIFIC</option>
+            </Select>
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="notes">Ghi chú</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Ghi chú."
+              id="notes"
+              name="notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
           </FormGroup>
         </div>
 

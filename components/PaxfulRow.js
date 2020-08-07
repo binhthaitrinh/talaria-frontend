@@ -4,9 +4,13 @@ import ActionBtn from './styles/ActionBtn';
 import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
 import StickerBtn from './styles/StickerBtn';
+import Noti from './Noti';
 
 const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
   const [showDetail, setShowDetail] = useState(false);
+  const [showNoti, setShowNoti] = useState(false);
+  const [message, setMessage] = useState('');
+  const [alertType, setAlertType] = useState('');
 
   const deleteItem = async () => {
     await axios.delete(`${process.env.BASE_URL}/paxfuls/${item.id}`);
@@ -31,12 +35,12 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
           year: 'numeric',
           day: 'numeric',
         });
-      } else if (field === 'moneySpent') {
-        if (item[field].amount) {
+      } else if (field === 'amountSpent') {
+        if (item[field].value) {
           return new Intl.NumberFormat('de-DE', {
             style: 'currency',
-            currency: 'VND',
-          }).format(item[field].amount['$numberDecimal']);
+            currency: item[field].currency.toUpperCase(),
+          }).format(item[field].value['$numberDecimal']);
         } else {
           return '---';
         }
@@ -57,6 +61,12 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
         } else {
           return '---';
         }
+      } else if (field === 'btcAccount' || field === 'fromAccount') {
+        return (
+          <Link href={`/accounts/${item[field]._id}`}>
+            {item[field].loginID}
+          </Link>
+        );
       }
     } else {
       return '---';
@@ -70,7 +80,7 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
       onClick={() => setShowDetail(false)}
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
-      {' '}
+      {showNoti ? <Noti message={message} type={alertType} /> : null}
       <th
         style={{
           position: 'absolute',
@@ -93,26 +103,31 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
         <ActionDetail className={showDetail ? 'show' : ''}>
           <ul>
             <li>
-              <Link href={`/paxfuls/${item.id}`}>
-                <a>View</a>
-              </Link>
-            </li>
-            <li>
-              <Link href={`/paxfuls/${item.id}/edit`}>
-                <a>Edit</a>
-              </Link>
-            </li>
-            <li>
               <button
                 onClick={async () => {
                   try {
                     await axios.delete(
-                      `${process.env.BASE_URL}/items/${item.id}`
+                      `${process.env.BASE_URL}/paxfuls/${item.id}`
                     );
 
-                    setItems(items.filter((doc) => doc.id !== item.id));
+                    setMessage(`Successfully deleted ${item.customId}`);
+                    setAlertType('success');
+                    setShowNoti(true);
+                    setTimeout(() => {
+                      setShowNoti(false);
+                      setMessage('');
+                      setAlertType('');
+                      setItems(items.filter((doc) => doc.id !== item.id));
+                    }, 2000);
                   } catch (err) {
-                    console.log(err);
+                    setMessage(err.response.data.message);
+                    setAlertType('danger');
+                    setShowNoti(true);
+                    setTimeout(() => {
+                      setShowNoti(false);
+                      setMessage('');
+                      setAlertType('');
+                    }, 3000);
                   }
 
                   // window.location.reload();
@@ -138,6 +153,7 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 borderBottom: '1px solid rgba(0,0,0,0.09)',
+                width: '14rem',
               }}
               key={field}
             >

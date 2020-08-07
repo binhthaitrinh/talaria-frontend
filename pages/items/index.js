@@ -344,6 +344,7 @@ export default function Items() {
                       Filter
                     </BtnPrimary>
                     <BtnGrey
+                      disabled={filterStr === null}
                       onClick={() => {
                         setFilterStr('');
                         setFilter([]);

@@ -11,18 +11,18 @@ import LimitField from '../../components/Options/LimitField';
 import Option from '../../components/styles/Option';
 
 const fieldArr = [
+  'customId',
   'createdAt',
-  'transactionType',
   'btcAmount',
   'withdrawFee',
-  'moneySpent',
-  'totalBalance',
-  'buyer',
-  'pocketMoney',
+  'amountSpent',
   'usdVndRate',
   'btcUsdRate',
+  'buyer',
+  'btcAccountBalance',
+  'btcAccount',
+  'fromAccount',
   'notes',
-  'remainingBalance',
 ];
 
 const fields = {
@@ -41,22 +41,20 @@ const fields = {
 };
 
 const initialFields = [
+  'customId',
   'createdAt',
-  'transactionType',
   'btcAmount',
   'withdrawFee',
-  'totalBalance',
-  'moneySpent',
-  'buyer',
-  'pocketMoney',
+  'amountSpent',
+  'usdVndRate',
   'btcUsdRate',
+  'buyer',
+  'btcAccountBalance',
+  'notes',
 ];
 
 export default function Items() {
   const router = useRouter();
-  console.log('//////////');
-  console.log(router.query);
-  console.log('//////////');
 
   const [freezeNo, setFreezeNo] = useState(4);
   const [freezePass, setFreezePass] = useState(4);
