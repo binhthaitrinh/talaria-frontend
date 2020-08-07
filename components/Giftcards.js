@@ -7,10 +7,11 @@ import GiftcardRow from './GiftcardRow';
 import LinkPrimary from '../components/styles/LinkPrimary';
 import Link from 'next/link';
 import ActionBtnGroup from '../components/styles/ActionBtnGroup';
+import _ from 'lodash';
 
 import { useRouter } from 'next/router';
 
-function GiftCards({ page }) {
+function GiftCards({ page, freezeNo, fields }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,9 +21,13 @@ function GiftCards({ page }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/giftcards?page=${page}&limit=8`
+          `${
+            process.env.BASE_URL
+          }/giftcards?page=${page}&limit=8&fields=${fields.join(
+            ','
+          )}&sort=-createdAt,-_id`
         );
-        console.log(res.data.numOfResults);
+        console.log(res.data.data.data);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
 
         setItems(res.data.data.data);
@@ -39,32 +44,81 @@ function GiftCards({ page }) {
     <Loader />
   ) : (
     <MainContent>
-      <Table>
-        <thead>
-          <tr>
-            <th>Ngày tạo</th>
-            <th>Account</th>
-            <th>Website</th>
-            <th>Price in BTC</th>
-            <th>Fee in BTC</th>
-            <th>Gift card value</th>
-            <th>BTC/USD Rate</th>
+      <div
+        style={{
+          marginLeft: `${14 * freezeNo + 9}rem`,
+          overflowX: 'scroll',
+          overflowY: 'hidden',
+        }}
+      >
+        <Table>
+          <thead>
+            <tr>
+              {' '}
+              <th
+                style={{
+                  position: 'absolute',
+                  top: 'auto',
+                  left: '4rem',
+                  borderBottom: '1px solid rgba(0,0,0,0.09)',
+                  width: '9rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                Action
+              </th>
+              {fields.map((field, index) => {
+                if (index < freezeNo) {
+                  return (
+                    <th
+                      style={{
+                        position: 'absolute',
+                        top: 'auto',
+                        left: `${index * 14 + 13}rem`,
+                        borderBottom: '1px solid rgba(0,0,0,0.09)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '14rem',
+                      }}
+                      key={field}
+                    >
+                      {_.startCase(field)}
+                    </th>
+                  );
+                } else {
+                  return (
+                    <td
+                      style={{
+                        position: 'relative',
+                        left: 0,
+                        whiteSpace: 'nowrap',
+                      }}
+                      key={field}
+                    >
+                      {_.startCase(field)}
+                    </td>
+                  );
+                }
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <GiftcardRow
+                item={item}
+                key={item._id}
+                index={index}
+                items={items}
+                setItems={setItems}
+                fields={fields}
+                freezeNo={freezeNo}
+              />
+            ))}
+          </tbody>
+        </Table>
+      </div>
 
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <GiftcardRow
-              item={item}
-              key={item.id}
-              index={index}
-              items={items}
-              setItems={setItems}
-            />
-          ))}
-        </tbody>
-      </Table>
       <ActionBtnGroup>
         <div>
           <Link href={`/giftcards?page=${page * 1 - 1}`} passHref>

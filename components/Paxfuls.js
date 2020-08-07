@@ -23,7 +23,9 @@ function Items({ page, freezeNo, fields }) {
         const res = await axios.get(
           `${
             process.env.BASE_URL
-          }/paxfuls?page=${page}&limit=8&fields=${fields.join(',')}`
+          }/paxfuls?page=${page}&limit=8&fields=${fields.join(
+            ','
+          )}&sort=-createdAt,-_id`
         );
         console.log(res.data.numOfResults);
         setNumOfPages(Math.ceil((res.data.numOfResults * 1) / 8));
