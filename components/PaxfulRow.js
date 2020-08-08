@@ -64,7 +64,7 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
       } else if (field === 'btcAccount' || field === 'fromAccount') {
         return (
           <Link href={`/accounts/${item[field]._id}`}>
-            {item[field].loginID}
+            <a>{item[field].loginID}</a>
           </Link>
         );
       }

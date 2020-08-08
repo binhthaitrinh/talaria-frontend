@@ -9,6 +9,7 @@ import DetailItemInfo from './styles/DetailItemInfo';
 import Link from 'next/link';
 import Modal from './Modal';
 import LinkPrimary from './styles/LinkPrimary';
+import Table from './styles/Table';
 
 import StickerBtn from './styles/StickerBtn';
 
@@ -16,6 +17,9 @@ const SingleItem = (props) => {
   const [item, setItem] = useState({});
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [transactions, setTransactions] = useState(null);
+
+  const [transLoading, setTransLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,9 +28,26 @@ const SingleItem = (props) => {
           `${process.env.BASE_URL}/accounts/${props.id}`
         );
 
-        console.log(res);
         setItem(res.data.data.data);
         setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (props.id !== undefined) {
+      fetchData();
+    }
+  }, [props.id]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get(
+          `${process.env.BASE_URL}/accounts/${props.id}/transactions`
+        );
+        setTransactions(res.data.data.data);
+        setTransLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -43,6 +64,36 @@ const SingleItem = (props) => {
     <MainContent>
       <DetailList>
         <DetailItem>
+          <DetailItemTitle>Ngày tạo</DetailItemTitle>
+          <DetailItemInfo>
+            {new Date(item.createdAt).toLocaleString('en-us', {
+              month: 'long',
+              year: 'numeric',
+              day: 'numeric',
+            })}
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>loginID</DetailItemTitle>
+          <DetailItemInfo>{item.loginID}</DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Website</DetailItemTitle>
+          <DetailItemInfo>{item.accountWebsite}</DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Balance</DetailItemTitle>
+          <DetailItemInfo>
+            {new Intl.NumberFormat(
+              item.currency === 'usd' ? 'us-US' : 'de-DE',
+              {
+                style: 'currency',
+                currency: item.currency,
+              }
+            ).format(item.balance['$numberDecimal'])}
+          </DetailItemInfo>
+        </DetailItem>
+        {/* <DetailItem>
           <DetailItemTitle>Ngày tạo</DetailItemTitle>
           <DetailItemInfo>
             {' '}
@@ -128,8 +179,131 @@ const SingleItem = (props) => {
         <DetailItem>
           <DetailItemTitle>Notes</DetailItemTitle>
           <DetailItemInfo>{item.notes}</DetailItemInfo>
-        </DetailItem>
+        </DetailItem> */}
       </DetailList>
+      <h2 style={{ margin: '2rem 0' }}>Transaction history</h2>
+      {transLoading ? null : (
+        <Table style={{ width: '100%' }}>
+          <thead>
+            <tr>
+              <th>Created At</th>
+              <th>With Account</th>
+              <th>Amount</th>
+              <th>Balance</th>
+              <th>Transaction ID</th>
+              <th>Transacion Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction) => (
+              <tr key={transactions._id}>
+                <th>
+                  {new Date(transaction.createdAt).toLocaleString('en-us', {
+                    month: 'long',
+                    year: 'numeric',
+                    day: 'numeric',
+                  })}
+                </th>
+                <th>
+                  {transaction.toAccount &&
+                  transaction.toAccount._id === props.id ? (
+                    <Link
+                      href={`/accounts/${transaction.fromAccount._id}`}
+                      passHref
+                    >
+                      <a>
+                        {transaction.fromAccount.loginID}
+                        <span className="tooltip">
+                          {transaction.fromAccount.currency.toUpperCase()} -{' '}
+                          {transaction.fromAccount.accountWebsite} -{' '}
+                          {transaction.fromAccount.loginID}
+                        </span>
+                      </a>
+                    </Link>
+                  ) : (
+                    '---'
+                  )}
+                </th>
+
+                <th>
+                  {transaction.toAccount &&
+                  transaction.toAccount._id === props.id
+                    ? new Intl.NumberFormat(
+                        transaction.amountReceived.currency === 'usd'
+                          ? 'en-US'
+                          : 'de-DE',
+                        {
+                          style: 'currency',
+                          currency: transaction.amountReceived.currency,
+                          maximumFractionDigits:
+                            transaction.amountReceived.currency === 'btc'
+                              ? 8
+                              : 2,
+                        }
+                      ).format(
+                        transaction.amountReceived.value['$numberDecimal']
+                      )
+                    : new Intl.NumberFormat(
+                        transaction.amountSpent.currency === 'usd'
+                          ? 'en-US'
+                          : 'de-DE',
+                        {
+                          style: 'currency',
+                          currency: transaction.amountSpent.currency,
+                          maximumFractionDigits:
+                            transaction.amountSpent.currency === 'btc' ? 8 : 2,
+                        }
+                      ).format(
+                        transaction.amountSpent.value['$numberDecimal'] +
+                          transaction.amountSpentFee.value['$numberDecimal']
+                      )}
+                </th>
+
+                <th>
+                  {transaction.toAccount &&
+                  transaction.toAccount._id === props.id
+                    ? new Intl.NumberFormat(
+                        transaction.amountReceived.currency === 'usd'
+                          ? 'en-US'
+                          : 'de-DE',
+                        {
+                          style: 'currency',
+                          currency: transaction.amountReceived.currency,
+                          maximumFractionDigits:
+                            transaction.amountReceived.currency === 'btc'
+                              ? 8
+                              : 2,
+                        }
+                      ).format(transaction.toAcctBalance['$numberDecimal'])
+                    : new Intl.NumberFormat(
+                        transaction.amountSpent.currency === 'usd'
+                          ? 'en-US'
+                          : 'de-DE',
+                        {
+                          style: 'currency',
+                          currency: transaction.amountSpent.currency,
+                          maximumFractionDigits:
+                            transaction.amountSpent.currency === 'btc' ? 8 : 2,
+                        }
+                      ).format(transaction.fromAcctBalance['$numberDecimal'])}
+                </th>
+
+                <th>
+                  <Link href={`/transactions/${transaction._id}`}>
+                    <a>{transaction.customId}</a>
+                  </Link>
+                </th>
+                <th>
+                  {transaction.toAccount &&
+                  transaction.toAccount._id === props.id
+                    ? 'inflow'
+                    : 'outflow'}
+                </th>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </MainContent>
   );
 };

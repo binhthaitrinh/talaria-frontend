@@ -7,6 +7,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import LinkPrimary from '../../components/styles/LinkPrimary';
 
+const fieldList = [
+  'createdAt',
+  'accountWebsite',
+  'loginID',
+  'balance',
+  'currency',
+  'accountType',
+  'status',
+  'notes',
+];
+
 export default function Customers() {
   const router = useRouter();
 
@@ -19,7 +30,7 @@ export default function Customers() {
           <LinkPrimary>Create an Account</LinkPrimary>
         </Link>
       </MainCntHeader>
-      <MainContent page={router.query.page || 1} />
+      <MainContent page={router.query.page || 1} fields={fieldList} />
     </>
   );
 }

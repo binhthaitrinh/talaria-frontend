@@ -7,10 +7,11 @@ import CustomerRow from './AccountRow';
 import LinkPrimary from '../components/styles/LinkPrimary';
 import Link from 'next/link';
 import ActionBtnGroup from '../components/styles/ActionBtnGroup';
+import _ from 'lodash';
 
 import { useRouter } from 'next/router';
 
-function Items({ page }) {
+function Items({ page, fields }) {
   const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,14 +43,22 @@ function Items({ page }) {
       <Table>
         <thead>
           <tr>
-            <th>Ngày tạo</th>
-            <th>Login ID</th>
-            <th>Account Website</th>
-            <th>Balance</th>
-            <th>Account Type</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th>Action</th>
+            <th
+              style={{
+                position: 'absolute',
+                top: 'auto',
+                left: '4rem',
+                borderBottom: '1px solid rgba(0,0,0,0.09)',
+                width: '9rem',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              Action
+            </th>
+            {fields.map((field, i) => (
+              <th key={i}>{_.startCase(field)}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -60,6 +69,7 @@ function Items({ page }) {
               index={index}
               items={items}
               setItems={setItems}
+              fields={fields}
             />
           ))}
         </tbody>
