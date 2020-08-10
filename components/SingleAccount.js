@@ -21,6 +21,62 @@ const SingleItem = (props) => {
 
   const [transLoading, setTransLoading] = useState(true);
 
+  const withAcctRender = (trans) => {
+    if (
+      trans.toAccount &&
+      trans.fromAccount &&
+      trans.fromAccount._id === props.id
+    ) {
+      return (
+        <Link href={`/accounts/${trans.toAccount._id}`} passHref>
+          <a>
+            {trans.toAccount.loginID}
+            <span className="tooltip">
+              {trans.toAccount.currency.toUpperCase()} -{' '}
+              {trans.toAccount.accountWebsite} - {trans.toAccount.currency} -{' '}
+              {trans.toAccount.loginID}
+            </span>
+          </a>
+        </Link>
+      );
+    }
+
+    if (
+      trans.fromAccount &&
+      trans.toAccount &&
+      trans.toAccount._id === props.id
+    ) {
+      return (
+        <Link href={`/accounts/${trans.fromAccount._id}`} passHref>
+          <a>
+            {trans.fromAccount.loginID}
+            <span className="tooltip">
+              {trans.fromAccount.currency.toUpperCase()} -{' '}
+              {trans.fromAccount.accountWebsite} - {trans.fromAccount.currency}{' '}
+              - {trans.fromAccount.loginID}
+            </span>
+          </a>
+        </Link>
+      );
+    }
+
+    if (trans.item) {
+      return (
+        <Link href={`/items/${trans.item._id}`} passHref>
+          <a>
+            Buy {trans.item.name || '---'}
+            <span className="tooltip">
+              {trans.item.quantity} x {trans.item.name} ( $
+              {trans.item.pricePerItem['$numberDecimal']})
+            </span>
+          </a>
+        </Link>
+      );
+    }
+
+    return '---';
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -182,7 +238,9 @@ const SingleItem = (props) => {
         </DetailItem> */}
       </DetailList>
       <h2 style={{ margin: '2rem 0' }}>Transaction history</h2>
-      {transLoading ? null : (
+      {transLoading ? null : transactions.length === 0 ? (
+        <p>No transactions found!</p>
+      ) : (
         <Table style={{ width: '100%' }}>
           <thead>
             <tr>
@@ -204,26 +262,7 @@ const SingleItem = (props) => {
                     day: 'numeric',
                   })}
                 </th>
-                <th>
-                  {transaction.toAccount &&
-                  transaction.toAccount._id === props.id ? (
-                    <Link
-                      href={`/accounts/${transaction.fromAccount._id}`}
-                      passHref
-                    >
-                      <a>
-                        {transaction.fromAccount.loginID}
-                        <span className="tooltip">
-                          {transaction.fromAccount.currency.toUpperCase()} -{' '}
-                          {transaction.fromAccount.accountWebsite} -{' '}
-                          {transaction.fromAccount.loginID}
-                        </span>
-                      </a>
-                    </Link>
-                  ) : (
-                    '---'
-                  )}
-                </th>
+                <th>{withAcctRender(transaction)}</th>
 
                 <th>
                   {transaction.toAccount &&

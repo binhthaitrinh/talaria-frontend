@@ -11,9 +11,11 @@ import Noti from './Noti';
 import Router from 'next/router';
 import Modal from './Modal';
 import BtnGrey from './styles/BtnGrey';
+import { Select } from './styles/FormComponent';
 
 const EditItem = () => {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [phoneNo, setPhoneNo] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [address, setAddress] = useState('');
@@ -82,28 +84,44 @@ const EditItem = () => {
           // console.log(currency);
           // console.log(pocketMoney);
           submitForm({
-            customerName: name,
+            firstName,
+            lastName,
             customerType,
             address: {
               address1: address,
               city,
             },
             phoneNumber: phoneNo,
-            discountRate,
+            discountRate: discountRate / 100,
             dateOfBirth,
+            bankAccounts,
+            notes,
           });
         }}
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="name">Tên khách hàng</FormLabel>
+            <FormLabel htmlFor="lastName">Họ</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter customer name..."
-              id="name"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              placeholder="Enter customer lastName..."
+              id="lastName"
+              name="lastName"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+              required={true}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="firstName">Tên</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Enter customer firstName..."
+              id="firstName"
+              name="firstName"
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -113,7 +131,10 @@ const EditItem = () => {
               placeholder="Enter customer dateOfBirth..."
               id="dateOfBirth"
               name="dateOfBirth"
-              onChange={(e) => setDateOfBirth(e.target.value)}
+              onChange={(e) => {
+                setDateOfBirth(e.target.value);
+                console.log(e.target.value);
+              }}
               value={dateOfBirth.slice(0, 10)}
             />
           </FormGroup>
@@ -137,6 +158,7 @@ const EditItem = () => {
               name="address"
               onChange={(e) => setAddress(e.target.value)}
               value={address}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -148,23 +170,25 @@ const EditItem = () => {
               name="city"
               onChange={(e) => setCity(e.target.value)}
               value={city}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="customerType">Loại khách hàng</FormLabel>
-            <FormInput
-              type="text"
-              placeholder="Enter customer customerType..."
-              id="customerType"
-              name="customerType"
+            <Select
               onChange={(e) => setCustomerType(e.target.value)}
               value={customerType}
-            />
+              required={true}
+            >
+              <option value="">Select</option>
+              <option value="personal">Personal</option>
+              <option value="wholesale">Wholesale</option>
+            </Select>
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="discountRate">Discount Rate</FormLabel>
             <FormInput
-              type="text"
+              type="number"
               placeholder="Enter customer discountRate..."
               id="discountRate"
               name="discountRate"
@@ -190,7 +214,7 @@ const EditItem = () => {
             {bankAccounts.length > 0 ? (
               <ul>
                 {bankAccounts.map((acct, index) => (
-                  <li style={{ marginBottom: '0.5rem' }}>
+                  <li key={index} style={{ marginBottom: '0.5rem' }}>
                     {acct.bankName} - {acct.accountNumber}{' '}
                     <span
                       style={{

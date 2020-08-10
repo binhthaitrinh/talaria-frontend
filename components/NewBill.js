@@ -110,6 +110,10 @@ const EditItem = (props) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setCustomerName(props.customerId);
+  }, [customers]);
+
   const submitForm = async (formData) => {
     setLoading(true);
     console.log(formData.items);

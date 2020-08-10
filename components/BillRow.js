@@ -123,7 +123,7 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
         style: 'currency',
         currency: 'VND',
       }).format(
-        item.vndUsdRate['$numberDecimal'] *
+        item.usdVndRate['$numberDecimal'] *
           item.moneyChargeCustomerUSD['$numberDecimal']
       );
     }

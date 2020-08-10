@@ -10,6 +10,7 @@ import Link from 'next/link';
 import Modal from './Modal';
 import styled from 'styled-components';
 import StickerBtn from './styles/StickerBtn';
+import Table from './styles/Table';
 
 const Dropdown = styled.ul`
   display: none;
@@ -66,7 +67,7 @@ const SingleItem = (props) => {
       if (bill.moneyChargeCustomerUSD) {
         total +=
           parseFloat(bill.moneyChargeCustomerUSD['$numberDecimal']) *
-          parseFloat(bill.vndUsdRate['$numberDecimal']);
+          parseFloat(bill.usdVndRate['$numberDecimal']);
       }
     });
 
@@ -79,12 +80,12 @@ const SingleItem = (props) => {
         const res = await axios.get(
           `${process.env.BASE_URL}/customers/${props.id}`
         );
-        const billInfo = await axios.get(
-          `${process.env.BASE_URL}/customers/${props.id}/bills`
-        );
+        // const billInfo = await axios.get(
+        //   `${process.env.BASE_URL}/customers/${props.id}/bills`
+        // );
 
         console.log(res);
-        setItem({ ...res.data.data.data, bills: billInfo.data.data.data });
+        setItem(res.data.data.data);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -105,7 +106,7 @@ const SingleItem = (props) => {
           <DetailItemTitle>Ngày tạo</DetailItemTitle>
           <DetailItemInfo>
             {' '}
-            {new Date(item.date).toLocaleString('en-us', {
+            {new Date(item.createdAt).toLocaleString('en-us', {
               month: 'long',
               year: 'numeric',
               day: 'numeric',
@@ -114,7 +115,7 @@ const SingleItem = (props) => {
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Họ tên</DetailItemTitle>
-          <DetailItemInfo>{item.customerName}</DetailItemInfo>
+          <DetailItemInfo>{`${item.firstName} ${item.lastName}`}</DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Số điện thoại</DetailItemTitle>
@@ -128,6 +129,7 @@ const SingleItem = (props) => {
               month: 'long',
               year: 'numeric',
               day: 'numeric',
+              timeZone: 'UTC',
             })}
           </DetailItemInfo>
         </DetailItem>
@@ -153,7 +155,7 @@ const SingleItem = (props) => {
             {new Intl.NumberFormat('us-US', {
               style: 'percent',
               maximumFractionDigits: 2,
-            }).format(parseFloat(item.discountRate['$numberDecimal']) / 100)}
+            }).format(parseFloat(item.discountRate['$numberDecimal']))}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -228,6 +230,75 @@ const SingleItem = (props) => {
           <DetailItemInfo>{item.notes}</DetailItemInfo>
         </DetailItem>
       </DetailList>
+
+      <h2 style={{ margin: '2rem 0' }}>Bills</h2>
+      {item.bills.length > 0 ? (
+        <Table style={{ width: '100%' }}>
+          <thead>
+            <tr>
+              <th>Created At</th>
+              <th>ID</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Remaining</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {item.bills.map((bill) => (
+              <tr key={bill._id}>
+                <th>
+                  {new Date(bill.createdAt).toLocaleString('en-us', {
+                    month: 'long',
+                    year: 'numeric',
+                    day: 'numeric',
+                  })}
+                </th>
+                <th>
+                  <Link href={`/items/${bill._id}`} passHref>
+                    <a>{bill.customId}</a>
+                  </Link>
+                </th>
+                <th>
+                  <Drop>
+                    <StickerBtn
+                      style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+                    >
+                      List of items...
+                    </StickerBtn>
+                    <Dropdown>
+                      {bill.items.map((single) => (
+                        <li key={single._id}>
+                          <Link href={`/items/${single._id}`} passHref>
+                            <a>
+                              {single.quantity} x {single.name}
+                            </a>
+                          </Link>
+                        </li>
+                      ))}
+                    </Dropdown>
+                  </Drop>
+                </th>
+                <th>
+                  {new Intl.NumberFormat('de-DE', {
+                    style: 'currency',
+                    currency: 'VND',
+                  }).format(bill.actualChargeCustomer['$numberDecimal'])}
+                </th>
+                <th>
+                  {new Intl.NumberFormat('de-DE', {
+                    style: 'currency',
+                    currency: 'VND',
+                  }).format(bill.remaining['$numberDecimal'])}
+                </th>
+                <th>{bill.status}</th>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        'No bills available'
+      )}
     </MainContent>
   );
 };

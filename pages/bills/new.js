@@ -13,7 +13,7 @@ export default function Items() {
       <MainCntHeader>
         <Title>Create a new Bill</Title>
       </MainCntHeader>
-      <NewBill items={router.query.ids} />
+      <NewBill items={router.query.ids} customerId={router.query.customerId} />
     </>
   );
 }

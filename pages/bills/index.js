@@ -26,7 +26,7 @@ const fields = {
   taxForCusomter: false,
   vndUsdRate: true,
   moneyChargeCustomerUSD: false,
-  moneyChargeCustomerVND: false,
+
   moneyTransferReceipt: false,
 };
 
@@ -44,14 +44,14 @@ const fieldArr = [
   'taxForCustomer',
   'vndUsdRate',
   'moneyChargeCustomerUSD',
-  'moneyChargeCustomerVND',
+
   'moneyTransferReceipt',
 ];
 
 const initialFields = [
   'createdAt',
   'items',
-  'moneyChargeCustomerVND',
+
   'remaining',
   'totalBillInUsd',
   'customer',

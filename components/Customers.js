@@ -49,6 +49,9 @@ function Items({ page }) {
             <th>Ngày sinh</th>
             <th>Địa chỉ</th>
             <th>Thành Phố</th>
+            <th>Customer Type</th>
+            <th>Bank Accounts</th>
+            <th>Notes</th>
             <th>Action</th>
           </tr>
         </thead>
