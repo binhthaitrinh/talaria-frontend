@@ -10,6 +10,8 @@ import Link from 'next/link';
 import Modal from './Modal';
 import LinkPrimary from './styles/LinkPrimary';
 import Table from './styles/Table';
+import BtnPrimary from './styles/BtnPrimary';
+import Noti from './Noti';
 
 import StickerBtn from './styles/StickerBtn';
 import { Drop, Dropdown } from './styles/Dropdown';
@@ -19,6 +21,11 @@ const SingleItem = (props) => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [compensations, setCompensations] = useState([]);
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [showNoti, setShowNoti] = useState(false);
+  const [message, setMessage] = useState('');
+  const [alertType, setAlertType] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -44,7 +51,7 @@ const SingleItem = (props) => {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/compensations/${props.id}/2020/08`
+          `${process.env.BASE_URL}/compensations/${props.id}/${year}/${month}`
         );
 
         console.log(res);
@@ -57,12 +64,50 @@ const SingleItem = (props) => {
     if (props.id !== undefined) {
       fetchData();
     }
-  }, [props.id]);
+  }, [props.id, year, month]);
+
+  const payAffiliate = async () => {
+    try {
+      const res = await axios.patch(
+        `${process.env.BASE_URL}/affiliates/${props.id}/${year}/${month}`
+      );
+
+      setMessage(
+        `Paid ${new Intl.NumberFormat('de-DE', {
+          style: 'currency',
+          currency: 'VND',
+        }).format(parseFloat(res.data.data.paidAmount))}`
+      );
+      setCompensations((compensations) => {
+        const shallow = [...compensations];
+        shallow.forEach((comp) => (comp.status = 'paid'));
+        return shallow;
+      });
+      setAlertType('success');
+      setShowNoti(true);
+      setTimeout(() => {
+        setShowNoti(false);
+        setMessage('');
+        setAlertType('');
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+      setMessage(err.response.data.message);
+      setAlertType('danger');
+      setShowNoti(true);
+      setTimeout(() => {
+        setShowNoti(false);
+        setMessage('');
+        setAlertType('');
+      }, 3000);
+    }
+  };
 
   return loading ? (
     <Loader />
   ) : (
     <MainContent>
+      {showNoti ? <Noti message={message} type={alertType} /> : null}
       <DetailList>
         <DetailItem>
           <DetailItemTitle>Ngày tạo</DetailItemTitle>
@@ -150,6 +195,32 @@ const SingleItem = (props) => {
         </DetailItem>
       </DetailList>
       <h2>Compensations</h2>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div>
+          <p>Result for </p>
+          <form>
+            <input
+              onChange={(e) => {
+                const data = e.target.value.split('-');
+                setYear(data[0]);
+                setMonth(parseFloat(data[1]));
+              }}
+              type="month"
+              value={`${year}-${month < 10 ? `0${month}` : month}`}
+            />
+          </form>
+        </div>
+        <div>
+          <BtnPrimary onClick={payAffiliate}>Pay in full</BtnPrimary>
+        </div>
+      </div>
+
       {compensations.length > 0 ? (
         <Table style={{ width: '100%' }}>
           <thead>
@@ -181,8 +252,8 @@ const SingleItem = (props) => {
                     : '---'}
                 </th>
                 <th>
-                  <Link href={`/bills/${comp.bill}`} passHref>
-                    <a>{comp.bill}</a>
+                  <Link href={`/bills/${comp.bill._id}`} passHref>
+                    <a>{comp.bill.customId}</a>
                   </Link>
                 </th>
                 <th>{comp.status}</th>
