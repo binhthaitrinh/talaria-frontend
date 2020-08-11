@@ -64,7 +64,7 @@ const SingleItem = (props) => {
   const caclTotalMoney = () => {
     let total = 0;
     item.bills.forEach((bill) => {
-      if (bill.moneyChargeCustomerUSD) {
+      if (bill.moneyChargeCustomerUSD && bill.status === 'fully-paid') {
         total +=
           parseFloat(bill.moneyChargeCustomerUSD['$numberDecimal']) *
           parseFloat(bill.usdVndRate['$numberDecimal']);
@@ -172,16 +172,15 @@ const SingleItem = (props) => {
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Số đơn mua thành công</DetailItemTitle>
-          <DetailItemInfo>{item.bills.length}</DetailItemInfo>
+          <DetailItemInfo>
+            {item.bills.filter((bill) => bill.status === 'fully-paid').length}
+          </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Loại khách hàng</DetailItemTitle>
           <DetailItemInfo>{item.customerType}</DetailItemInfo>
         </DetailItem>
-        <DetailItem>
-          <DetailItemTitle>Số item mua thành công</DetailItemTitle>
-          <DetailItemInfo>{caclTotalItems()}</DetailItemInfo>
-        </DetailItem>
+
         <DetailItem>
           <DetailItemTitle>Số tiền mua thành công</DetailItemTitle>
           <DetailItemInfo>
@@ -192,39 +191,7 @@ const SingleItem = (props) => {
             }).format(caclTotalMoney())}
           </DetailItemInfo>
         </DetailItem>
-        <DetailItem>
-          <DetailItemTitle>Danh sách đơn hàng</DetailItemTitle>
-          <DetailItemInfo>
-            {showModal && (
-              <Modal setShowModal={setShowModal}>
-                {item.bills.length > 0 ? (
-                  <ul style={{ listStyle: 'none' }}>
-                    {item.bills.map((bill) =>
-                      bill.items.map((single) => (
-                        <li key={single._id}>
-                          <Link href={`/items/${single._id}`} passHref>
-                            <a>
-                              {single.quantity} x {single.name}
-                            </a>
-                          </Link>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                ) : (
-                  <p>Wow! Such empty!</p>
-                )}
-              </Modal>
-            )}
 
-            <StickerBtn
-              style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
-              onClick={() => setShowModal(!showModal)}
-            >
-              Click to show
-            </StickerBtn>
-          </DetailItemInfo>
-        </DetailItem>{' '}
         <DetailItem>
           <DetailItemTitle>Ghi chú</DetailItemTitle>
           <DetailItemInfo>{item.notes}</DetailItemInfo>

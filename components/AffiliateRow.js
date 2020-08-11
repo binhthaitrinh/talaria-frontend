@@ -27,7 +27,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
           day: 'numeric',
         })}
       </th>
-      <th>{item.name}</th>
+      <th>
+        <Link href={`/affiliates/${item._id}`} passHref>
+          <a>{item.customId}</a>
+        </Link>
+      </th>
+      <th>{`${item.firstName} ${item.lastName ? item.lastName : ''}`}</th>
       <th>{item.phoneNumber}</th>
       <th>
         {item.socialMediaLinks.length >= 1 ? (
@@ -49,7 +54,12 @@ const ItemRow = ({ item, index, items, setItems }) => {
           '---'
         )}
       </th>
-      <th>{item.commissionRate['$numberDecimal']}</th>
+      <th>
+        {new Intl.NumberFormat('us-US', {
+          style: 'percent',
+          maximumFractionDigits: 2,
+        }).format(parseFloat(item.commissionRate['$numberDecimal']))}
+      </th>
       <th>
         {item.bankAccounts.length >= 1 ? (
           <Drop>

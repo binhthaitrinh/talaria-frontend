@@ -39,10 +39,11 @@ function Items({ page }) {
     <Loader />
   ) : (
     <MainContent>
-      <Table>
+      <Table style={{ width: '100%' }}>
         <thead>
           <tr>
             <th>Ngày tạo</th>
+            <th>Id</th>
             <th>Họ tên</th>
             <th>Số điện thoại</th>
             <th>Link social media</th>

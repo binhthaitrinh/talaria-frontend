@@ -14,7 +14,8 @@ import BtnGrey from './styles/BtnGrey';
 import Modal from './Modal';
 
 const EditItem = ({ item }) => {
-  const [name, setName] = useState(item.customerName);
+  const [firstName, setFirstName] = useState(item.firstName);
+  const [lastName, setLastName] = useState(item.lastName);
   const [phoneNo, setPhoneNo] = useState(item.phoneNumber);
   const [dateOfBirth, setDateOfBirth] = useState(item.dateOfBirth);
   const [address, setAddress] = useState(
@@ -25,7 +26,7 @@ const EditItem = ({ item }) => {
   );
   const [customerType, setCustomerType] = useState(item.customerType);
   const [discountRate, setDiscountRate] = useState(
-    parseFloat(item.discountRate['$numberDecimal'])
+    parseFloat(item.discountRate['$numberDecimal'] * 100)
   );
   const [bankAccounts, setBankAccounts] = useState(item.bankAccounts || []);
   const [bankName, setBankName] = useState('');
@@ -85,9 +86,10 @@ const EditItem = ({ item }) => {
       <Form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(name);
+
           submitForm({
-            name,
+            firstName,
+            lastName,
             dateOfBirth,
             phoneNumber: phoneNo,
             address: {
@@ -95,7 +97,7 @@ const EditItem = ({ item }) => {
               city,
             },
             customerType,
-            discountRate,
+            discountRate: discountRate / 100,
             bankAccounts,
             notes,
           });
@@ -103,14 +105,27 @@ const EditItem = ({ item }) => {
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="name">Tên khách hàng</FormLabel>
+            <FormLabel htmlFor="firstName">Họ</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter customer name..."
-              id="name"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              placeholder="Enter customer firstName..."
+              id="firstName"
+              name="firstName"
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+              required={true}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="lastName">Tên</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Enter customer lastName..."
+              id="lastName"
+              name="lastName"
+              onChange={(e) => setlastName(e.target.value)}
+              value={lastName}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -144,6 +159,7 @@ const EditItem = ({ item }) => {
               name="address"
               onChange={(e) => setAddress(e.target.value)}
               value={address}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -155,6 +171,7 @@ const EditItem = ({ item }) => {
               name="city"
               onChange={(e) => setCity(e.target.value)}
               value={city}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -164,6 +181,7 @@ const EditItem = ({ item }) => {
               onChange={(e) => setCustomerType(e.target.value)}
               id="customerType"
               name="customerType"
+              required={true}
             >
               <option value="">Choose one</option>
               <option value="personal">Cá nhân</option>
@@ -179,6 +197,7 @@ const EditItem = ({ item }) => {
               name="discountRate"
               onChange={(e) => setDiscountRate(e.target.value)}
               value={discountRate}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
