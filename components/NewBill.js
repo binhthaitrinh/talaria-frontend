@@ -500,8 +500,8 @@ const EditItem = (props) => {
               <p>Wow. Such Empty!</p>
             ) : (
               <ul>
-                {items.map((item) => (
-                  <DetailItem key={item._id}>
+                {items.map((item, index) => (
+                  <DetailItem key={index}>
                     {item.quantity} x {item.name}{' '}
                     <InlineBtn
                       onClick={(e) => {

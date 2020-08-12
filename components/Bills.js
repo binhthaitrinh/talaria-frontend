@@ -69,7 +69,7 @@ function Items({ page, fields, freezeNo, sort }) {
               {fields.map((field, index) => {
                 if (field === 'actualChargeCustomer') {
                   return (
-                    <td style={{ position: 'relative', left: 0 }}>
+                    <td style={{ position: 'relative', left: 0 }} key={index}>
                       {_.startCase('totalBillVND')}
                     </td>
                   );
@@ -111,7 +111,7 @@ function Items({ page, fields, freezeNo, sort }) {
             {items.map((item, index) => (
               <BillRow
                 item={item}
-                key={item._id}
+                key={index}
                 index={index}
                 items={items}
                 setItems={setItems}

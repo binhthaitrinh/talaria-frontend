@@ -147,7 +147,6 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
 
   return (
     <tr
-      key={item.id}
       onClick={() => setShowDetail(false)}
       // style={{ backgroundColor: index % 2 === 0 ? '#ececec' : '#dae1e7' }}
     >
@@ -170,20 +169,32 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
                 // item.remaining['$numberDecimal'] =
                 //   parseFloat(item.remaining['$numberDecimal']) -
                 //   parseFloat(amount);
-                setItems((items) => {
-                  const found = items.findIndex(
+                setItems((abc) => {
+                  const found = abc.findIndex(
                     (single) => single._id === item._id
                   );
-                  // const temp = items[found];
+
+                  console.log(found);
+                  const temp = res.data.data.data;
+                  const temp2 = abc[found];
+                  // temp2.remaining = temp.remaining;
+                  // temp2.status = temp.status;
+                  for (let field in temp2) {
+                    temp2[field] = temp[field];
+                  }
+
+                  // const temp = abc[found];
                   // temp.remaining['$numberDecimal'] =
                   //   parseFloat(temp.remaining['$numberDecimal']) -
                   //   parseFloat(amount);
 
-                  items.splice(found, 1, res.data.data.data);
+                  abc.splice(found, 1, temp2);
                   console.log(res.data.data.data);
 
-                  return items;
+                  return abc;
                 });
+
+                // location.reload();
 
                 setShowModal(false);
                 setAmount('');
@@ -300,7 +311,7 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
                 borderBottom: '1px solid rgba(0,0,0,0.09)',
                 width: '14rem',
               }}
-              key={field}
+              key={index}
             >
               {renderField(field)}
             </th>
