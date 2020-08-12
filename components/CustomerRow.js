@@ -58,8 +58,8 @@ const ItemRow = ({ item, index, items, setItems }) => {
           <div>
             Hover here
             <span className="tooltip">
-              {item.bankAccounts.map((acct) => (
-                <div>
+              {item.bankAccounts.map((acct, index) => (
+                <div key={index}>
                   {acct.bankName} - {acct.accountNumber}
                 </div>
               ))}

@@ -32,31 +32,35 @@ const fields = {
 
 const fieldArr = [
   'createdAt',
+  'customId',
   'items',
-  'totalBillInUsd',
-  'remaining',
   'customer',
-  'status',
   'affiliate',
-  'estimatedWeight',
-  'shippingRateToVnInUSD',
-  'shippingFeeToVnInUSD',
+  'status',
+  'remaining',
+  'actualChargeCustomer',
+  'moneyReceived',
   'taxForCustomer',
-  'vndUsdRate',
+  'actualBillCost',
   'moneyChargeCustomerUSD',
 
+  'usdVndRate',
+  'estimatedWeight',
+  'shippingRateToVnInUSD',
   'moneyTransferReceipt',
+  'notes',
 ];
 
 const initialFields = [
   'createdAt',
+  'customId',
   'items',
-
-  'remaining',
-  'totalBillInUsd',
   'customer',
   'affiliate',
   'status',
+  'remaining',
+  'actualChargeCustomer',
+  'notes',
 ];
 
 export default function Customers() {
@@ -66,7 +70,7 @@ export default function Customers() {
 
   // sort state
   const [sort, setSort] = useState({ sortBy: 'createdAt', orderBy: 'desc' });
-  const [sortStr, setSortStr] = useState('-createdAt');
+  const [sortStr, setSortStr] = useState('-createdAt,-_id');
 
   const [fieldSelected, setFieldSelected] = useState(fields);
   const [fieldLimit, setFieldLimit] = useState(initialFields);

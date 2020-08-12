@@ -67,6 +67,19 @@ function Items({ page, fields, freezeNo, sort }) {
                 Action
               </th>
               {fields.map((field, index) => {
+                if (field === 'actualChargeCustomer') {
+                  return (
+                    <td style={{ position: 'relative', left: 0 }}>
+                      {_.startCase('totalBillVND')}
+                    </td>
+                  );
+                } else if (field === 'shippingRateToVnInUSD') {
+                  return (
+                    <td style={{ position: 'relative', left: 0 }}>
+                      {_.startCase('shippingToVnFee')}
+                    </td>
+                  );
+                }
                 if (index < freezeNo) {
                   return (
                     <th
@@ -77,6 +90,7 @@ function Items({ page, fields, freezeNo, sort }) {
                         borderBottom: '1px solid rgba(0,0,0,0.09)',
                         display: 'flex',
                         alignItems: 'center',
+                        width: '14rem',
                       }}
                       key={field}
                     >

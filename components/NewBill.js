@@ -34,7 +34,7 @@ const InlineBtn = styled.button`
 const EditItem = (props) => {
   const [items, setItems] = useState(props.items ? props.items.split(',') : []);
 
-  const [vndUsdRate, setVndUsdRate] = useState(23500);
+  const [usdVndRate, setUsdVndRate] = useState(23500);
   const [customers, setCustomers] = useState([]);
   const [affiliates, setAffiliates] = useState([]);
   const [customerName, setCustomerName] = useState('');
@@ -47,12 +47,14 @@ const EditItem = (props) => {
   const [affiliate, setAffiliate] = useState('');
 
   const [tax, setTax] = useState(0);
-  const [taxForCustomer, setTaxForCustomer] = useState(0.0875);
+  const [taxForCustomer, setTaxForCustomer] = useState(8.75);
   const [usShippingFee, setUsShippingFee] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [estimatedWeight, setEstimatedWeight] = useState(0);
   const [orderedWebsite, setOrderedWebsite] = useState('amazon');
   const [pricePerItem, setPrice] = useState(0);
+  const [itemNotes, setItemNotes] = useState('');
+  const [warehouse, setWarehouse] = useState('');
 
   const [custName, setCustName] = useState('');
   const [phoneNo, setPhoneNo] = useState('');
@@ -124,7 +126,6 @@ const EditItem = (props) => {
         config
       );
 
-      console.log('Done');
       setLoading(false);
       setMessage('success');
       setAlertType('success');
@@ -303,11 +304,12 @@ const EditItem = (props) => {
                     link,
                     pricePerItem: parseFloat(pricePerItem),
                     tax,
-
                     usShippingFee,
                     quantity,
                     estimatedWeight,
                     orderedWebsite,
+                    warehouse,
+                    notes: itemNotes,
                   },
                   config
                 );
@@ -326,6 +328,9 @@ const EditItem = (props) => {
                 setUsShippingFee(0);
                 setQuantity(1);
                 setEstimatedWeight(0);
+                setItemNotes('');
+                setWarehouse('');
+                setOrderedWebsite('amazon');
                 setMessage('Item added');
                 setAlertType('success');
                 setShowNoti(true);
@@ -356,6 +361,7 @@ const EditItem = (props) => {
                 name="name"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
+                required={true}
               />
             </FormGroup>
             <FormGroup>
@@ -367,6 +373,7 @@ const EditItem = (props) => {
                 name="link"
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
+                required={true}
               />
             </FormGroup>
             <FormGroup>
@@ -378,6 +385,7 @@ const EditItem = (props) => {
                 name="pricePerItem"
                 value={pricePerItem}
                 onChange={(e) => setPrice(e.target.value)}
+                required={true}
               />
             </FormGroup>{' '}
             <FormGroup>
@@ -389,6 +397,7 @@ const EditItem = (props) => {
                 name="quantity"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
+                required={true}
               />
             </FormGroup>
             <FormGroup>
@@ -425,6 +434,22 @@ const EditItem = (props) => {
               />
             </FormGroup>
             <FormGroup>
+              <FormLabel htmlFor="warehouse">Về đâu?</FormLabel>
+              <Select
+                onChange={(e) => setWarehouse(e.target.value)}
+                value={warehouse}
+                name="warehouse"
+                id="warehouse"
+                required={true}
+              >
+                <option value="">Choose one</option>
+                <option value="unihan">UNIHAN</option>
+                <option value="unisgn">UNISGN</option>
+                <option value="pacific">PACIFIC</option>
+                <option value="others">OTHERS</option>
+              </Select>
+            </FormGroup>
+            <FormGroup>
               <FormLabel htmlFor="orderedWebsite">Order Website</FormLabel>
               <Select
                 onChange={(e) => setOrderedWebsite(e.target.value)}
@@ -437,6 +462,17 @@ const EditItem = (props) => {
                 <option value="ebay">Ebay</option>
                 <option value="bestbuy">Best Buy</option>
               </Select>
+            </FormGroup>
+            <FormGroup>
+              <FormLabel htmlFor="notes">Ghi chú</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="Ghi chú..."
+                id="notes"
+                name="notes"
+                value={itemNotes}
+                onChange={(e) => setItemNotes(e.target.value)}
+              />
             </FormGroup>
             <SubmitBtn>Submit</SubmitBtn>
           </Form>
@@ -451,9 +487,9 @@ const EditItem = (props) => {
           submitForm({
             customer: customerName,
             items: items.map((item) => item.id),
-            vndUsdRate,
+            usdVndRate,
             affiliate,
-            taxForCustomer,
+            taxForCustomer: parseFloat(taxForCustomer) / 100,
           });
         }}
       >
@@ -487,23 +523,26 @@ const EditItem = (props) => {
             <Select
               onChange={(e) => setCustomerName(e.target.value)}
               value={customerName}
+              required={true}
             >
               <option value="">Choose a customer</option>
               {customers.map((customer) => (
-                <option value={customer._id}>{customer.customerName}</option>
+                <option key={customer._id} value={customer._id}>
+                  {customer.firstName} {customer.lastName}
+                </option>
               ))}
             </Select>
           </FormGroup>
 
           <FormGroup>
-            <FormLabel htmlFor="vnsUsdRate">Tỉ giá</FormLabel>
+            <FormLabel htmlFor="usdVndRate">Tỉ giá</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter customer vnsUsdRate..."
-              id="vnsUsdRate"
-              name="vnsUsdRate"
-              onChange={(e) => setVndUsdRate(e.target.value)}
-              value={vndUsdRate}
+              placeholder="Enter customer usdVndRate..."
+              id="usdVndRate"
+              name="usdVndRate"
+              onChange={(e) => setUsdVndRate(e.target.value)}
+              value={usdVndRate}
             />
           </FormGroup>
 
@@ -513,11 +552,12 @@ const EditItem = (props) => {
               <Select
                 onChange={(e) => setAffiliate(e.target.value)}
                 value={affiliate}
+                required={true}
               >
                 <option value="">Choose an affiliate</option>
                 {affiliates.map((aff) => (
                   <option value={aff._id} key={aff._id}>
-                    {aff.name}
+                    {aff.firstName} {aff.lastName}
                   </option>
                 ))}
               </Select>

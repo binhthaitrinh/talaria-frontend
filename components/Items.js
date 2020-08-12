@@ -44,7 +44,7 @@ function Items({ page, fields, sort, filter, freezeNo }) {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `${process.env.BASE_URL}/items?page=${page}&limit=8&sort=${sort}${
+          `${process.env.BASE_URL}/items?page=${page}&limit=10&sort=${sort}${
             fields.length > 0
               ? `&fields=${fields.join(',')}${filter ? `&${filter}` : ''}`
               : ''

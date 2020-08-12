@@ -59,11 +59,29 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
           }).format(item[field]['$numberDecimal']);
         } else if (field === 'estimatedWeight') {
           return item[field]['$numberDecimal'];
-        } else if (field === 'remaining') {
+        } else if (
+          field === 'remaining' ||
+          field === 'actualChargeCustomer' ||
+          field === 'moneyReceived'
+        ) {
           return new Intl.NumberFormat('de-DE', {
             style: 'currency',
             currency: 'VND',
-          }).format(item.remaining['$numberDecimal']);
+          }).format(item[field]['$numberDecimal']);
+        } else if (field === 'taxForCustomer') {
+          return new Intl.NumberFormat('us-US', {
+            style: 'percent',
+            maximumFractionDigits: 2,
+          }).format(parseFloat(item.taxForCustomer['$numberDecimal']));
+        } else if (field === 'shippingRateToVnInUSD') {
+          return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'VND',
+          }).format(
+            item.shippingRateToVnInUSD['$numberDecimal'] *
+              item.estimatedWeight['$numberDecimal'] *
+              item.usdVndRate['$numberDecimal']
+          );
         } else {
           return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -99,14 +117,18 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
         return (
           <Link href={`/customers/${item[field]._id}`} passHref>
             <BtnText style={{ marginBottom: 0 }}>
-              {item[field].customerName}
+              {`${item[field].firstName} ${item[field].lastName}`}
             </BtnText>
           </Link>
         );
       } else if (field === 'affiliate') {
         return (
           <Link href={`/affiliates/${item[field]._id}`} passHref>
-            <BtnText style={{ marginBottom: 0 }}>{item[field].name}</BtnText>
+            <BtnText style={{ marginBottom: 0 }}>
+              {`${item[field].firstName} ${
+                item[field].lastName ? item[field].lastName : ''
+              }`}
+            </BtnText>
           </Link>
         );
       } else if (field === 'createdAt') {
@@ -118,14 +140,6 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
       } else {
         return item[field];
       }
-    } else if (field === 'moneyChargeCustomerVND') {
-      return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'VND',
-      }).format(
-        item.usdVndRate['$numberDecimal'] *
-          item.moneyChargeCustomerUSD['$numberDecimal']
-      );
     }
 
     return '---';
@@ -146,16 +160,31 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
               e.preventDefault();
 
               try {
-                await axios.post(
+                const res = await axios.post(
                   `${process.env.BASE_URL}/bills/${item._id}/pay`,
                   {
                     amount,
                   }
                 );
 
-                item.remaining['$numberDecimal'] =
-                  parseFloat(item.remaining['$numberDecimal']) -
-                  parseFloat(amount);
+                // item.remaining['$numberDecimal'] =
+                //   parseFloat(item.remaining['$numberDecimal']) -
+                //   parseFloat(amount);
+                setItems((items) => {
+                  const found = items.findIndex(
+                    (single) => single._id === item._id
+                  );
+                  // const temp = items[found];
+                  // temp.remaining['$numberDecimal'] =
+                  //   parseFloat(temp.remaining['$numberDecimal']) -
+                  //   parseFloat(amount);
+
+                  items.splice(found, 1, res.data.data.data);
+                  console.log(res.data.data.data);
+
+                  return items;
+                });
+
                 setShowModal(false);
                 setAmount('');
                 setType('success');
@@ -269,6 +298,7 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 borderBottom: '1px solid rgba(0,0,0,0.09)',
+                width: '14rem',
               }}
               key={field}
             >

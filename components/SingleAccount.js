@@ -60,6 +60,44 @@ const SingleItem = (props) => {
       );
     }
 
+    if (
+      !trans.fromAccount &&
+      trans.toAccount &&
+      trans.toAccount._id === props.id
+    ) {
+      return (
+        <Link href={`/accounts/${trans.toAccount._id}`} passHref>
+          <a>
+            {trans.toAccount.loginID}
+            <span className="tooltip">
+              {trans.toAccount.currency.toUpperCase()} -{' '}
+              {trans.toAccount.accountWebsite} - {trans.toAccount.currency} -{' '}
+              {trans.toAccount.loginID}
+            </span>
+          </a>
+        </Link>
+      );
+    }
+
+    if (
+      !trans.toAccount &&
+      trans.fromAccount &&
+      trans.fromAccount._id === props.id
+    ) {
+      return (
+        <Link href={`/accounts/${trans.fromAccount._id}`} passHref>
+          <a>
+            {trans.fromAccount.loginID}
+            <span className="tooltip">
+              {trans.fromAccount.currency.toUpperCase()} -{' '}
+              {trans.fromAccount.accountWebsite} - {trans.fromAccount.currency}{' '}
+              - {trans.fromAccount.loginID}
+            </span>
+          </a>
+        </Link>
+      );
+    }
+
     if (trans.item) {
       return (
         <Link href={`/items/${trans.item._id}`} passHref>
