@@ -165,6 +165,19 @@ const SingleItem = (props) => {
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
+          <DetailItemTitle>Ngày order</DetailItemTitle>
+          <DetailItemInfo>
+            {item.arrivedAtWarehouseDate
+              ? new Date(item.orderDate).toLocaleString('en-us', {
+                  month: 'long',
+                  year: 'numeric',
+                  day: 'numeric',
+                  timeZone: 'utc',
+                })
+              : 'Not available'}
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
           <DetailItemTitle>Ngày đến kho</DetailItemTitle>
           <DetailItemInfo>
             {item.arrivedAtWarehouseDate
@@ -172,6 +185,7 @@ const SingleItem = (props) => {
                   month: 'long',
                   year: 'numeric',
                   day: 'numeric',
+                  timeZone: 'utc',
                 })
               : 'Not available'}
           </DetailItemInfo>
@@ -184,6 +198,7 @@ const SingleItem = (props) => {
                   month: 'long',
                   year: 'numeric',
                   day: 'numeric',
+                  timeZone: 'utc',
                 })
               : 'Not available'}
           </DetailItemInfo>
@@ -196,6 +211,7 @@ const SingleItem = (props) => {
                   month: 'long',
                   year: 'numeric',
                   day: 'numeric',
+                  timeZone: 'utc',
                 })
               : 'Not available'}
           </DetailItemInfo>
@@ -208,12 +224,26 @@ const SingleItem = (props) => {
                   month: 'long',
                   year: 'numeric',
                   day: 'numeric',
+                  timeZone: 'utc',
                 })
               : 'Not available'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Ngày Return hàng</DetailItemTitle>
+          <DetailItemInfo>
+            {' '}
+            {item.returnPkgDate
+              ? new Date(item.returnPkgDate).toLocaleString('en-us', {
+                  month: 'long',
+                  year: 'numeric',
+                  day: 'numeric',
+                })
+              : 'Not available'}
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Ngày Return tới nơi</DetailItemTitle>
           <DetailItemInfo>
             {item.returnPkgArvlDate
               ? new Date(item.returnPkgArvlDate).toLocaleString('en-us', {

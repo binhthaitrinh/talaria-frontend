@@ -90,7 +90,13 @@ const ItemRow = ({
         field === 'invoiceLink'
       ) {
         return (
-          <a href={item[field]} target="_blank">
+          <a
+            href={`${item[field].slice(0, 4) === 'http' ? '' : 'http://'}${
+              item[field]
+            }`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {item[field].slice(0, 15)}...
           </a>
         );
@@ -142,6 +148,12 @@ const ItemRow = ({
               ''
             )}
           </div>
+        );
+      } else if (field === 'customId') {
+        return (
+          <Link href={`/items/${item._id}`} passHref>
+            <a>{item.customId}</a>
+          </Link>
         );
       }
     } else {

@@ -30,6 +30,12 @@ const ItemRow = ({ item, index, items, setItems, fields }) => {
             <a>{item.loginID}</a>
           </Link>
         );
+      } else if (field === 'customId') {
+        return (
+          <Link href={`/accounts/${item._id}`} passHref>
+            <a>{item.customId}</a>
+          </Link>
+        );
       }
 
       return item[field];

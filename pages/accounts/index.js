@@ -9,6 +9,7 @@ import LinkPrimary from '../../components/styles/LinkPrimary';
 
 const fieldList = [
   'createdAt',
+  'customId',
   'accountWebsite',
   'loginID',
   'balance',

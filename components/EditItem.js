@@ -35,6 +35,27 @@ const EditItem = ({ item }) => {
   const [invoiceLink, setInvoiceLink] = useState(item.invoiceLink || '');
   const [itemType, setItemType] = useState(item.itemType || '');
   const [notes, setNotes] = useState(item.notes || '');
+  const [orderDate, setOrderDate] = useState(
+    item.orderDate ? item.orderDate.slice(0, 10) : ''
+  );
+  const [arrivedAtWarehouseDate, setArrivedAtWarehouseDate] = useState(
+    item.arrivedAtWarehouseDate ? item.arrivedAtWarehouseDate.slice(0, 10) : ''
+  );
+  const [shippingToVnDate, setShippingToVnDate] = useState(
+    item.shippingToVnDate ? item.shippingToVnDate.slice(0, 10) : ''
+  );
+  const [arrivedAtVnDate, setArrivedAtVnDate] = useState(
+    item.arrivedAtVnDate ? item.arrivedAtVnDate.slice(0, 10) : ''
+  );
+  const [customerRcvedDate, setCustomerRcvedDate] = useState(
+    item.customerRcvedDate ? item.customerRcvedDate.slice(0, 10) : ''
+  );
+  const [returnPkgDate, setReturnPkgDate] = useState(
+    item.returnPkgDate ? item.returnPkgDate.slice(0, 10) : ''
+  );
+  const [returnPkgArvlDate, setReturnPkgArvlDate] = useState(
+    item.returnPkgArvlDate ? item.returnPkgArvlDate.slice(0, 10) : ''
+  );
   const [loading, setLoading] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
@@ -98,7 +119,14 @@ const EditItem = ({ item }) => {
             link,
             trackingLink,
             invoiceLink,
-            itemType,
+            itemType: itemType !== '' ? itemType : null,
+            orderDate,
+            arrivedAtWarehouseDate,
+            shippingToVnDate,
+            arrivedAtVnDate,
+            customerRcvedDate,
+            returnPkgDate,
+            returnPkgArvlDate,
 
             notes,
           });
@@ -242,6 +270,80 @@ const EditItem = ({ item }) => {
               <option value="accessories">Accessories</option>
               <option value="others">Others</option>
             </Select>
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="orderDate">Ngày order</FormLabel>
+            <FormInput
+              type="date"
+              value={orderDate}
+              onChange={(e) => setOrderDate(e.target.value)}
+              id="orderDate"
+              name="orderDate"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="arrivedAtWarehouseDate">Ngày về kho</FormLabel>
+            <FormInput
+              type="date"
+              value={arrivedAtWarehouseDate}
+              onChange={(e) => setArrivedAtWarehouseDate(e.target.value)}
+              id="arrivedAtWarehouseDate"
+              name="arrivedAtWarehouseDate"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="shippingToVnDate">Ngày Ship về VN</FormLabel>
+            <FormInput
+              type="date"
+              value={shippingToVnDate}
+              onChange={(e) => setShippingToVnDate(e.target.value)}
+              id="shippingToVnDate"
+              name="shippingToVnDate"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="arrivedAtVnDate">Ngày đến VN</FormLabel>
+            <FormInput
+              type="date"
+              value={arrivedAtVnDate}
+              onChange={(e) => setAririvedAarrivedAtVnDate(e.target.value)}
+              id="aririvedAarrivedAtVnDate"
+              name="aririvedAarrivedAtVnDate"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="customerRcvedDate">
+              Ngày khách nhận hàng
+            </FormLabel>
+            <FormInput
+              type="date"
+              value={customerRcvedDate}
+              onChange={(e) => setCustomerRcvedDate(e.target.value)}
+              id="customerRcvedDate"
+              name="customerRcvedDate"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="returnPkgDate">Ngày return hàng</FormLabel>
+            <FormInput
+              type="date"
+              value={returnPkgDate}
+              onChange={(e) => setReturnPkgDate(e.target.value)}
+              id="returnPkgDate"
+              name="returnPkgDate"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="returnPkgArvlDate">
+              Ngày hàng return dến nơi
+            </FormLabel>
+            <FormInput
+              type="date"
+              value={returnPkgArvlDate}
+              onChange={(e) => setReturnPkgArvlDate(e.target.value)}
+              id="returnPkgArvlDate"
+              name="returnPkgArvlDate"
+            />
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="notes">Ghi chú</FormLabel>

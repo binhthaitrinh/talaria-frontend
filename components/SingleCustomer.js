@@ -74,6 +74,17 @@ const SingleItem = (props) => {
     return total;
   };
 
+  const calcDebt = () => {
+    let total = 0;
+    item.bills.forEach((bill) => {
+      if (parseFloat(bill.remaining['$numberDecimal']) > 0) {
+        total += parseFloat(bill.remaining['$numberDecimal']);
+      }
+    });
+
+    return total;
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -189,6 +200,17 @@ const SingleItem = (props) => {
               style: 'currency',
               currency: 'VND',
             }).format(caclTotalMoney())}
+          </DetailItemInfo>
+        </DetailItem>
+
+        <DetailItem>
+          <DetailItemTitle>Số tiền còn nợ</DetailItemTitle>
+          <DetailItemInfo>
+            {' '}
+            {new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'VND',
+            }).format(calcDebt())}
           </DetailItemInfo>
         </DetailItem>
 

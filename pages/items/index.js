@@ -16,6 +16,7 @@ import FormContainer from '../../components/styles/FormContainer';
 import FilterAction from '../../components/styles/FilterAction';
 import BtnPrimary from '../../components/styles/BtnPrimary';
 import BtnGrey from '../../components/styles/BtnGrey';
+import axios from 'axios';
 
 const fields = {
   _id: true,
@@ -111,6 +112,8 @@ export default function Items() {
   const [warehouse, setWarehouse] = useState('');
   const [status, setStatus] = useState('');
   const [orderWebsite, setOrderWebsite] = useState('');
+  const [orderAccount, setOrderAccount] = useState('');
+  const [accounts, setAccounts] = useState([]);
 
   const router = useRouter();
 
@@ -128,6 +131,22 @@ export default function Items() {
       }));
     });
   }, [fieldLimit]);
+
+  useEffect(() => {
+    try {
+      async function fetchData() {
+        const res = await axios.get(
+          `${process.env.BASE_URL}/accounts?fields=loginID`
+        );
+
+        setAccounts(res.data.data.data);
+      }
+
+      fetchData();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const populate = () => {
     setFieldLimit([]);
@@ -167,6 +186,11 @@ export default function Items() {
     if (orderWebsite) {
       result.push(`orderWebsite=${orderWebsite}`);
     }
+
+    if (orderAccount) {
+      result.push(`orderAccount=${orderAccount}`);
+    }
+
     console.log(result.join('&'));
     setFilterStr(result.join('&'));
   };
@@ -314,22 +338,25 @@ export default function Items() {
                         <option value="bestbuy">Best buy</option>
                         <option value="costco">Costco</option>
                         <option value="walmart">Walmart</option>
-                        <option value="others">Others</option>
+                        <option value="assisting">Others</option>
                       </Select>
                     </div>
                   </div>
                   <div>
                     <h2>Order Account</h2>
                     <div>
-                      <Select>
+                      <Select
+                        value={orderAccount}
+                        onChange={(e) => setOrderAccount(e.target.value)}
+                      >
                         <option value="">Choose one</option>
-                        <option value="unihan">Not Ordered Yet</option>
-                        <option value="unisgn">Ordered</option>
-                        <option value="pacific">On the way to Warehouse</option>
-                        <option value="pacific">On the way to VN</option>
-                        <option value="pacific">Done</option>
-                        <option value="pacific">Returning</option>
-                        <option value="pacific">Returned</option>
+                        {accounts.length > 0
+                          ? accounts.map((account) => (
+                              <option key={account._id} value={account._id}>
+                                {account.loginID}
+                              </option>
+                            ))
+                          : null}
                       </Select>
                     </div>
                   </div>

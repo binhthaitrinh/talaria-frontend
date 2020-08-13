@@ -17,10 +17,9 @@ const EditItem = () => {
 
   const [tax, setTax] = useState(0);
   const [usShippingFee, setUsShippingFee] = useState(0);
-  const [quantity, setQuantity] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const [estimatedWeight, setEstimatedWeight] = useState('');
   const [orderedWebsite, setOrderedWebsite] = useState('amazon');
-  const [itemType, setItemType] = useState('');
   const [warehouse, setWarehouse] = useState('');
   const [notes, setNotes] = useState('');
 
@@ -52,7 +51,7 @@ const EditItem = () => {
       setShowNoti(true);
       setTimeout(() => {
         setShowNoti(false);
-        Router.push(`/items`);
+        Router.push(`/items/${res.data.data.data._id}`);
         setMessage('');
         setAlertType('');
       }, 2000);
@@ -102,6 +101,7 @@ const EditItem = () => {
               name="name"
               onChange={(e) => setName(e.target.value)}
               value={name}
+              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -192,7 +192,7 @@ const EditItem = () => {
               <option value="sephora">Sephora</option>
               <option value="ebay">Ebay</option>
               <option value="bestbuy">Best Buy</option>
-              <option value="others">Others</option>
+              <option value="assisting">Mua hộ</option>
             </Select>
           </FormGroup>
 
@@ -210,6 +210,7 @@ const EditItem = () => {
               <option value="unihan">UNIHAN</option>
               <option value="unisgn">UNISGN</option>
               <option value="pacific">PACIFIC</option>
+              <option value="others">Others</option>
             </Select>
           </FormGroup>
 
