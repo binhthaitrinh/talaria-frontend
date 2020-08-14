@@ -14,9 +14,16 @@ export default function ItemDetail(props) {
       <Meta title="Detail" />
       <MainCntHeader>
         <Title>Customer {id}</Title>
-        <Link href={`/customers/${id}/edit`} passHref>
-          <LinkPrimary>CHỉnh sửa</LinkPrimary>
-        </Link>
+        <div>
+          <Link href={`/bills/new?customerId=${id}`} passHref>
+            <LinkPrimary style={{ marginRight: '2rem' }}>
+              Create a bill
+            </LinkPrimary>
+          </Link>
+          <Link href={`/customers/${id}/edit`} passHref>
+            <LinkPrimary>CHỉnh sửa</LinkPrimary>
+          </Link>
+        </div>
       </MainCntHeader>
       <SingleCustomer id={id} src="items" />
     </>

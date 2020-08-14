@@ -18,7 +18,7 @@ const Dropdown = styled.ul`
   background-color: #fff;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  top: 2.8rem;
+  top: 4rem;
   right: 0;
   z-index: 1;
   border-radius: 4px;
@@ -32,6 +32,11 @@ const Dropdown = styled.ul`
     &:hover {
       background-color: ${(props) => props.theme.lightGrey};
     }
+  }
+
+  li > * {
+    display: block;
+    padding: 0.8rem 0.8rem 0.8rem 1rem;
   }
 `;
 
@@ -163,10 +168,90 @@ const SingleItem = (props) => {
         <DetailItem>
           <DetailItemTitle>Discount rate</DetailItemTitle>
           <DetailItemInfo>
-            {new Intl.NumberFormat('us-US', {
-              style: 'percent',
-              maximumFractionDigits: 2,
-            }).format(parseFloat(item.discountRate['$numberDecimal']))}
+            <Drop>
+              <StickerBtn
+                style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+              >
+                Hover
+              </StickerBtn>
+              <Dropdown>
+                <li>
+                  <span>
+                    Amazon:{' '}
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(item.discountRate.amazon['$numberDecimal'])}
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    {' '}
+                    Sephora:{' '}
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(item.discountRate.sephora['$numberDecimal'])}
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    {' '}
+                    Ebay:{' '}
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(item.discountRate.ebay['$numberDecimal'])}
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    {' '}
+                    Bestbuy:{' '}
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(item.discountRate.bestbuy['$numberDecimal'])}
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    {' '}
+                    Costco:{' '}
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(item.discountRate.costco['$numberDecimal'])}
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    Walmart:{' '}
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(item.discountRate.walmart['$numberDecimal'])}
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    {' '}
+                    Mua hộ:{' '}
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(item.discountRate.assisting['$numberDecimal'])}
+                  </span>
+                </li>
+              </Dropdown>
+            </Drop>
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>

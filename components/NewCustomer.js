@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MainContent from './styles/MainContent';
 import Form from './styles/Form';
 import FormGroup from './styles/FormGroup';
@@ -12,6 +12,7 @@ import Router from 'next/router';
 import Modal from './Modal';
 import BtnGrey from './styles/BtnGrey';
 import { Select } from './styles/FormComponent';
+import Editable from './Editable';
 
 const EditItem = () => {
   const [firstName, setFirstName] = useState('');
@@ -21,12 +22,47 @@ const EditItem = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [customerType, setCustomerType] = useState('');
-  const [discountRate, setDiscountRate] = useState('');
+  const [discountRate, setDiscountRate] = useState({
+    amazon: 8,
+    sephora: 8,
+    ebay: 8,
+    bestbuy: 8,
+    costco: 8,
+    walmart: 8,
+    assisting: -5,
+  });
+
+  const [isEditing, setEditing] = useState({
+    amazon: false,
+    sephora: false,
+    ebay: false,
+    bestbuy: false,
+    costco: false,
+    walmart: false,
+    assisting: false,
+  });
+
+  const [trash, setTrash] = useState('');
+  const trashRef = useRef();
+  const amazonRef = useRef();
+  const sephoraRef = useRef();
+  const ebayRef = useRef();
+  const bestbuyRef = useRef();
+  const costcoRef = useRef();
+  const walmartRef = useRef();
+  const assistingRef = useRef();
   const [notes, setNotes] = useState('');
 
   const [showAddBank, setShowAddBank] = useState(false);
+  const [showAddSocialMedia, setShowAddSocialMedia] = useState(false);
+  const [showDiscount, setShowDiscount] = useState(false);
 
   const [bankAccounts, setBankAccounts] = useState([]);
+  const [socialMediaLinks, setSocialMediaLinks] = useState([]);
+  const [socialMediaLink, setSocialMediaLink] = useState({
+    socialMediaType: '',
+    link: '',
+  });
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [loading, setLoading] = useState(false);
@@ -92,7 +128,14 @@ const EditItem = () => {
               city,
             },
             phoneNumber: phoneNo,
-            discountRate: discountRate / 100,
+            discountRate: {
+              amazon: discountRate.amazon / 100,
+              sephora: discountRate.sephora / 100,
+              ebay: discountRate.ebay / 100,
+              costco: discountRate.costco / 100,
+              walmart: discountRate.walmart / 100,
+              assisting: discountRate.assisting / 100,
+            },
             dateOfBirth,
             bankAccounts,
             notes,
@@ -187,14 +230,160 @@ const EditItem = () => {
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="discountRate">Discount Rate</FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter customer discountRate..."
-              id="discountRate"
-              name="discountRate"
-              onChange={(e) => setDiscountRate(e.target.value)}
-              value={discountRate}
-            />
+            <BtnGrey
+              onClick={(e) => {
+                e.preventDefault();
+                setShowDiscount(!showDiscount);
+              }}
+            >
+              Click to Show
+            </BtnGrey>
+            {showDiscount && (
+              <Modal setShowModal={setShowDiscount}>
+                <div style={{ width: '35rem' }}>
+                  <FormGroup>
+                    <FormLabel htmlFor="amazonDiscount">Amazon</FormLabel>
+                    <Editable
+                      text={`${discountRate.amazon}%`}
+                      placeholder="Amazon discount"
+                      type="input"
+                      childRef={amazonRef}
+                    >
+                      <FormInput
+                        ref={amazonRef}
+                        type="number"
+                        name="amazonDiscount"
+                        placeholder="Amazon discount"
+                        value={discountRate.amazon}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            amazon: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="sephoraDiscount">Sephora</FormLabel>
+                    <Editable
+                      text={`${discountRate.sephora}%`}
+                      placeholder="Sephora discount"
+                      type="input"
+                      childRef={sephoraRef}
+                    >
+                      <FormInput
+                        ref={sephoraRef}
+                        type="number"
+                        name="sephoraDiscount"
+                        placeholder="Sephora discount"
+                        value={discountRate.sephora}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            sephora: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="ebayDiscount">Ebay</FormLabel>
+                    <Editable
+                      text={`${discountRate.ebay}%`}
+                      placeholder="Ebay discount"
+                      type="input"
+                      childRef={ebayRef}
+                    >
+                      <FormInput
+                        ref={ebayRef}
+                        type="number"
+                        name="ebayDiscount"
+                        placeholder="Ebay discount"
+                        value={discountRate.ebay}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            ebay: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="costcoDiscount">Costco</FormLabel>
+                    <Editable
+                      text={`${discountRate.costco}%`}
+                      placeholder="Costco discount"
+                      type="input"
+                      childRef={costcoRef}
+                    >
+                      <FormInput
+                        ref={costcoRef}
+                        type="number"
+                        name="costcoDiscount"
+                        placeholder="Costco discount"
+                        value={discountRate.costco}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            costco: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel htmlFor="walmartDiscount">Walmart</FormLabel>
+                    <Editable
+                      text={`${discountRate.walmart}%`}
+                      placeholder="Walmart discount"
+                      type="input"
+                      childRef={walmartRef}
+                    >
+                      <FormInput
+                        ref={walmartRef}
+                        type="number"
+                        name="walmartDiscount"
+                        placeholder="Walmart discount"
+                        value={discountRate.walmart}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            walmart: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel htmlFor="assistingDiscount">Mua Hộ</FormLabel>
+                    <Editable
+                      text={`${discountRate.assisting}%`}
+                      placeholder="Assisting discount"
+                      type="input"
+                      childRef={assistingRef}
+                    >
+                      <FormInput
+                        ref={assistingRef}
+                        type="number"
+                        name="assistingDiscount"
+                        placeholder="Assisting discount"
+                        value={discountRate.assisting}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            assisting: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                </div>
+              </Modal>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -207,6 +396,26 @@ const EditItem = () => {
               onChange={(e) => setNotes(e.target.value)}
               value={notes}
             />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="trash">Ghi chú</FormLabel>
+            <Editable
+              text={trash}
+              placeholder="Write trash"
+              type="input"
+              childRef={trashRef}
+            >
+              <FormInput
+                ref={trashRef}
+                type="text"
+                name="trash"
+                placeholder="Write trash"
+                value={trash}
+                onChange={(e) => setTrash(e.target.value)}
+                style={{ width: '100%' }}
+              />
+            </Editable>
           </FormGroup>
 
           <FormGroup>
@@ -287,6 +496,99 @@ const EditItem = () => {
               </Modal>
             )}
           </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="discountRate">Contacts</FormLabel>
+            {socialMediaLinks.length > 0 ? (
+              <ul>
+                {socialMediaLinks.map((acct, index) => (
+                  <li key={index} style={{ marginBottom: '0.5rem' }}>
+                    {acct.socialMediaType} - {acct.link}{' '}
+                    <span
+                      style={{
+                        backgroundColor: 'grey',
+                        color: 'white',
+                        padding: '0 1rem',
+                        marginLeft: '1rem',
+                        borderRadius: '50%',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() =>
+                        setSocialMediaLinks((socialMediaLinks) =>
+                          socialMediaLinks.filter(
+                            (item) => item.link != acct.link
+                          )
+                        )
+                      }
+                    >
+                      x
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Such empty!</p>
+            )}
+            {showAddSocialMedia && (
+              <Modal setShowModal={setShowAddSocialMedia}>
+                <form
+                  className="form-content"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSocialMediaLinks((socialMediaLinks) => [
+                      ...socialMediaLinks,
+                      socialMediaLink,
+                    ]);
+                    setShowAddSocialMedia(false);
+                    setSocialMediaLink({ socialMediaType: '', link: '' });
+                  }}
+                >
+                  <FormGroup>
+                    <FormLabel htmlFor="socialMediaType">MXH nào</FormLabel>
+                    <Select
+                      value={socialMediaLink.socialMediaType}
+                      onChange={(e) =>
+                        setSocialMediaLink({
+                          ...socialMediaLink,
+                          socialMediaType: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Choose</option>'facebook',
+                      <option value="facebook">Facebook</option>
+                      <option value="instagram">Instagram</option>
+                      <option value="tiktok">Tiktok</option>
+                      <option value="pinterest">Pinterest</option>
+                      <option value="zalo">Zalo</option>
+                      <option value="telegram">Telegram</option>
+                      <option value="others">Others</option>
+                    </Select>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="socialMediaUrl">Link</FormLabel>
+                    <FormInput
+                      type="text"
+                      placeholder="Link..."
+                      id="socialMediaUrl"
+                      name="socialMediaUrl"
+                      onChange={(e) =>
+                        setSocialMediaLink({
+                          ...socialMediaLink,
+                          link: e.target.value,
+                        })
+                      }
+                      value={socialMediaLink.link}
+                    />
+                  </FormGroup>
+                  <SubmitBtn>Add</SubmitBtn>
+                </form>
+              </Modal>
+            )}
+          </FormGroup>
         </div>
         <SubmitBtn disabled={loading ? true : false}>
           {loading ? <LoadingBtn /> : 'Submit'}
@@ -301,6 +603,17 @@ const EditItem = () => {
         >
           {' '}
           Add Bank Account
+        </BtnGrey>
+
+        <BtnGrey
+          style={{ padding: '1.5rem 2rem', marginLeft: '2rem' }}
+          onClick={(e) => {
+            e.preventDefault();
+            setShowAddSocialMedia(true);
+          }}
+        >
+          {' '}
+          Add Social Links
         </BtnGrey>
       </Form>
     </MainContent>

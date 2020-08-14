@@ -4,6 +4,39 @@ import ActionBtn from './styles/ActionBtn';
 import ActionDetail from './styles/ActionDetails';
 import axios from 'axios';
 import StickerBtn from './styles/StickerBtn';
+import styled from 'styled-components';
+
+const Dropdown = styled.ul`
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  top: 2.8rem;
+  right: 0;
+  z-index: 1;
+  border-radius: 4px;
+  padding: 1.2rem 0;
+
+  li {
+    display: block;
+    padding: 0.8rem 0.8rem 0.8rem 1rem;
+    color: ${(props) => props.theme.grey};
+
+    &:hover {
+      background-color: ${(props) => props.theme.lightGrey};
+    }
+  }
+`;
+
+const Drop = styled.div`
+  position: relative;
+  display: inline-block;
+
+  &:hover ul {
+    display: block;
+  }
+`;
 
 const ItemRow = ({ item, index, items, setItems }) => {
   const [showDetail, setShowDetail] = useState(false);
@@ -26,13 +59,81 @@ const ItemRow = ({ item, index, items, setItems }) => {
           day: 'numeric',
         })}
       </th>
+      <th>
+        <Link href={`/customers/${item._id}`} passHref>
+          <a>{item.customId}</a>
+        </Link>
+      </th>
       <th>{`${item.firstName} ${item.lastName}`}</th>
       <th>
-        {new Intl.NumberFormat('en-US', {
+        <Drop>
+          <StickerBtn style={{ backgroundColor: '#E1E1E1', color: '#424242' }}>
+            Hover
+          </StickerBtn>
+          <Dropdown>
+            <li>
+              Amazon:{' '}
+              {new Intl.NumberFormat('en-US', {
+                style: 'percent',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(item.discountRate.amazon['$numberDecimal'])}
+            </li>
+            <li>
+              Sephora:{' '}
+              {new Intl.NumberFormat('en-US', {
+                style: 'percent',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(item.discountRate.sephora['$numberDecimal'])}
+            </li>
+            <li>
+              Ebay:{' '}
+              {new Intl.NumberFormat('en-US', {
+                style: 'percent',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(item.discountRate.ebay['$numberDecimal'])}
+            </li>
+            <li>
+              Bestbuy:{' '}
+              {new Intl.NumberFormat('en-US', {
+                style: 'percent',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(item.discountRate.bestbuy['$numberDecimal'])}
+            </li>
+            <li>
+              Costco:{' '}
+              {new Intl.NumberFormat('en-US', {
+                style: 'percent',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(item.discountRate.costco['$numberDecimal'])}
+            </li>
+            <li>
+              Walmart:{' '}
+              {new Intl.NumberFormat('en-US', {
+                style: 'percent',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(item.discountRate.walmart['$numberDecimal'])}
+            </li>
+            <li>
+              Mua hộ:{' '}
+              {new Intl.NumberFormat('en-US', {
+                style: 'percent',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(item.discountRate.assisting['$numberDecimal'])}
+            </li>
+          </Dropdown>
+        </Drop>
+        {/* {new Intl.NumberFormat('en-US', {
           style: 'percent',
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
-        }).format(item.discountRate['$numberDecimal'] * 1)}
+        }).format(item.discountRate['$numberDecimal'] * 1)} */}
       </th>
       <th>{item.phoneNumber}</th>
       <th>

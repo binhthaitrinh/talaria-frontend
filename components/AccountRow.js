@@ -70,31 +70,6 @@ const ItemRow = ({ item, index, items, setItems, fields }) => {
                 <a>View</a>
               </Link>
             </li>
-            <li>
-              <Link href={`/accounts/${item._id}/edit`}>
-                <a>Edit</a>
-              </Link>
-            </li>
-            <li>
-              <button
-                onClick={async () => {
-                  try {
-                    await axios.delete(
-                      `${process.env.BASE_URL}/accounts/${item.id}`
-                    );
-
-                    setItems(items.filter((doc) => doc.id !== item.id));
-                  } catch (err) {
-                    console.log(err);
-                  }
-
-                  // window.location.reload();
-                  // console.log('acbasd');
-                }}
-              >
-                Delete
-              </button>
-            </li>
           </ul>
         </ActionDetail>
       </th>

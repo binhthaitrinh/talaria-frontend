@@ -52,8 +52,9 @@ const SingleItem = (props) => {
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Mã sản phẩm</DetailItemTitle>
-          <DetailItemInfo>{item._id}</DetailItemInfo>
+          <DetailItemInfo>{item.customId}</DetailItemInfo>
         </DetailItem>
+
         <DetailItem>
           <DetailItemTitle>Tên sản phẩm</DetailItemTitle>
           <DetailItemInfo>{item.name}</DetailItemInfo>
@@ -72,18 +73,6 @@ const SingleItem = (props) => {
           <DetailItemTitle>Số lượng</DetailItemTitle>
           <DetailItemInfo>{item.quantity}</DetailItemInfo>
         </DetailItem>
-
-        <DetailItem>
-          <DetailItemTitle>Thuế</DetailItemTitle>
-          <DetailItemInfo>
-            {new Intl.NumberFormat('de-DE', {
-              stype: 'percent',
-              maximumFractionDigits: 2,
-            }).format(item.tax['$numberDecimal'] * 100)}{' '}
-            %
-          </DetailItemInfo>
-        </DetailItem>
-
         <DetailItem>
           <DetailItemTitle>Phí ship nội địa Mỹ</DetailItemTitle>
           <DetailItemInfo>
@@ -94,14 +83,24 @@ const SingleItem = (props) => {
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
+          <DetailItemTitle>Thuế</DetailItemTitle>
+          <DetailItemInfo>
+            {new Intl.NumberFormat('de-DE', {
+              stype: 'percent',
+              maximumFractionDigits: 2,
+            }).format(item.tax['$numberDecimal'] * 100)}{' '}
+            %
+          </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
           <DetailItemTitle>Giá thực tế</DetailItemTitle>
           <DetailItemInfo>
             {item.actualCost['$numberDecimal'] > 0
-              ? new Intl.NumberFormat('en-US', {
+              ? new Intl.NumberFormat('de-DE', {
                   style: 'currency',
-                  currency: 'USD',
+                  currency: 'VND',
                 }).format(item.actualCost['$numberDecimal'])
-              : '---'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -120,7 +119,18 @@ const SingleItem = (props) => {
           <DetailItemTitle>Order Website</DetailItemTitle>
           <DetailItemInfo>{item.orderedWebsite}</DetailItemInfo>
         </DetailItem>
-
+        <DetailItem>
+          <DetailItemTitle>Order account</DetailItemTitle>
+          <DetailItemInfo>
+            {item.orderAccount ? (
+              <Link href={`/accounts/${item.orderAccount._id}`} passHref>
+                <BtnText>{item.orderAccount.loginID}</BtnText>
+              </Link>
+            ) : (
+              'N/A'
+            )}
+          </DetailItemInfo>
+        </DetailItem>
         <DetailItem>
           <DetailItemTitle>Link sản phẩm</DetailItemTitle>
           <DetailItemInfo>
@@ -148,33 +158,28 @@ const SingleItem = (props) => {
                 Click here
               </BtnText>
             ) : (
-              'Not available'
+              'N/A'
             )}
           </DetailItemInfo>
         </DetailItem>
-        <DetailItem>
-          <DetailItemTitle>Order account</DetailItemTitle>
-          <DetailItemInfo>
-            {item.orderAccount ? item.orderAccount.loginID : 'Not available'}
-          </DetailItemInfo>
-        </DetailItem>
+
         <DetailItem>
           <DetailItemTitle>Invoice</DetailItemTitle>
           <DetailItemInfo>
-            {item.invoiceLink ? <a>item.invoiceLink</a> : 'Not available'}
+            {item.invoiceLink ? <a>item.invoiceLink</a> : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Ngày order</DetailItemTitle>
           <DetailItemInfo>
-            {item.arrivedAtWarehouseDate
+            {item.orderDate
               ? new Date(item.orderDate).toLocaleString('en-us', {
                   month: 'long',
                   year: 'numeric',
                   day: 'numeric',
                   timeZone: 'utc',
                 })
-              : 'Not available'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -187,7 +192,7 @@ const SingleItem = (props) => {
                   day: 'numeric',
                   timeZone: 'utc',
                 })
-              : 'Not available'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -200,7 +205,7 @@ const SingleItem = (props) => {
                   day: 'numeric',
                   timeZone: 'utc',
                 })
-              : 'Not available'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -213,7 +218,7 @@ const SingleItem = (props) => {
                   day: 'numeric',
                   timeZone: 'utc',
                 })
-              : 'Not available'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -226,7 +231,7 @@ const SingleItem = (props) => {
                   day: 'numeric',
                   timeZone: 'utc',
                 })
-              : 'Not available'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -239,7 +244,7 @@ const SingleItem = (props) => {
                   year: 'numeric',
                   day: 'numeric',
                 })
-              : 'Not available'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -251,13 +256,13 @@ const SingleItem = (props) => {
                   year: 'numeric',
                   day: 'numeric',
                 })
-              : 'Not available'}
+              : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Loại hàng</DetailItemTitle>
           <DetailItemInfo>
-            {item.itemType ? item.itemType : 'Not available'}
+            {item.itemType ? item.itemType : 'N/A'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -266,7 +271,7 @@ const SingleItem = (props) => {
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Ghi chú</DetailItemTitle>
-          <DetailItemInfo>{item.notes}</DetailItemInfo>
+          <DetailItemInfo>{item.notes ? item.notes : 'N/A'}</DetailItemInfo>
         </DetailItem>
       </DetailList>
     </MainContent>

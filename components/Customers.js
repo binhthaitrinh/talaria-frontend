@@ -43,6 +43,7 @@ function Items({ page }) {
         <thead>
           <tr>
             <th>Ngày tạo</th>
+            <th>Id</th>
             <th>Họ tên</th>
             <th>Discount</th>
             <th>Số điện thoại</th>

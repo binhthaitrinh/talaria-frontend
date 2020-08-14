@@ -11,6 +11,17 @@ import Noti from './Noti';
 import Router from 'next/router';
 import { Select } from './styles/FormComponent';
 
+const statusList = [
+  'not-yet-ordered',
+  'ordered',
+  'on-the-way-to-warehouse',
+  'on-the-way-to-viet-nam',
+  'arrived-at-viet-nam',
+  'done',
+  'returning',
+  'returned',
+];
+
 const EditItem = ({ item }) => {
   const [name, setName] = useState(item.name || '');
   const [pricePerItem, setPrice] = useState(
@@ -56,6 +67,8 @@ const EditItem = ({ item }) => {
   const [returnPkgArvlDate, setReturnPkgArvlDate] = useState(
     item.returnPkgArvlDate ? item.returnPkgArvlDate.slice(0, 10) : ''
   );
+
+  const [status, setStatus] = useState(item.status || '');
   const [loading, setLoading] = useState(false);
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
@@ -127,7 +140,7 @@ const EditItem = ({ item }) => {
             customerRcvedDate,
             returnPkgDate,
             returnPkgArvlDate,
-
+            status,
             notes,
           });
         }}
@@ -306,7 +319,7 @@ const EditItem = ({ item }) => {
             <FormInput
               type="date"
               value={arrivedAtVnDate}
-              onChange={(e) => setAririvedAarrivedAtVnDate(e.target.value)}
+              onChange={(e) => setArrivedAtVnDate(e.target.value)}
               id="aririvedAarrivedAtVnDate"
               name="aririvedAarrivedAtVnDate"
             />
@@ -355,6 +368,17 @@ const EditItem = ({ item }) => {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="status">Tình trạng</FormLabel>
+            <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="">Choose</option>
+              {statusList.map((stat, index) => (
+                <option value={stat} key={index}>
+                  {stat.split('-').join(' ')}
+                </option>
+              ))}
+            </Select>
           </FormGroup>
         </div>
 
