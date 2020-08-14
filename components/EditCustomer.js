@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MainContent from './styles/MainContent';
 import Form from './styles/Form';
 import FormGroup from './styles/FormGroup';
@@ -12,6 +12,7 @@ import Router from 'next/router';
 import { Select } from './styles/FormComponent';
 import BtnGrey from './styles/BtnGrey';
 import Modal from './Modal';
+import Editable from './Editable';
 
 const EditItem = ({ item }) => {
   const [firstName, setFirstName] = useState(item.firstName);
@@ -21,13 +22,31 @@ const EditItem = ({ item }) => {
   const [address, setAddress] = useState(
     item.address.length >= 1 ? item.address[0].address1 : ''
   );
+
+  const [discountRate, setDiscountRate] = useState({
+    amazon: item.discountRate.amazon['$numberDecimal'] * 100,
+    sephora: item.discountRate.sephora['$numberDecimal'] * 100,
+    ebay: item.discountRate.ebay['$numberDecimal'] * 100,
+    bestbuy: item.discountRate.bestbuy['$numberDecimal'] * 100,
+    costco: item.discountRate.costco['$numberDecimal'] * 100,
+    walmart: item.discountRate.walmart['$numberDecimal'] * 100,
+    assisting: item.discountRate.assisting['$numberDecimal'] * 100,
+  });
+
+  const amazonRef = useRef();
+  const sephoraRef = useRef();
+  const ebayRef = useRef();
+  const bestbuyRef = useRef();
+  const costcoRef = useRef();
+  const walmartRef = useRef();
+  const [showDiscount, setShowDiscount] = useState(false);
+  const assistingRef = useRef();
+
   const [city, setCity] = useState(
     item.address.length >= 1 ? item.address[0].city : ''
   );
   const [customerType, setCustomerType] = useState(item.customerType);
-  const [discountRate, setDiscountRate] = useState(
-    parseFloat(item.discountRate['$numberDecimal'] * 100)
-  );
+
   const [bankAccounts, setBankAccounts] = useState(item.bankAccounts || []);
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -97,7 +116,14 @@ const EditItem = ({ item }) => {
               city,
             },
             customerType,
-            discountRate: discountRate / 100,
+            discountRate: {
+              amazon: discountRate.amazon / 100,
+              sephora: discountRate.sephora / 100,
+              ebay: discountRate.ebay / 100,
+              costco: discountRate.costco / 100,
+              walmart: discountRate.walmart / 100,
+              assisting: discountRate.assisting / 100,
+            },
             bankAccounts,
             notes,
           });
@@ -190,15 +216,184 @@ const EditItem = ({ item }) => {
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="discountRate">Discount Rate</FormLabel>
-            <FormInput
-              type="number"
-              placeholder="Enter customer discountRate..."
-              id="discountRate"
-              name="discountRate"
-              onChange={(e) => setDiscountRate(e.target.value)}
-              value={discountRate}
-              required={true}
-            />
+            <BtnGrey
+              onClick={(e) => {
+                e.preventDefault();
+                setShowDiscount(!showDiscount);
+              }}
+            >
+              Click to Show
+            </BtnGrey>
+            {showDiscount && (
+              <Modal setShowModal={setShowDiscount}>
+                <div style={{ width: '35rem' }}>
+                  <FormGroup>
+                    <FormLabel htmlFor="amazonDiscount">Amazon</FormLabel>
+                    <Editable
+                      text={`${discountRate.amazon}%`}
+                      placeholder="Amazon discount"
+                      type="input"
+                      childRef={amazonRef}
+                    >
+                      <FormInput
+                        ref={amazonRef}
+                        type="number"
+                        name="amazonDiscount"
+                        placeholder="Amazon discount"
+                        value={discountRate.amazon}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            amazon: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="sephoraDiscount">Sephora</FormLabel>
+                    <Editable
+                      text={`${discountRate.sephora}%`}
+                      placeholder="Sephora discount"
+                      type="input"
+                      childRef={sephoraRef}
+                    >
+                      <FormInput
+                        ref={sephoraRef}
+                        type="number"
+                        name="sephoraDiscount"
+                        placeholder="Sephora discount"
+                        value={discountRate.sephora}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            sephora: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="ebayDiscount">Ebay</FormLabel>
+                    <Editable
+                      text={`${discountRate.ebay}%`}
+                      placeholder="Ebay discount"
+                      type="input"
+                      childRef={ebayRef}
+                    >
+                      <FormInput
+                        ref={ebayRef}
+                        type="number"
+                        name="ebayDiscount"
+                        placeholder="Ebay discount"
+                        value={discountRate.ebay}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            ebay: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormLabel htmlFor="costcoDiscount">Costco</FormLabel>
+                    <Editable
+                      text={`${discountRate.costco}%`}
+                      placeholder="Costco discount"
+                      type="input"
+                      childRef={costcoRef}
+                    >
+                      <FormInput
+                        ref={costcoRef}
+                        type="number"
+                        name="costcoDiscount"
+                        placeholder="Costco discount"
+                        value={discountRate.costco}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            costco: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel htmlFor="bestbuyDiscount">bestbuy</FormLabel>
+                    <Editable
+                      text={`${discountRate.bestbuy}%`}
+                      placeholder="Bestbuy discount"
+                      type="input"
+                      childRef={bestbuyRef}
+                    >
+                      <FormInput
+                        ref={bestbuyRef}
+                        type="number"
+                        name="bestbuyDiscount"
+                        placeholder="Best buy discount"
+                        value={discountRate.bestbuy}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            bestbuy: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel htmlFor="walmartDiscount">Walmart</FormLabel>
+                    <Editable
+                      text={`${discountRate.walmart}%`}
+                      placeholder="Walmart discount"
+                      type="input"
+                      childRef={walmartRef}
+                    >
+                      <FormInput
+                        ref={walmartRef}
+                        type="number"
+                        name="walmartDiscount"
+                        placeholder="Walmart discount"
+                        value={discountRate.walmart}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            walmart: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel htmlFor="assistingDiscount">Mua Hộ</FormLabel>
+                    <Editable
+                      text={`${discountRate.assisting}%`}
+                      placeholder="Assisting discount"
+                      type="input"
+                      childRef={assistingRef}
+                    >
+                      <FormInput
+                        ref={assistingRef}
+                        type="number"
+                        name="assistingDiscount"
+                        placeholder="Assisting discount"
+                        value={discountRate.assisting}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            assisting: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+                </div>
+              </Modal>
+            )}
           </FormGroup>
           <FormGroup>
             <FormLabel htmlFor="discountRate">Bank Accounts</FormLabel>

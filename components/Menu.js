@@ -40,11 +40,7 @@ const menuItems = [
     item: 'Paxful',
     icon: 'logo-bitcoin',
   },
-  {
-    pathname: 'transactions',
-    item: 'Transactions',
-    icon: 'card-outline',
-  },
+
   {
     pathname: 'bills',
     item: 'Bills',

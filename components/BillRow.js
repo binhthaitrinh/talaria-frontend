@@ -137,6 +137,12 @@ const ItemRow = ({ item, index, items, setItems, fields, freezeNo }) => {
           year: 'numeric',
           day: 'numeric',
         });
+      } else if (field === 'customId') {
+        return (
+          <Link href={`/bills/${item._id}`}>
+            <a>{item.customId}</a>
+          </Link>
+        );
       } else {
         return item[field];
       }

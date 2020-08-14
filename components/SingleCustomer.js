@@ -329,7 +329,7 @@ const SingleItem = (props) => {
                   })}
                 </th>
                 <th>
-                  <Link href={`/items/${bill._id}`} passHref>
+                  <Link href={`/bills/${bill._id}`} passHref>
                     <a>{bill.customId}</a>
                   </Link>
                 </th>

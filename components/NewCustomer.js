@@ -32,18 +32,6 @@ const EditItem = () => {
     assisting: -5,
   });
 
-  const [isEditing, setEditing] = useState({
-    amazon: false,
-    sephora: false,
-    ebay: false,
-    bestbuy: false,
-    costco: false,
-    walmart: false,
-    assisting: false,
-  });
-
-  const [trash, setTrash] = useState('');
-  const trashRef = useRef();
   const amazonRef = useRef();
   const sephoraRef = useRef();
   const ebayRef = useRef();
@@ -335,6 +323,30 @@ const EditItem = () => {
                   </FormGroup>
 
                   <FormGroup>
+                    <FormLabel htmlFor="bestbuyDiscount">bestbuy</FormLabel>
+                    <Editable
+                      text={`${discountRate.bestbuy}%`}
+                      placeholder="Bestbuy discount"
+                      type="input"
+                      childRef={bestbuyRef}
+                    >
+                      <FormInput
+                        ref={bestbuyRef}
+                        type="number"
+                        name="bestbuyDiscount"
+                        placeholder="Best buy discount"
+                        value={discountRate.bestbuy}
+                        onChange={(e) =>
+                          setDiscountRate({
+                            ...discountRate,
+                            bestbuy: e.target.value,
+                          })
+                        }
+                      />
+                    </Editable>
+                  </FormGroup>
+
+                  <FormGroup>
                     <FormLabel htmlFor="walmartDiscount">Walmart</FormLabel>
                     <Editable
                       text={`${discountRate.walmart}%`}
@@ -396,26 +408,6 @@ const EditItem = () => {
               onChange={(e) => setNotes(e.target.value)}
               value={notes}
             />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel htmlFor="trash">Ghi chú</FormLabel>
-            <Editable
-              text={trash}
-              placeholder="Write trash"
-              type="input"
-              childRef={trashRef}
-            >
-              <FormInput
-                ref={trashRef}
-                type="text"
-                name="trash"
-                placeholder="Write trash"
-                value={trash}
-                onChange={(e) => setTrash(e.target.value)}
-                style={{ width: '100%' }}
-              />
-            </Editable>
           </FormGroup>
 
           <FormGroup>
