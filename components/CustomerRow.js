@@ -64,7 +64,7 @@ const ItemRow = ({ item, index, items, setItems }) => {
           <a>{item.customId}</a>
         </Link>
       </th>
-      <th>{`${item.firstName} ${item.lastName}`}</th>
+      <th>{`${item.firstName} ${item.lastName ? item.lastName : ''}`}</th>
       <th>
         <Drop>
           <StickerBtn style={{ backgroundColor: '#E1E1E1', color: '#424242' }}>
@@ -135,37 +135,47 @@ const ItemRow = ({ item, index, items, setItems }) => {
           maximumFractionDigits: 2,
         }).format(item.discountRate['$numberDecimal'] * 1)} */}
       </th>
-      <th>{item.phoneNumber}</th>
+      <th>{item.phoneNumber ? item.phoneNumber : '---'}</th>
       <th>
-        {new Date(item.dateOfBirth).toLocaleString('en-us', {
-          month: 'long',
-          year: 'numeric',
-          day: 'numeric',
-          timeZone: 'UTC',
-        })}
+        {item.dateOfBirth
+          ? new Date(item.dateOfBirth).toLocaleString('en-us', {
+              month: 'long',
+              year: 'numeric',
+              day: 'numeric',
+              timeZone: 'UTC',
+            })
+          : '---'}
       </th>
-      <th>{item.address.length >= 1 ? item.address[0].address1 : '---'}</th>
       <th>
-        {item.address.length >= 1 ? (
-          <StickerBtn type="success">{item.address[0].city}</StickerBtn>
-        ) : (
-          '---'
-        )}
+        {item.address.length >= 1
+          ? item.address[item.address.length - 1].address1
+          : '---'}
+      </th>
+      <th>
+        {item.address.length >= 1
+          ? item.address[item.address.length - 1].city
+          : '---'}
       </th>
       <th>{item.customerType}</th>
 
       <th>
         {item.bankAccounts.length > 0 ? (
-          <div>
-            Hover here
-            <span className="tooltip">
+          <Drop>
+            <StickerBtn
+              style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+            >
+              Hover here
+            </StickerBtn>
+            <Dropdown>
               {item.bankAccounts.map((acct, index) => (
-                <div key={index}>
-                  {acct.bankName} - {acct.accountNumber}
-                </div>
+                <li key={index}>
+                  <span>
+                    {acct.bankName} - {acct.accountNumber}
+                  </span>
+                </li>
               ))}
-            </span>
-          </div>
+            </Dropdown>
+          </Drop>
         ) : (
           '---'
         )}

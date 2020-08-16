@@ -16,11 +16,13 @@ import Editable from './Editable';
 
 const EditItem = ({ item }) => {
   const [firstName, setFirstName] = useState(item.firstName);
-  const [lastName, setLastName] = useState(item.lastName);
-  const [phoneNo, setPhoneNo] = useState(item.phoneNumber);
-  const [dateOfBirth, setDateOfBirth] = useState(item.dateOfBirth);
+  const [lastName, setLastName] = useState(item.lastName || '');
+  const [phoneNo, setPhoneNo] = useState(item.phoneNumber || '');
+  const [dateOfBirth, setDateOfBirth] = useState(item.dateOfBirth || '');
   const [address, setAddress] = useState(
-    item.address.length >= 1 ? item.address[0].address1 : ''
+    item.address.length >= 1
+      ? item.address[item.address.length - 1].address1
+      : ''
   );
 
   const [discountRate, setDiscountRate] = useState({
@@ -43,7 +45,7 @@ const EditItem = ({ item }) => {
   const assistingRef = useRef();
 
   const [city, setCity] = useState(
-    item.address.length >= 1 ? item.address[0].city : ''
+    item.address.length >= 1 ? item.address[item.address.length - 1].city : ''
   );
   const [customerType, setCustomerType] = useState(item.customerType);
 
@@ -69,6 +71,12 @@ const EditItem = ({ item }) => {
   const submitForm = async (formData) => {
     setLoading(true);
     try {
+      for (let el in formData) {
+        if (formData[el] === '') {
+          delete formData[el];
+        }
+      }
+
       const res = await axios.patch(
         `${process.env.BASE_URL}/customers/${item._id}`,
         formData,
@@ -131,7 +139,18 @@ const EditItem = ({ item }) => {
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="firstName">Họ</FormLabel>
+            <FormLabel htmlFor="lastName">Họ</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Enter customer lastName..."
+              id="lastName"
+              name="lastName"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="firstName">Tên</FormLabel>
             <FormInput
               type="text"
               placeholder="Enter customer firstName..."
@@ -143,26 +162,13 @@ const EditItem = ({ item }) => {
             />
           </FormGroup>
           <FormGroup>
-            <FormLabel htmlFor="lastName">Tên</FormLabel>
-            <FormInput
-              type="text"
-              placeholder="Enter customer lastName..."
-              id="lastName"
-              name="lastName"
-              onChange={(e) => setlastName(e.target.value)}
-              value={lastName}
-              required={true}
-            />
-          </FormGroup>
-          <FormGroup>
             <FormLabel htmlFor="dateOfBirth">Ngày sinh</FormLabel>
             <FormInput
               type="date"
-              placeholder="Enter customer dateOfBirth..."
               id="dateOfBirth"
               name="dateOfBirth"
               onChange={(e) => setDateOfBirth(e.target.value)}
-              value={dateOfBirth.slice(0, 10)}
+              value={dateOfBirth ? dateOfBirth.slice(0, 10) : ''}
             />
           </FormGroup>
           <FormGroup>
@@ -400,7 +406,7 @@ const EditItem = ({ item }) => {
             {bankAccounts.length > 0 ? (
               <ul>
                 {bankAccounts.map((acct, index) => (
-                  <li style={{ marginBottom: '0.5rem' }}>
+                  <li style={{ marginBottom: '0.5rem' }} key={index}>
                     {acct.bankName} - {acct.accountNumber}{' '}
                     <span
                       style={{
@@ -476,7 +482,7 @@ const EditItem = ({ item }) => {
           <FormGroup>
             <FormLabel htmlFor="notes">Ghi chú</FormLabel>
             <FormInput
-              type="number"
+              type="text"
               placeholder="Enter notes..."
               id="notes"
               name="notes"

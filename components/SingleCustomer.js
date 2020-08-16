@@ -131,35 +131,44 @@ const SingleItem = (props) => {
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Họ tên</DetailItemTitle>
-          <DetailItemInfo>{`${item.firstName} ${item.lastName}`}</DetailItemInfo>
+          <DetailItemInfo>{`${item.firstName} ${
+            item.lastName ? item.lastName : ''
+          }`}</DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Số điện thoại</DetailItemTitle>
-          <DetailItemInfo>{item.phoneNumber}</DetailItemInfo>
+          <DetailItemInfo>
+            {item.phoneNumber ? item.phoneNumber : '---'}
+          </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Ngày sinh</DetailItemTitle>
           <DetailItemInfo>
-            {' '}
-            {new Date(item.dateOfBirth).toLocaleString('en-us', {
-              month: 'long',
-              year: 'numeric',
-              day: 'numeric',
-              timeZone: 'UTC',
-            })}
+            {item.dateOfBirth
+              ? new Date(item.dateOfBirth).toLocaleString('en-us', {
+                  month: 'long',
+                  year: 'numeric',
+                  day: 'numeric',
+                  timeZone: 'UTC',
+                })
+              : '---'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Địa chỉ</DetailItemTitle>
           <DetailItemInfo>
-            {item.address.length >= 1 ? item.address[0].address1 : '---'}
+            {item.address.length >= 1
+              ? item.address[item.address.length - 1].address1
+              : '---'}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
           <DetailItemTitle>Thành phố</DetailItemTitle>
           <DetailItemInfo>
             {item.address.length >= 1 ? (
-              <StickerBtn type="success">{item.address[0].city}</StickerBtn>
+              <StickerBtn type="success">
+                {item.address[item.address.length - 1].city}
+              </StickerBtn>
             ) : (
               '---'
             )}
@@ -257,13 +266,26 @@ const SingleItem = (props) => {
         <DetailItem>
           <DetailItemTitle>Bank Account</DetailItemTitle>
           <DetailItemInfo>
-            {item.bankAccounts.length > 0
-              ? item.bankAccounts.map((acct) => (
-                  <p>
-                    {acct.bankName} - {acct.accountNumber}
-                  </p>
-                ))
-              : 'Not Available'}
+            {item.bankAccounts.length > 0 ? (
+              <Drop>
+                <StickerBtn
+                  style={{ backgroundColor: '#E1E1E1', color: '#424242' }}
+                >
+                  Hover
+                </StickerBtn>
+                <Dropdown>
+                  {item.bankAccounts.map((acct) => (
+                    <li>
+                      <span>
+                        {acct.bankName} - {acct.accountNumber}
+                      </span>
+                    </li>
+                  ))}
+                </Dropdown>
+              </Drop>
+            ) : (
+              'Not Available'
+            )}
           </DetailItemInfo>
         </DetailItem>
         <DetailItem>
@@ -301,7 +323,7 @@ const SingleItem = (props) => {
 
         <DetailItem>
           <DetailItemTitle>Ghi chú</DetailItemTitle>
-          <DetailItemInfo>{item.notes}</DetailItemInfo>
+          <DetailItemInfo>{item.notes ? item.notes : '---'}</DetailItemInfo>
         </DetailItem>
       </DetailList>
 

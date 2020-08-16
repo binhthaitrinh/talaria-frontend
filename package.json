@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
     "lodash": "^4.17.15",
     "next": "9.4.4",
+    "node-fetch": "^2.6.0",
     "nprogress": "^0.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",

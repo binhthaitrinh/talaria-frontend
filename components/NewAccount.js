@@ -36,6 +36,8 @@ const NewAccount = (props) => {
   const [accountWebsite, setAccountWebsite] = useState('');
   const [accountType, setAccountType] = useState('');
   const [notes, setNotes] = useState('');
+  const [teamviewInfo, setTeamviewInfo] = useState('');
+  const [currency, setCurrency] = useState('');
 
   const [showNoti, setShowNoti] = useState(false);
   const [message, setMessage] = useState('');
@@ -53,6 +55,11 @@ const NewAccount = (props) => {
     setLoading(true);
     console.log(formData.items);
     try {
+      for (let el in formData) {
+        if (formData[el] === '') {
+          delete formData[el];
+        }
+      }
       const res = await axios.post(
         `${process.env.BASE_URL}/accounts`,
         formData,
@@ -99,6 +106,8 @@ const NewAccount = (props) => {
             accountType,
             accountWebsite,
             notes,
+            currency,
+            teamviewInfo,
           });
         }}
       >
@@ -130,12 +139,25 @@ const NewAccount = (props) => {
           </FormGroup>
 
           <FormGroup>
+            <FormLabel htmlFor="teamviewInfo">Teamview Info</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="teamviewInfo..."
+              id="teamviewInfo"
+              name="teamviewInfo"
+              onChange={(e) => setTeamviewInfo(e.target.value)}
+              value={teamviewInfo}
+            />
+          </FormGroup>
+
+          <FormGroup>
             <FormLabel htmlFor="accountWebsite">Account Website</FormLabel>
             <Select
               value={accountWebsite}
               onChange={(e) => setAccountWebsite(e.target.value)}
               id="accountWebsite"
               name="accountWebsite"
+              required={true}
             >
               <option value="">Choose one</option>
               <option value="amazon">Amazon</option>
@@ -155,10 +177,27 @@ const NewAccount = (props) => {
               onChange={(e) => setAccountType(e.target.value)}
               id="accountType"
               name="accountType"
+              required={true}
             >
               <option value="">Choose</option>
               <option value="owned">Sở hữu</option>
               <option value="borrowed">Mượn</option>
+            </Select>
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="currency">Currency</FormLabel>
+            <Select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              id="currency"
+              name="currency"
+              required={true}
+            >
+              <option value="">Choose</option>
+              <option value="usd">USD</option>
+              <option value="vnd">VND</option>
+              <option value="btc">BTC</option>
             </Select>
           </FormGroup>
 

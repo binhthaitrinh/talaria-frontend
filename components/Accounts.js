@@ -44,15 +44,15 @@ function Items({ page, fields }) {
         <thead>
           <tr>
             <th
-              style={{
-                position: 'absolute',
-                top: 'auto',
-                left: '4rem',
-                borderBottom: '1px solid rgba(0,0,0,0.09)',
-                width: '9rem',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+            // style={{
+            //   position: 'absolute',
+            //   top: 'auto',
+            //   left: '4rem',
+            //   borderBottom: '1px solid rgba(0,0,0,0.09)',
+            //   width: '9rem',
+            //   display: 'flex',
+            //   alignItems: 'center',
+            // }}
             >
               Action
             </th>

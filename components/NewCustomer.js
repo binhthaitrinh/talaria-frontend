@@ -67,6 +67,11 @@ const EditItem = () => {
   const submitForm = async (formData) => {
     setLoading(true);
     try {
+      for (let el in formData) {
+        if (formData[el] === '') {
+          delete formData[el];
+        }
+      }
       const res = await axios.post(
         `${process.env.BASE_URL}/customers`,
         formData,
@@ -109,7 +114,7 @@ const EditItem = () => {
           // console.log(pocketMoney);
           submitForm({
             firstName,
-            lastName,
+            lastName: lastName,
             customerType,
             address: {
               address1: address,
@@ -124,9 +129,9 @@ const EditItem = () => {
               walmart: discountRate.walmart / 100,
               assisting: discountRate.assisting / 100,
             },
-            dateOfBirth,
-            bankAccounts,
-            notes,
+            dateOfBirth: dateOfBirth,
+            bankAccounts: bankAccounts,
+            notes: notes,
           });
         }}
       >
@@ -140,7 +145,6 @@ const EditItem = () => {
               name="lastName"
               onChange={(e) => setLastName(e.target.value)}
               value={lastName}
-              required={true}
             />
           </FormGroup>
           <FormGroup>
@@ -164,7 +168,6 @@ const EditItem = () => {
               name="dateOfBirth"
               onChange={(e) => {
                 setDateOfBirth(e.target.value);
-                console.log(e.target.value);
               }}
               value={dateOfBirth.slice(0, 10)}
             />
