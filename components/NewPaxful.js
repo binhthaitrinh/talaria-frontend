@@ -18,7 +18,7 @@ const EditItem = () => {
     value: '',
     currency: 'vnd',
   });
-  const [btcUsdRate, setBtcUsdRate] = useState('');
+  const [btcUsdRate, setBtcUsdRate] = useState(10500);
   const [usdVndRate, setUsdVndRate] = useState(23700);
   const [buyer, setBuyer] = useState('');
   const [pocketMoney, setPocketMoney] = useState(true);
@@ -119,6 +119,7 @@ const EditItem = () => {
               <FormLabel htmlFor="btcAmount">BTC amount</FormLabel>
               <FormInput
                 type="number"
+                step="0.00000001"
                 placeholder="Enter BTC amount..."
                 id="btcAmount"
                 name="btcAmount"
@@ -131,6 +132,7 @@ const EditItem = () => {
               <FormLabel htmlFor="withdrawFee">BTC withdraw Fee</FormLabel>
               <FormInput
                 type="number"
+                step="0.00000001"
                 placeholder="BTC withdrawal fee..."
                 id="withdrawFee"
                 name="withdrawFee"
@@ -142,7 +144,8 @@ const EditItem = () => {
               <FormLabel htmlFor="amountSPent">Money spent</FormLabel>
               <div style={{ display: 'flex' }}>
                 <FormInput
-                  type="text"
+                  type="number"
+                  step="0.00000001"
                   placeholder="Money spent to buy..."
                   id="amountSpent"
                   name="amountSpent"
@@ -175,6 +178,7 @@ const EditItem = () => {
               <FormLabel htmlFor="btcUsdRate">BTC/USD rate</FormLabel>
               <FormInput
                 type="number"
+                step="0.1"
                 placeholder="USD/BTC rate..."
                 id="btcUsdRate"
                 name="btcUsdRate"
@@ -187,6 +191,7 @@ const EditItem = () => {
               <FormLabel htmlFor="usdVndRate">USD/VND rate</FormLabel>
               <FormInput
                 type="number"
+                step="0.1"
                 placeholder="VND/USD rate..."
                 id="usdVndRate"
                 name="usdVndRate"

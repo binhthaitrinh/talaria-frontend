@@ -33,7 +33,8 @@ const InlineBtn = styled.button`
 
 const EditItem = (props) => {
   const [socialMediaLinks, setSocialMediaLinks] = useState([]);
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [commissionRate, setCommissionRate] = useState(0);
   const [bankAccounts, setBankAccounts] = useState([]);
@@ -62,6 +63,11 @@ const EditItem = (props) => {
     setLoading(true);
     console.log(formData.items);
     try {
+      for (let el in formData) {
+        if (formData[el] === '') {
+          delete formData[el];
+        }
+      }
       const res = await axios.post(
         `${process.env.BASE_URL}/affiliates`,
         formData,
@@ -75,7 +81,7 @@ const EditItem = (props) => {
       setShowNoti(true);
       setTimeout(() => {
         setShowNoti(false);
-        Router.push(`/affiliates${res.data.data.data._id}`);
+        Router.push(`/affiliates/${res.data.data.data._id}`);
         setMessage('');
         setAlertType('');
       }, 2000);
@@ -103,7 +109,8 @@ const EditItem = (props) => {
           // console.log(currency);
           // console.log(pocketMoney);
           submitForm({
-            name,
+            firstName,
+            lastName,
             commissionRate,
             phoneNumber,
             socialMediaLinks,
@@ -114,14 +121,27 @@ const EditItem = (props) => {
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="name">Tên CTV</FormLabel>
+            <FormLabel htmlFor="firstName">Tên CTV</FormLabel>
             <FormInput
               type="text"
-              placeholder="Enter name..."
-              id="name"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              placeholder="Enter firstName..."
+              id="firstName"
+              name="firstName"
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+              required={true}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="lastName">Họ CTV</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Enter lastName..."
+              id="lastName"
+              name="lastName"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
             />
           </FormGroup>
 

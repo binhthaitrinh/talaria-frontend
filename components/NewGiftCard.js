@@ -170,6 +170,7 @@ const EditItem = (props) => {
               <FormInput
                 type="number"
                 placeholder="Enter priceInBTC..."
+                step="0.00000001"
                 id="priceInBTC"
                 name="priceInBTC"
                 onChange={(e) => setPrice({ ...price, value: e.target.value })}
@@ -192,6 +193,7 @@ const EditItem = (props) => {
             <div style={{ display: 'flex' }}>
               <FormInput
                 type="number"
+                step="0.00000001"
                 placeholder="Enter feeBTC..."
                 id="feeBTC"
                 name="feeBTC"

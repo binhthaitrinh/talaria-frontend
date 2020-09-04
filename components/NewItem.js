@@ -93,18 +93,6 @@ const EditItem = () => {
       >
         <div className="form-content">
           <FormGroup>
-            <FormLabel htmlFor="name">Tên sản phẩm</FormLabel>
-            <FormInput
-              type="text"
-              placeholder="Tên sản phẩm..."
-              id="name"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              required={true}
-            />
-          </FormGroup>
-          <FormGroup>
             <FormLabel htmlFor="link">Link sản phẩm</FormLabel>
             <FormInput
               type="text"
@@ -113,6 +101,18 @@ const EditItem = () => {
               name="link"
               value={link}
               onChange={(e) => setLink(e.target.value)}
+              required={true}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="name">Tên sản phẩm</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Tên sản phẩm..."
+              id="name"
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
               required={true}
             />
           </FormGroup>
@@ -192,10 +192,11 @@ const EditItem = () => {
               <option value="sephora">Sephora</option>
               <option value="ebay">Ebay</option>
               <option value="bestbuy">Best Buy</option>
+              <option value="costco">Costco</option>
+              <option value="walmart">Walmart</option>
               <option value="assisting">Mua hộ</option>
             </Select>
           </FormGroup>
-
           <FormGroup>
             <FormLabel htmlFor="warehouse">Ship về đâu?</FormLabel>
             <Select
@@ -213,7 +214,6 @@ const EditItem = () => {
               <option value="others">Others</option>
             </Select>
           </FormGroup>
-
           <FormGroup>
             <FormLabel htmlFor="notes">Ghi chú</FormLabel>
             <FormInput

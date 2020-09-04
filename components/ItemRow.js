@@ -155,6 +155,12 @@ const ItemRow = ({
             <a>{item.customId}</a>
           </Link>
         );
+      } else if (field === 'shippingExtraBase') {
+        return (
+          <span>
+            {item.shippingExtraBase.value} {item.shippingExtraBase.unit}
+          </span>
+        );
       }
     } else {
       return '---';

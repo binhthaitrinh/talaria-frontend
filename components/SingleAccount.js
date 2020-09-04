@@ -176,6 +176,14 @@ const SingleItem = (props) => {
           <DetailItemInfo>{item.accountWebsite}</DetailItemInfo>
         </DetailItem>
         <DetailItem>
+          <DetailItemTitle>Currency</DetailItemTitle>
+          <DetailItemInfo>{item.currency}</DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Teamview Info</DetailItemTitle>
+          <DetailItemInfo>{item.teamviewInfo || '---'}</DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
           <DetailItemTitle>Balance</DetailItemTitle>
           <DetailItemInfo>
             {new Intl.NumberFormat(
@@ -186,6 +194,14 @@ const SingleItem = (props) => {
               }
             ).format(item.balance['$numberDecimal'])}
           </DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Account Type</DetailItemTitle>
+          <DetailItemInfo>{item.accountType || '---'}</DetailItemInfo>
+        </DetailItem>
+        <DetailItem>
+          <DetailItemTitle>Notes</DetailItemTitle>
+          <DetailItemInfo>{item.notes || '---'}</DetailItemInfo>
         </DetailItem>
         {/* <DetailItem>
           <DetailItemTitle>Ngày tạo</DetailItemTitle>
