@@ -18,10 +18,18 @@ const EditItem = () => {
   const [tax, setTax] = useState(0);
   const [usShippingFee, setUsShippingFee] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [estimatedWeight, setEstimatedWeight] = useState('');
+  const [estimatedWeightPerItem, setEstimatedWeightPerItem] = useState('');
   const [orderedWebsite, setOrderedWebsite] = useState('amazon');
   const [warehouse, setWarehouse] = useState('');
   const [notes, setNotes] = useState('');
+  const [itemType, setItemType] = useState('');
+  const [commissionRateForAffiliate, setCommissionRateForAffiliate] = useState(
+    ''
+  );
+  const [shippingExtraBase, setShippingExtraBase] = useState({
+    unit: 'usd',
+    value: 0,
+  });
 
   const [pricePerItem, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
@@ -84,7 +92,7 @@ const EditItem = () => {
             tax,
             quantity,
             usShippingFee,
-            estimatedWeight,
+            estimatedWeightPerItem,
             orderedWebsite,
             notes,
             warehouse,
@@ -152,6 +160,35 @@ const EditItem = () => {
             />
           </FormGroup>
           <FormGroup>
+            <FormLabel htmlFor="commissionRateForAffiliate">
+              Hoa hồng cho CTV
+            </FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Commission..."
+              id="commissionRateForAffiliate"
+              name="commissionRateForAffiliate"
+              value={commissionRateForAffiliate}
+              onChange={(e) => setCommissionRateForAffiliate(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel htmlFor="shippingExtraBase">Phụ thu shipping</FormLabel>
+            <FormInput
+              type="number"
+              placeholder="Commission..."
+              id="shippingExtraBase"
+              name="shippingExtraBase"
+              value={shippingExtraBase.value}
+              onChange={(e) =>
+                setShippingExtraBase({
+                  ...shippingExtraBase,
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
+          <FormGroup>
             <FormLabel htmlFor="usShippingFee">Ship nội địa Mỹ</FormLabel>
             <FormInput
               type="number"
@@ -163,14 +200,16 @@ const EditItem = () => {
             />
           </FormGroup>
           <FormGroup>
-            <FormLabel htmlFor="estimatedWeight">Cân nặng ước tính</FormLabel>
+            <FormLabel htmlFor="estimatedWeightPerItem">
+              Cân nặng ước tính / item
+            </FormLabel>
             <FormInput
               type="number"
               placeholder="Cân nặng ước tính..."
-              id="estimatedWeight"
-              name="estimatedWeight"
-              value={estimatedWeight}
-              onChange={(e) => setEstimatedWeight(e.target.value)}
+              id="estimatedWeightPerItem"
+              name="estimatedWeightPerItem"
+              value={estimatedWeightPerItem}
+              onChange={(e) => setEstimatedWeightPerItem(e.target.value)}
             />
           </FormGroup>
           <FormGroup>
@@ -195,6 +234,22 @@ const EditItem = () => {
               <option value="costco">Costco</option>
               <option value="walmart">Walmart</option>
               <option value="assisting">Mua hộ</option>
+            </Select>
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="itemType">Item type</FormLabel>
+            <Select
+              onChange={(e) => setItemType(e.target.value)}
+              value={itemType}
+              style={{ width: '22rem' }}
+            >
+              <option value="">Choose one</option>
+              <option value="toys">Toys</option>
+              <option value="electronics">Electronics</option>
+              <option value="cosmetics">Cosmetics</option>
+              <option value="accessories">Accessories</option>
+              <option value="others">Others</option>
             </Select>
           </FormGroup>
           <FormGroup>

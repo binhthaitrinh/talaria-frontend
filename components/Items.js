@@ -183,9 +183,9 @@ function Items({ page, fields, sort, filter, freezeNo }) {
               Next
             </LinkPrimary>
           </Link>
-          <Link href={`/bills/new?ids=${ids}`} passHref>
+          {/* <Link href={`/bills/new?ids=${ids}`} passHref>
             <LinkPrimary>Create a bill</LinkPrimary>
-          </Link>
+          </Link> */}
           <Link href="/items/new" passHref>
             <LinkPrimary>Create a new item</LinkPrimary>
           </Link>

@@ -13,8 +13,8 @@ const FormGroup = styled.div`
     margin-right: 2rem;
   }
 
-  input,
-  select {
+  & > input,
+  & > select {
     grid-column: 4 / -1;
   }
 
